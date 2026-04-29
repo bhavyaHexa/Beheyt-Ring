@@ -4,6 +4,7 @@ import { Suspense, useState, useEffect } from 'react'
 import { useControls } from 'leva'
 import Model from './Model'
 import * as THREE from 'three'
+
 function ToneMappingDebugger() {
   const { gl } = useThree();
 
@@ -33,7 +34,7 @@ function ToneMappingDebugger() {
 
 
 function AssetControls({ modelUrl, onModelUrlChange, envUrl, onEnvUrlChange, showBackground, onShowBackgroundChange }) {
-  useControls("Assets", {
+  const [, set] = useControls("Assets", () => ({
     modelUrl: {
       value: modelUrl,
       onChange: (v) => onModelUrlChange(v),
@@ -46,7 +47,13 @@ function AssetControls({ modelUrl, onModelUrlChange, envUrl, onEnvUrlChange, sho
       value: showBackground,
       onChange: (v) => onShowBackgroundChange(v),
     }
-  });
+  }));
+
+  // Sync Leva GUI when props change from outside (like dropzone)
+  useEffect(() => {
+    set({ modelUrl: modelUrl });
+  }, [modelUrl, set]);
+
   return null;
 }
 
@@ -107,7 +114,7 @@ export default function ModelViewer({ modelUrl, envUrl }) {
           />
 
           {/* Model component */}
-          <Model url={currentModelUrl} envUrl={currentEnvUrl} rotation={[- Math.PI / 2, 0, Math.PI / 5]} />
+          <Model url={currentModelUrl} envUrl={currentEnvUrl} rotation={[- Math.PI / 2, 0, Math.PI / 3]} />
 
           <ContactShadows
             position={[0, -1.3, 0]}

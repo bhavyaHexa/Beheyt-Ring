@@ -1,15 +1,27 @@
+import { useState } from "react"
 import ModelViewer from "./components/ModelViewer"
+import Dropzone from "./components/Dropzone"
 
 export default function App() {
-
-  // 👉 PUT ANY GLB URL HERE
-  const modelURL = "/Beheyt Artisanaal_174_V1.4.glb"
-
+  const [modelURL, setModelURL] = useState("/Beheyt Artisanaal_174_V1.4.glb")
+  const [modelName, setModelName] = useState("Beheyt Artisanaal_174_V1.4.glb")
   const envURL = "/env_metal_001_d01c4504e0.hdr"
 
+  const handleFileLoaded = (url, name) => {
+    setModelURL(url)
+    setModelName(name)
+  }
+
   return (
-    <div style={{ width: "100vw", height: "100vh" }}>
+    <div className="app-container">
+      <div className="ui-overlay">
+        <h1>Beheyt Ring Viewer</h1>
+        <p>{modelName}</p>
+      </div>
+
       <ModelViewer modelUrl={modelURL} envUrl={envURL} />
+      
+      <Dropzone onFileLoaded={handleFileLoaded} />
     </div>
   )
 }
