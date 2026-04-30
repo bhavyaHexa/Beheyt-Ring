@@ -2,7 +2,9 @@ import { Canvas, useThree } from '@react-three/fiber'
 import { Environment, OrbitControls, ContactShadows, PerspectiveCamera } from '@react-three/drei'
 import { Suspense, useState, useEffect } from 'react'
 import { useControls } from 'leva'
+import { EffectComposer, Bloom } from '@react-three/postprocessing'
 import Model from './Model'
+import Lights from './Lights'
 import * as THREE from 'three'
 
 function ToneMappingDebugger() {
@@ -20,7 +22,7 @@ function ToneMappingDebugger() {
         AgX: THREE.AgXToneMapping,
       },
     },
-
+    exposure: { value: 1, min: 0, max: 2, step: 0.1 }
   });
 
   useEffect(() => {
@@ -33,20 +35,14 @@ function ToneMappingDebugger() {
 }
 
 
-function AssetControls({ modelUrl, onModelUrlChange, envUrl, onEnvUrlChange, showBackground, onShowBackgroundChange }) {
+function AssetControls({
+  modelUrl, onModelUrlChange,
+}) {
   const [, set] = useControls("Assets", () => ({
     modelUrl: {
       value: modelUrl,
       onChange: (v) => onModelUrlChange(v),
     },
-    environmentUrl: {
-      value: envUrl,
-      onChange: (v) => onEnvUrlChange(v),
-    },
-    showBackground: {
-      value: showBackground,
-      onChange: (v) => onShowBackgroundChange(v),
-    }
   }));
 
   // Sync Leva GUI when props change from outside (like dropzone)
@@ -57,20 +53,38 @@ function AssetControls({ modelUrl, onModelUrlChange, envUrl, onEnvUrlChange, sho
   return null;
 }
 
+function PostProcessing() {
+  const { bloomEnabled, intensity, luminanceThreshold, luminanceSmoothing, radius } = useControls("Bloom", {
+    bloomEnabled: { value: true, label: "Enabled" },
+    intensity: { value: 1.0, min: 0, max: 10, step: 0.1 },
+    luminanceThreshold: { value: 0.9, min: 0, max: 2, step: 0.05 },
+    luminanceSmoothing: { value: 0.025, min: 0, max: 1, step: 0.01 },
+    radius: { value: 0.4, min: 0, max: 1, step: 0.01 },
+  });
+
+  if (!bloomEnabled) return null;
+
+  return (
+    <EffectComposer disableNormalPass>
+      <Bloom
+        intensity={intensity}
+        luminanceThreshold={luminanceThreshold}
+        luminanceSmoothing={luminanceSmoothing}
+        mipmapBlur
+        radius={radius}
+      />
+    </EffectComposer>
+  );
+}
+
 
 export default function ModelViewer({ modelUrl, envUrl }) {
   const [currentModelUrl, setCurrentModelUrl] = useState(modelUrl);
-  const [currentEnvUrl, setCurrentEnvUrl] = useState(envUrl);
-  const [showBackground, setShowBackground] = useState(false);
 
   // Sync state if props change
   useEffect(() => {
     setCurrentModelUrl(modelUrl);
   }, [modelUrl]);
-
-  useEffect(() => {
-    setCurrentEnvUrl(envUrl);
-  }, [envUrl]);
 
   return (
     <div className="canvas-container">
@@ -84,37 +98,21 @@ export default function ModelViewer({ modelUrl, envUrl }) {
           outputColorSpace: THREE.SRGBColorSpace
         }}
       >
-        <color attach="background" args={["#faf8f8"]} />
+        <color attach="background" args={["#f9f9f9"]} />
         <PerspectiveCamera makeDefault position={[0, 10, 10]} fov={35} />
         <ToneMappingDebugger />
 
         <AssetControls
           modelUrl={modelUrl}
           onModelUrlChange={setCurrentModelUrl}
-          envUrl={envUrl}
-          onEnvUrlChange={setCurrentEnvUrl}
-          showBackground={showBackground}
-          onShowBackgroundChange={setShowBackground}
         />
 
 
-        {/* Basic lighting */}
-        {/* <ambientLight intensity={0.5} />
-        <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} castShadow /> */}
-
         <Suspense fallback={null}>
-          {/* Environment declaration */}
-          <Environment
-            frames={Infinity}
-            files={currentEnvUrl}
-            background={showBackground}
-            resolution={256}
-            environmentIntensity={1}
-            environmentRotation={[0, -4.38, 0]}
-          />
+          <Lights envUrl={envUrl} />
 
           {/* Model component */}
-          <Model url={currentModelUrl} envUrl={currentEnvUrl} rotation={[- Math.PI / 2, 0, Math.PI / 3]} />
+          <Model url={currentModelUrl} envUrl={envUrl} rotation={[- Math.PI / 2, 0, Math.PI / 3]} />
 
           <ContactShadows
             position={[0, -1.3, 0]}
@@ -123,6 +121,8 @@ export default function ModelViewer({ modelUrl, envUrl }) {
             blur={2}
             far={10}
           />
+
+          {/* <PostProcessing /> */}
         </Suspense>
 
         <OrbitControls
@@ -130,9 +130,10 @@ export default function ModelViewer({ modelUrl, envUrl }) {
           enableDamping
           dampingFactor={0.05}
           minDistance={2}
-          maxDistance={10}
+          maxDistance={100}
         />
       </Canvas>
     </div>
   )
 }
+

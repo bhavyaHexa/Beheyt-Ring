@@ -5,7 +5,7 @@ import Dropzone from "./components/Dropzone"
 export default function App() {
   const [modelURL, setModelURL] = useState("/Beheyt Artisanaal_174_V1.4.glb")
   const [modelName, setModelName] = useState("Beheyt Artisanaal_174_V1.4.glb")
-  const envURL = "/env_metal_001_d01c4504e0.hdr"
+  const envURL = "/08.hdr"
 
   const handleFileLoaded = (url, name) => {
     setModelURL(url)
@@ -20,7 +20,7 @@ export default function App() {
       </div>
 
       <ModelViewer modelUrl={modelURL} envUrl={envURL} />
-      
+
       <Dropzone onFileLoaded={handleFileLoaded} />
     </div>
   )
