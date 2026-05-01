@@ -1,6 +1,6 @@
 import { Canvas, useThree } from '@react-three/fiber'
 import { Environment, CameraControls, ContactShadows, PerspectiveCamera, Center, SoftShadows } from '@react-three/drei'
-import { Suspense, useState, useEffect } from 'react'
+import { Suspense, useState, useEffect, useMemo } from 'react'
 import { useControls } from 'leva'
 import Model from './Model'
 import Lights from './Lights'
@@ -57,9 +57,30 @@ function AssetControls({
 
 export default function ModelViewer({ modelUrl, envUrl }) {
   const [currentModelUrl, setCurrentModelUrl] = useState(modelUrl);
+  
+  // Use THREE.Timer instead of THREE.Clock to resolve deprecation warning in Three.js 184+
+  const timerClock = useMemo(() => {
+    const timer = new THREE.Timer();
+    return {
+      getDelta: () => {
+        timer.update();
+        return timer.getDelta();
+      },
+      getElapsedTime: () => timer.getElapsed(),
+      get elapsedTime() { return timer.getElapsed(); },
+      start: () => {},
+      stop: () => {},
+    };
+  }, []);
 
   const { normalIntensity } = useControls("Normal Map", {
     normalIntensity: { value: 1, min: 0, max: 5, step: 0.05, label: "Intensity" }
+  });
+
+  const { goldRoughness, silverRoughness, roughnessMapUrl } = useControls("Roughness", {
+    goldRoughness: { value: 0.0, min: 0, max: 1, step: 0.01, label: "Gold Roughness" },
+    silverRoughness: { value: 0.3, min: 0, max: 1, step: 0.01, label: "Silver Roughness" },
+    roughnessMapUrl: { value: '', label: 'Roughness Map URL' }
   });
 
   const { envIntensity, envRotation, showBackground } = useControls('Lighting.Environment', {
@@ -87,6 +108,7 @@ export default function ModelViewer({ modelUrl, envUrl }) {
       <Canvas
         shadows
         dpr={[1, 2]}
+        clock={timerClock}
         gl={{
           antialias: true,
           // As requested: default use NoToneMapping
@@ -119,6 +141,9 @@ export default function ModelViewer({ modelUrl, envUrl }) {
               cloneScale={cloneScale}
               normalIntensity={normalIntensity}
               envIntensity={envIntensity}
+              goldRoughness={goldRoughness}
+              silverRoughness={silverRoughness}
+              roughnessMapUrl={roughnessMapUrl}
             />
           </Center>
 
@@ -135,7 +160,7 @@ export default function ModelViewer({ modelUrl, envUrl }) {
             height={20}
           />
 
-          <PostProcessing dirty={`${clonePos}-${cloneRot}-${cloneScale}-${normalIntensity}-${envIntensity}-${envRotation}`} />
+          <PostProcessing dirty={`${clonePos}-${cloneRot}-${cloneScale}-${normalIntensity}-${envIntensity}-${envRotation}-${goldRoughness}-${silverRoughness}`} />
         </Suspense>
 
         <CameraControls

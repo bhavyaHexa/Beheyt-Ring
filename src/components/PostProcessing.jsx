@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { useThree, useFrame } from '@react-three/fiber'
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js'
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js'
+import { SSAOPass } from 'three/addons/postprocessing/SSAOPass.js'
 import { TAARenderPass } from 'three/addons/postprocessing/TAARenderPass.js'
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js'
@@ -10,140 +11,160 @@ import { OutputPass } from 'three/addons/postprocessing/OutputPass.js'
 import { useControls } from 'leva'
 import * as THREE from 'three'
 
-/**
- * Custom PostProcessing component using vanilla Three.js EffectComposer.
- * This allows us to use TAARenderPass (Temporal Anti-Aliasing) for high-quality smooth edges.
- * Note: While Three.js calls this TAA, it provides the temporal smoothing the user requested.
- */
 export default function PostProcessing({ dirty }) {
   const { gl, scene, camera, size } = useThree()
+
+  const composerRef = useRef()
+  const passesRef = useRef()
   const lastMatrix = useRef(new THREE.Matrix4())
 
-  // TRAA (Temporal Anti-Aliasing) Controls
+  // TRAA Controls
   const { traaEnabled, sampleLevel, unbiased } = useControls("Post Processing.TRAA", {
-    traaEnabled: { value: true, label: "Enabled" },
-    sampleLevel: { 
-      value: 3, 
-      min: 0, 
-      max: 5, 
-      step: 1, 
-      label: "Sample Level (2^n)",
-      hint: "Higher levels provide better smoothing over time."
-    },
-    unbiased: { value: true, label: "Unbiased" },
+    traaEnabled: true,
+    sampleLevel: { value: 5, min: 0, max: 5, step: 1 },
+    unbiased: true
   })
 
-  // Bloom Controls (Reverted names to match previous implementation)
-  const { bloomEnabled, intensity, luminanceThreshold, radius } = useControls("Post Processing.Bloom", {
-    bloomEnabled: { value: false, label: "Enabled" },
-    intensity: { value: 0.5, min: 0, max: 3, step: 0.1, label: "Intensity" },
-    luminanceThreshold: { value: 0.9, min: 0, max: 1, step: 0.05, label: "Threshold" },
-    radius: { value: 0.4, min: 0, max: 1, step: 0.01, label: "Radius" },
-  });
+  // SSAO Controls (jewellery tuned defaults)
+  const { ssaoEnabled, ssaoRadius, minDistance, maxDistance, kernelRadius, kernelSize, output } = useControls("Post Processing.SSAO", {
+    ssaoEnabled: true,
+    ssaoRadius: 0.03,
+    minDistance: 0.005,
+    maxDistance: 0.03,
+    kernelRadius: 0.15,
+    kernelSize: 64,
+    output: { value: 0, options: { Default: 0, SSAO: 1, Blur: 2, Beauty: 3, Depth: 4, Normal: 5 } }
+  })
 
-  // Brightness & Contrast Controls
-  const { bcEnabled, brightness, contrast } = useControls("Post Processing.Brightness & Contrast", {
-    bcEnabled: { value: true, label: "Enabled" },
-    brightness: { value: 0, min: -1, max: 1, step: 0.01 },
-    contrast: { value: 0, min: -1, max: 1, step: 0.01 },
-  });
+  // Bloom
+  const { bloomEnabled, intensity, luminanceThreshold, bloomRadius } = useControls("Post Processing.Bloom", {
+    bloomEnabled: false,
+    intensity: 0.5,
+    luminanceThreshold: 0.9,
+    bloomRadius: 0.4,
+  })
 
-  // Create composer and passes
-  const composerState = useMemo(() => {
+  // Brightness / Contrast
+  const { bcEnabled, brightness, contrast } = useControls("Post Processing.Color", {
+    bcEnabled: true,
+    brightness: 0,
+    contrast: 0
+  })
+
+  // ⭐ CREATE COMPOSER AFTER FIRST RENDER (CRITICAL FIX)
+  useEffect(() => {
+
+    gl.autoClear = false
+
     const composer = new EffectComposer(gl)
     composer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-    
-    // 0. Regular Render Pass (Fallback for when SSAA is disabled)
-    // This provides the standard "jaggy" edges
+    composer.setSize(size.width, size.height)
+
+    // 1️⃣ Render pass MUST ALWAYS BE FIRST
     const renderPass = new RenderPass(scene, camera)
     composer.addPass(renderPass)
 
-    // 1. TRAA Pass (Temporal Anti-Aliasing)
-    // This provides high-quality smooth edges by accumulating samples over time.
+    // 2️⃣ SSAO
+    const ssaoPass = new SSAOPass(scene, camera, size.width, size.height)
+    ssaoPass.renderToScreen = false
+
+    // 🔴 CRITICAL FIX FOR BLACK SCREEN
+    ssaoPass.normalMaterial.blending = THREE.NoBlending
+    ssaoPass.ssaoMaterial.blending = THREE.NoBlending
+    ssaoPass.blurMaterial.blending = THREE.NoBlending
+    ssaoPass.depthRenderMaterial.blending = THREE.NoBlending
+
+    composer.addPass(ssaoPass)
+
+    // 3️⃣ TAA (STACKED AFTER SSAO)
     const traaPass = new TAARenderPass(scene, camera)
-    traaPass.unbiased = unbiased
-    traaPass.sampleLevel = sampleLevel
     traaPass.accumulate = true
     composer.addPass(traaPass)
 
-    // 2. Bloom Pass (UnrealBloomPass)
+    // 4️⃣ Bloom
     const bloomPass = new UnrealBloomPass(
-      new THREE.Vector2(size.width, size.height), 
-      intensity, 
-      radius, 
+      new THREE.Vector2(size.width, size.height),
+      intensity,
+      bloomRadius,
       luminanceThreshold
     )
     composer.addPass(bloomPass)
 
-    // 3. Brightness/Contrast Pass
+    // 5️⃣ Brightness / Contrast
     const bcPass = new ShaderPass(BrightnessContrastShader)
     composer.addPass(bcPass)
 
-    // 4. Output Pass
-    // Necessary to handle tone mapping and color space conversion correctly
+    // 6️⃣ Output
     const outputPass = new OutputPass()
     composer.addPass(outputPass)
 
-    return { composer, renderPass, traaPass, bloomPass, bcPass, outputPass }
-  }, [gl, scene, camera])
+    composerRef.current = composer
+    passesRef.current = { renderPass, ssaoPass, traaPass, bloomPass, bcPass, outputPass }
 
-  // Update pass parameters whenever controls change
+  }, [])
+
+  // ⭐ HANDLE RESIZE
   useEffect(() => {
-    const { composer, renderPass, traaPass, bloomPass, bcPass, outputPass } = composerState
+    if (composerRef.current) {
+      composerRef.current.setSize(size.width, size.height)
+    }
+  }, [size])
 
-    // Toggle between standard RenderPass and TAARenderPass
-    // This ensures something is always rendering the scene
-    renderPass.enabled = !traaEnabled
+  // ⭐ UPDATE PASS SETTINGS
+  useEffect(() => {
+    if (!passesRef.current) return
+    const { renderPass, ssaoPass, traaPass, bloomPass, bcPass } = passesRef.current
+
+    // RenderPass ALWAYS ON
+    renderPass.enabled = true
+
+    // SSAO
+    ssaoPass.enabled = ssaoEnabled
+    ssaoPass.radius = ssaoRadius
+    ssaoPass.minDistance = minDistance
+    ssaoPass.maxDistance = maxDistance
+    ssaoPass.kernelRadius = kernelRadius
+    ssaoPass.kernelSize = kernelSize
+    ssaoPass.output = parseInt(output)
+
+    // TAA
     traaPass.enabled = traaEnabled
-    
-    // Update TRAA settings
     traaPass.sampleLevel = sampleLevel
     traaPass.unbiased = unbiased
-    traaPass.accumulate = traaEnabled
+    traaPass.accumulate = true
+    traaPass.accumulateIndex = -1
 
-    // Clear camera offset if TRAA is disabled to fix positioning issues
-    if (!traaEnabled && camera.clearViewOffset) {
-      camera.clearViewOffset()
-    }
-
-    // Update Bloom
+    // Bloom
     bloomPass.enabled = bloomEnabled
     bloomPass.strength = intensity
     bloomPass.threshold = luminanceThreshold
-    bloomPass.radius = radius
+    bloomPass.radius = bloomRadius
 
-    // Update Brightness/Contrast
+    // Color
     bcPass.enabled = bcEnabled
     bcPass.uniforms.brightness.value = brightness
     bcPass.uniforms.contrast.value = contrast
 
-    // Sync OutputPass with renderer settings
-    outputPass.toneMapping = gl.toneMapping
+  }, [
+    ssaoEnabled, ssaoRadius, minDistance, maxDistance, kernelRadius, kernelSize, output,
+    traaEnabled, sampleLevel, unbiased,
+    bloomEnabled, intensity, luminanceThreshold, bloomRadius,
+    bcEnabled, brightness, contrast, dirty
+  ])
 
-    // Reset TAA accumulation when any prop (including dirty) changes
-    if (traaPass) {
-      traaPass.accumulateIndex = -1
-    }
-
-    // Sync size
-    composer.setSize(size.width, size.height)
-  }, [composerState, gl.toneMapping, size, camera, traaEnabled, sampleLevel, unbiased, bloomEnabled, intensity, luminanceThreshold, radius, bcEnabled, brightness, contrast, dirty])
-
-  // Render loop override
+  // ⭐ RENDER LOOP
   useFrame((state) => {
-    const { composer, traaPass } = composerState
+    const composer = composerRef.current
+    const passes = passesRef.current
+    if (!composer || !passes) return
 
-    if (traaEnabled && traaPass) {
-      // Reset TRAA accumulation if camera moves, otherwise OrbitControls feels "stuck" or blurry
-      if (!state.camera.matrixWorld.equals(lastMatrix.current)) {
-        traaPass.accumulateIndex = -1
-        lastMatrix.current.copy(state.camera.matrixWorld)
-      }
+    // Reset TAA when camera moves
+    if (traaEnabled && !state.camera.matrixWorld.equals(lastMatrix.current)) {
+      passes.traaPass.accumulateIndex = -1
+      lastMatrix.current.copy(state.camera.matrixWorld)
     }
 
-    if (composer) {
-      composer.render()
-    }
+    composer.render()
   }, 1)
 
   return null

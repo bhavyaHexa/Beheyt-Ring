@@ -7,6 +7,8 @@ export default function App() {
   const [modelName, setModelName] = useState("Beheyt Artisanaal_174_V1.4.glb")
   const envURL = "/08.hdr"
 
+
+
   const handleFileLoaded = (url, name) => {
     setModelURL(url)
     setModelName(name)

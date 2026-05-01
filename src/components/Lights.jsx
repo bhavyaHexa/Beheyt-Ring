@@ -42,13 +42,14 @@ export default function Lights({ envUrl, envIntensity, envRotation, showBackgrou
     distance1,
     decay1
   } = useControls('Lighting', {
-    'Light 1': { folder: true },
-    visible1: { value: false, label: 'Enabled' },
-    intensity1: { value: 10, min: 0, max: 500, step: 1, label: 'Intensity' },
-    color1: { value: '#ffffff', label: 'Color' },
-    position1: { value: [-0.4, 2.1, 0.1], label: 'Position' },
-    distance1: { value: 20, min: 0, max: 100, step: 1, label: 'Distance' },
-    decay1: { value: 5, min: 0, max: 5, step: 0.1, label: 'Decay' },
+    'Light 1': folder({
+      visible1: { value: false, label: 'Enabled' },
+      intensity1: { value: 10, min: 0, max: 500, step: 1, label: 'Intensity' },
+      color1: { value: '#ffffff', label: 'Color' },
+      position1: { value: [-0.4, 2.1, 0.1], label: 'Position' },
+      distance1: { value: 20, min: 0, max: 100, step: 1, label: 'Distance' },
+      decay1: { value: 5, min: 0, max: 5, step: 0.1, label: 'Decay' },
+    })
   }, { collapsed: true })
 
   const {
@@ -59,13 +60,14 @@ export default function Lights({ envUrl, envIntensity, envRotation, showBackgrou
     distance2,
     decay2
   } = useControls('Lighting', {
-    'Light 2': { folder: true },
-    visible2: { value: false, label: 'Enabled' },
-    intensity2: { value: 20, min: 0, max: 500, step: 1, label: 'Intensity' },
-    color2: { value: '#ffffff', label: 'Color' },
-    position2: { value: [0.8, -1.7, -1.6], label: 'Position' },
-    distance2: { value: 20, min: 0, max: 100, step: 1, label: 'Distance' },
-    decay2: { value: 2, min: 0, max: 5, step: 0.1, label: 'Decay' },
+    'Light 2': folder({
+      visible2: { value: false, label: 'Enabled' },
+      intensity2: { value: 20, min: 0, max: 500, step: 1, label: 'Intensity' },
+      color2: { value: '#ffffff', label: 'Color' },
+      position2: { value: [0.8, -1.7, -1.6], label: 'Position' },
+      distance2: { value: 20, min: 0, max: 100, step: 1, label: 'Distance' },
+      decay2: { value: 2, min: 0, max: 5, step: 0.1, label: 'Decay' },
+    })
   }, { collapsed: true })
 
   const { scene } = useThree()
@@ -86,9 +88,9 @@ export default function Lights({ envUrl, envIntensity, envRotation, showBackgrou
   })
 
   // Debug log to verify Leva values are changing
-  useEffect(() => {
-    console.log('Leva Env Update:', { envIntensity, envRotation })
-  }, [envIntensity, envRotation])
+  // useEffect(() => {
+  //   console.log('Leva Env Update:', { envIntensity, envRotation })
+  // }, [envIntensity, envRotation])
 
   return (
     <>
