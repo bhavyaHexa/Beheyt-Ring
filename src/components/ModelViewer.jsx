@@ -1,5 +1,5 @@
 import { Canvas, useThree } from '@react-three/fiber'
-import { Environment, OrbitControls, ContactShadows, PerspectiveCamera, Center, SoftShadows } from '@react-three/drei'
+import { Environment, CameraControls, ContactShadows, PerspectiveCamera, Center, SoftShadows } from '@react-three/drei'
 import { Suspense, useState, useEffect } from 'react'
 import { useControls } from 'leva'
 import Model from './Model'
@@ -58,6 +58,25 @@ function AssetControls({
 export default function ModelViewer({ modelUrl, envUrl }) {
   const [currentModelUrl, setCurrentModelUrl] = useState(modelUrl);
 
+  const { normalIntensity } = useControls("Normal Map", {
+    normalIntensity: { value: 1, min: 0, max: 5, step: 0.05, label: "Intensity" }
+  });
+
+  const { envIntensity, envRotation, showBackground } = useControls('Lighting.Environment', {
+    envIntensity: { value: 0.7, min: 0, max: 10, step: 0.1, label: 'Intensity' },
+    showBackground: { value: false, label: 'Show BG' },
+    envRotation: { value: [0, -2.5, 0], step: 0.1, label: 'Rotation' },
+  });
+
+  const [shadowY, setShadowY] = useState(0);
+
+
+  const { clonePos, cloneRot, cloneScale } = useControls("Cloned Ring", {
+    clonePos: { value: [0.5, 0.0, 1.3], step: 0.1 },
+    cloneRot: { value: [-4.0, 0.1, -2.0], step: 0.1 },
+    cloneScale: { value: 0.8, step: 0.05 }
+  });
+
   // Sync state if props change
   useEffect(() => {
     setCurrentModelUrl(modelUrl);
@@ -76,7 +95,8 @@ export default function ModelViewer({ modelUrl, envUrl }) {
         }}
       >
         <color attach="background" args={["#f9f9f9"]} />
-        <PerspectiveCamera makeDefault position={[0, 10, 10]} fov={35} />
+        <PerspectiveCamera makeDefault position={[0, 3, 10.5]} fov={30} />
+
         <ToneMappingDebugger />
 
         <AssetControls
@@ -86,16 +106,26 @@ export default function ModelViewer({ modelUrl, envUrl }) {
 
 
         <Suspense fallback={null}>
-          <Lights envUrl={envUrl} />
+          <Lights envUrl={envUrl} envIntensity={envIntensity} envRotation={envRotation} showBackground={showBackground} />
 
-          {/* Model component wrapped in Center to ensure it's at [0,0,0] */}
-          <Center top>
-            <Model url={currentModelUrl} envUrl={envUrl} rotation={[- Math.PI / 2, 0, Math.PI / 3]} />
+          {/* Model component centered at [0,0,0] to ensure zoom stays centered */}
+          <Center onCentered={({ height }) => setShadowY(-height / 2)}>
+            <Model
+              url={currentModelUrl}
+              envUrl={envUrl}
+              rotation={[- Math.PI / 2, 0, Math.PI / 3]}
+              clonePos={clonePos}
+              cloneRot={cloneRot}
+              cloneScale={cloneScale}
+              normalIntensity={normalIntensity}
+              envIntensity={envIntensity}
+            />
           </Center>
+
 
           {/* Stable Contact Shadows */}
           <ContactShadows
-            position={[0, -0.0, 0]}
+            position={[0, shadowY, 0]}
             opacity={0.9}
             scale={2}
             blur={0.5}
@@ -105,15 +135,14 @@ export default function ModelViewer({ modelUrl, envUrl }) {
             height={20}
           />
 
-          <PostProcessing />
+          <PostProcessing dirty={`${clonePos}-${cloneRot}-${cloneScale}-${normalIntensity}-${envIntensity}-${envRotation}`} />
         </Suspense>
 
-        <OrbitControls
+        <CameraControls
           makeDefault
-          enableDamping
-          dampingFactor={0.05}
           minDistance={2}
           maxDistance={100}
+          dollyToCursor={false}
         />
       </Canvas>
     </div>

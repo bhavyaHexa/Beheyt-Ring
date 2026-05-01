@@ -15,7 +15,7 @@ import * as THREE from 'three'
  * This allows us to use TAARenderPass (Temporal Anti-Aliasing) for high-quality smooth edges.
  * Note: While Three.js calls this TAA, it provides the temporal smoothing the user requested.
  */
-export default function PostProcessing() {
+export default function PostProcessing({ dirty }) {
   const { gl, scene, camera, size } = useThree()
   const lastMatrix = useRef(new THREE.Matrix4())
 
@@ -120,9 +120,14 @@ export default function PostProcessing() {
     // Sync OutputPass with renderer settings
     outputPass.toneMapping = gl.toneMapping
 
+    // Reset TAA accumulation when any prop (including dirty) changes
+    if (traaPass) {
+      traaPass.accumulateIndex = -1
+    }
+
     // Sync size
     composer.setSize(size.width, size.height)
-  }, [composerState, gl.toneMapping, size, camera, traaEnabled, sampleLevel, unbiased, bloomEnabled, intensity, luminanceThreshold, radius, bcEnabled, brightness, contrast])
+  }, [composerState, gl.toneMapping, size, camera, traaEnabled, sampleLevel, unbiased, bloomEnabled, intensity, luminanceThreshold, radius, bcEnabled, brightness, contrast, dirty])
 
   // Render loop override
   useFrame((state) => {

@@ -1,27 +1,22 @@
 import { Environment, useHelper } from '@react-three/drei'
 import { useFrame, useThree } from '@react-three/fiber'
-import { useControls } from 'leva'
+import { useControls, folder } from 'leva'
 import { useRef, useEffect } from 'react'
 import * as THREE from 'three'
 
-export default function Lights({ envUrl }) {
+export default function Lights({ envUrl, envIntensity, envRotation, showBackground }) {
   const light1 = useRef()
   const light2 = useRef()
   const groupRef = useRef()
 
   const {
-    envIntensity,
-    showBackground,
-    envRotation,
     showHelpers,
     rotationSpeed
   } = useControls('Lighting', {
-    Environment: { folder: true },
-    envIntensity: { value: 0.7, min: 0, max: 10, step: 0.1, label: 'Intensity' },
-    showBackground: { value: false, label: 'Show BG' },
-    envRotation: { value: [0, -2.5, 0], step: 0.1, label: 'Rotation' },
-    showHelpers: { value: false, label: 'Show Light Helpers' },
-    rotationSpeed: { value: 1.0, min: 0, max: 10, step: 0.1, label: 'Rotation Speed' },
+    'Light Helpers': folder({
+      showHelpers: { value: false, label: 'Enabled' },
+      rotationSpeed: { value: 1.0, min: 0, max: 10, step: 0.1, label: 'Rotation Speed' },
+    })
   }, { collapsed: true })
 
   // Animate light rotation
@@ -80,7 +75,7 @@ export default function Lights({ envUrl }) {
     if (scene) {
       scene.environmentIntensity = envIntensity
       scene.backgroundIntensity = envIntensity
-      
+
       if (scene.environmentRotation) {
         scene.environmentRotation.set(envRotation[0], envRotation[1], envRotation[2])
       }
@@ -98,10 +93,12 @@ export default function Lights({ envUrl }) {
   return (
     <>
       <Environment
-        frames={Infinity} // Set back to Infinity to ensure dynamic updates work if needed
         files={envUrl}
         background={showBackground}
         resolution={256}
+        environmentIntensity={envIntensity}
+        rotation={envRotation}
+        backgroundRotation={envRotation}
       />
 
       <group ref={groupRef}>

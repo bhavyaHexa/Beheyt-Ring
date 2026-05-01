@@ -3,15 +3,8 @@ import { useMemo } from "react";
 import { MeshPhysicalMaterial, Vector2 } from "three";
 import { useControls } from "leva";
 
-export default function Model({ url, envUrl, ...props }) {
+export default function Model({ url, envUrl, clonePos, cloneRot, cloneScale, normalIntensity, envIntensity, ...props }) {
   const { scene, nodes } = useGLTF(url);
-  const { normalIntensity } = useControls("Normal Map", {
-    normalIntensity: { value: 1, min: 0, max: 5, step: 0.05, label: "Intensity" }
-  });
-
-  const { envIntensity } = useControls('Lighting', {
-    envIntensity: { value: 1.0, min: 0, max: 10, step: 0.1, label: 'Intensity' },
-  });
 
   // Extract the original normal map safely
   const originalNormalMap = useMemo(() => {
@@ -34,12 +27,6 @@ export default function Model({ url, envUrl, ...props }) {
     roughness: 0.0,
     envMapIntensity: envIntensity,
   }), [envIntensity]);
-
-  const { clonePos, cloneRot, cloneScale } = useControls("Cloned Ring", {
-    clonePos: { value: [1.1, 0.0, 1.3], step: 0.1 },
-    cloneRot: { value: [-4.1, 0.1, 1.2], step: 0.1 },
-    cloneScale: { value: 1, step: 0.05 }
-  });
 
   return (
     <>
