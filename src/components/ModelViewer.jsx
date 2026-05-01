@@ -1,10 +1,10 @@
 import { Canvas, useThree } from '@react-three/fiber'
-import { Environment, OrbitControls, ContactShadows, PerspectiveCamera } from '@react-three/drei'
+import { Environment, OrbitControls, ContactShadows, PerspectiveCamera, Center, SoftShadows } from '@react-three/drei'
 import { Suspense, useState, useEffect } from 'react'
 import { useControls } from 'leva'
-import { EffectComposer, Bloom } from '@react-three/postprocessing'
 import Model from './Model'
 import Lights from './Lights'
+import PostProcessing from './PostProcessing'
 import * as THREE from 'three'
 
 function ToneMappingDebugger() {
@@ -53,29 +53,6 @@ function AssetControls({
   return null;
 }
 
-function PostProcessing() {
-  const { bloomEnabled, intensity, luminanceThreshold, luminanceSmoothing, radius } = useControls("Bloom", {
-    bloomEnabled: { value: true, label: "Enabled" },
-    intensity: { value: 1.0, min: 0, max: 10, step: 0.1 },
-    luminanceThreshold: { value: 0.9, min: 0, max: 2, step: 0.05 },
-    luminanceSmoothing: { value: 0.025, min: 0, max: 1, step: 0.01 },
-    radius: { value: 0.4, min: 0, max: 1, step: 0.01 },
-  });
-
-  if (!bloomEnabled) return null;
-
-  return (
-    <EffectComposer disableNormalPass>
-      <Bloom
-        intensity={intensity}
-        luminanceThreshold={luminanceThreshold}
-        luminanceSmoothing={luminanceSmoothing}
-        mipmapBlur
-        radius={radius}
-      />
-    </EffectComposer>
-  );
-}
 
 
 export default function ModelViewer({ modelUrl, envUrl }) {
@@ -89,7 +66,7 @@ export default function ModelViewer({ modelUrl, envUrl }) {
   return (
     <div className="canvas-container">
       <Canvas
-        // shadows
+        shadows
         dpr={[1, 2]}
         gl={{
           antialias: true,
@@ -111,18 +88,24 @@ export default function ModelViewer({ modelUrl, envUrl }) {
         <Suspense fallback={null}>
           <Lights envUrl={envUrl} />
 
-          {/* Model component */}
-          <Model url={currentModelUrl} envUrl={envUrl} rotation={[- Math.PI / 2, 0, Math.PI / 3]} />
+          {/* Model component wrapped in Center to ensure it's at [0,0,0] */}
+          <Center top>
+            <Model url={currentModelUrl} envUrl={envUrl} rotation={[- Math.PI / 2, 0, Math.PI / 3]} />
+          </Center>
 
+          {/* Stable Contact Shadows */}
           <ContactShadows
-            position={[0, -1.3, 0]}
-            opacity={0.5}
-            scale={8}
-            blur={2}
-            far={10}
+            position={[0, -0.0, 0]}
+            opacity={0.9}
+            scale={2}
+            blur={0.5}
+            far={6}
+            resolution={1024}
+            width={20}
+            height={20}
           />
 
-          {/* <PostProcessing /> */}
+          <PostProcessing />
         </Suspense>
 
         <OrbitControls

@@ -4,7 +4,7 @@ import { MeshPhysicalMaterial, Vector2 } from "three";
 import { useControls } from "leva";
 
 export default function Model({ url, envUrl, ...props }) {
-  const { nodes } = useGLTF(url);
+  const { scene, nodes } = useGLTF(url);
   const { normalIntensity } = useControls("Normal Map", {
     normalIntensity: { value: 1, min: 0, max: 5, step: 0.05, label: "Intensity" }
   });
@@ -45,7 +45,9 @@ export default function Model({ url, envUrl, ...props }) {
     <>
       {/* The Original Ring */}
       <Clone
-        object={nodes.Scene}
+        object={scene}
+        castShadow
+        receiveShadow
         inject={(node) => {
           if (node.isMesh) {
             return node.name.includes("Object002")
@@ -58,7 +60,9 @@ export default function Model({ url, envUrl, ...props }) {
 
       {/* The Cloned Ring */}
       <Clone
-        object={nodes.Scene}
+        object={scene}
+        castShadow
+        receiveShadow
         position={clonePos}
         rotation={cloneRot}
         scale={cloneScale}
