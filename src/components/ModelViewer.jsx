@@ -57,7 +57,7 @@ function AssetControls({
 
 export default function ModelViewer({ modelUrl, envUrl }) {
   const [currentModelUrl, setCurrentModelUrl] = useState(modelUrl);
-  
+
   // Use THREE.Timer instead of THREE.Clock to resolve deprecation warning in Three.js 184+
   const timerClock = useMemo(() => {
     const timer = new THREE.Timer();
@@ -68,8 +68,8 @@ export default function ModelViewer({ modelUrl, envUrl }) {
       },
       getElapsedTime: () => timer.getElapsed(),
       get elapsedTime() { return timer.getElapsed(); },
-      start: () => {},
-      stop: () => {},
+      start: () => { },
+      stop: () => { },
     };
   }, []);
 
@@ -81,6 +81,12 @@ export default function ModelViewer({ modelUrl, envUrl }) {
     goldRoughness: { value: 0.0, min: 0, max: 1, step: 0.01, label: "Gold Roughness" },
     silverRoughness: { value: 0.3, min: 0, max: 1, step: 0.01, label: "Silver Roughness" },
     roughnessMapUrl: { value: '', label: 'Roughness Map URL' }
+  });
+
+  const { aoMapUrl, aoIntensity, viewOnlyAOMap } = useControls("AO Map", {
+    aoMapUrl: { value: "", label: "AO Map URL" },
+    aoIntensity: { value: 1, min: 0, max: 2, step: 0.1, label: "Intensity" },
+    viewOnlyAOMap: { value: false, label: "View Only AO Map" }
   });
 
   const { envIntensity, envRotation, showBackground } = useControls('Lighting.Environment', {
@@ -141,9 +147,6 @@ export default function ModelViewer({ modelUrl, envUrl }) {
               cloneScale={cloneScale}
               normalIntensity={normalIntensity}
               envIntensity={envIntensity}
-              goldRoughness={goldRoughness}
-              silverRoughness={silverRoughness}
-              roughnessMapUrl={roughnessMapUrl}
             />
           </Center>
 
