@@ -62,6 +62,12 @@ export default function ModelViewer({ modelUrl, envUrl }) {
     normalIntensity: { value: 1, min: 0, max: 5, step: 0.05, label: "Intensity" }
   });
 
+  const { aoMapUrl, aoIntensity, viewOnlyAOMap } = useControls("AO Map", {
+    aoMapUrl: { value: "", label: "AO Map URL" },
+    aoIntensity: { value: 1, min: 0, max: 2, step: 0.1, label: "Intensity" },
+    viewOnlyAOMap: { value: false, label: "View Only AO Map" }
+  });
+
   const { envIntensity, envRotation, showBackground } = useControls('Lighting.Environment', {
     envIntensity: { value: 0.7, min: 0, max: 10, step: 0.1, label: 'Intensity' },
     showBackground: { value: false, label: 'Show BG' },
@@ -119,6 +125,9 @@ export default function ModelViewer({ modelUrl, envUrl }) {
               cloneScale={cloneScale}
               normalIntensity={normalIntensity}
               envIntensity={envIntensity}
+              aoMapUrl={aoMapUrl}
+              aoIntensity={aoIntensity}
+              viewOnlyAOMap={viewOnlyAOMap}
             />
           </Center>
 
