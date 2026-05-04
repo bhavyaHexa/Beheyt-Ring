@@ -77,11 +77,7 @@ export default function ModelViewer({ modelUrl, envUrl }) {
     normalIntensity: { value: 1, min: 0, max: 5, step: 0.05, label: "Intensity" }
   });
 
-  const { goldRoughness, silverRoughness, roughnessMapUrl } = useControls("Roughness", {
-    goldRoughness: { value: 0.0, min: 0, max: 1, step: 0.01, label: "Gold Roughness" },
-    silverRoughness: { value: 0.3, min: 0, max: 1, step: 0.01, label: "Silver Roughness" },
-    roughnessMapUrl: { value: '', label: 'Roughness Map URL' }
-  });
+
 
   const { aoMapUrl, aoIntensity, viewOnlyAOMap } = useControls("AO Map", {
     aoMapUrl: { value: "", label: "AO Map URL" },
@@ -147,6 +143,9 @@ export default function ModelViewer({ modelUrl, envUrl }) {
               cloneScale={cloneScale}
               normalIntensity={normalIntensity}
               envIntensity={envIntensity}
+              aoMapUrl={aoMapUrl}
+              aoIntensity={aoIntensity}
+              viewOnlyAOMap={viewOnlyAOMap}
             />
           </Center>
 
@@ -163,7 +162,7 @@ export default function ModelViewer({ modelUrl, envUrl }) {
             height={20}
           />
 
-          <PostProcessing dirty={`${clonePos}-${cloneRot}-${cloneScale}-${normalIntensity}-${envIntensity}-${envRotation}-${goldRoughness}-${silverRoughness}`} />
+          <PostProcessing dirty={`${clonePos}-${cloneRot}-${cloneScale}-${normalIntensity}-${envIntensity}-${envRotation}`} />
         </Suspense>
 
         <CameraControls

@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import { useThree, useFrame } from '@react-three/fiber'
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js'
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js'
-import { SSAOPass } from 'three/addons/postprocessing/SSAOPass.js'
+// import { SSAOPass } from 'three/addons/postprocessing/SSAOPass.js'
 import { TAARenderPass } from 'three/addons/postprocessing/TAARenderPass.js'
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js'
@@ -25,16 +25,7 @@ export default function PostProcessing({ dirty }) {
     unbiased: true
   })
 
-  // SSAO Controls (jewellery tuned defaults)
-  const { ssaoEnabled, ssaoRadius, minDistance, maxDistance, kernelRadius, kernelSize, output } = useControls("Post Processing.SSAO", {
-    ssaoEnabled: true,
-    ssaoRadius: 0.03,
-    minDistance: 0.005,
-    maxDistance: 0.03,
-    kernelRadius: 0.15,
-    kernelSize: 64,
-    output: { value: 0, options: { Default: 0, SSAO: 1, Blur: 2, Beauty: 3, Depth: 4, Normal: 5 } }
-  })
+
 
   // Bloom
   const { bloomEnabled, intensity, luminanceThreshold, bloomRadius } = useControls("Post Processing.Bloom", {
@@ -64,17 +55,6 @@ export default function PostProcessing({ dirty }) {
     const renderPass = new RenderPass(scene, camera)
     composer.addPass(renderPass)
 
-    // 2️⃣ SSAO
-    const ssaoPass = new SSAOPass(scene, camera, size.width, size.height)
-    ssaoPass.renderToScreen = false
-
-    // 🔴 CRITICAL FIX FOR BLACK SCREEN
-    ssaoPass.normalMaterial.blending = THREE.NoBlending
-    ssaoPass.ssaoMaterial.blending = THREE.NoBlending
-    ssaoPass.blurMaterial.blending = THREE.NoBlending
-    ssaoPass.depthRenderMaterial.blending = THREE.NoBlending
-
-    composer.addPass(ssaoPass)
 
     // 3️⃣ TAA (STACKED AFTER SSAO)
     const traaPass = new TAARenderPass(scene, camera)
@@ -99,9 +79,12 @@ export default function PostProcessing({ dirty }) {
     composer.addPass(outputPass)
 
     composerRef.current = composer
-    passesRef.current = { renderPass, ssaoPass, traaPass, bloomPass, bcPass, outputPass }
+    passesRef.current = { renderPass, traaPass, bloomPass, bcPass, outputPass }
 
-  }, [])
+    return () => {
+      // Cleanup on unmount
+    }
+  }, [gl, scene, camera])
 
   // ⭐ HANDLE RESIZE
   useEffect(() => {
@@ -112,29 +95,29 @@ export default function PostProcessing({ dirty }) {
 
   // ⭐ UPDATE PASS SETTINGS
   useEffect(() => {
-    if (!passesRef.current) return
-    const { renderPass, ssaoPass, traaPass, bloomPass, bcPass } = passesRef.current
+    const composer = composerRef.current
+    const passes = passesRef.current
+    if (!composer || !passes) return
 
-    // RenderPass ALWAYS ON
-    renderPass.enabled = true
+    const { renderPass, traaPass, bloomPass, bcPass, outputPass } = passes
 
-    // SSAO
-    ssaoPass.enabled = ssaoEnabled
-    ssaoPass.radius = ssaoRadius
-    ssaoPass.minDistance = minDistance
-    ssaoPass.maxDistance = maxDistance
-    ssaoPass.kernelRadius = kernelRadius
-    ssaoPass.kernelSize = kernelSize
-    ssaoPass.output = parseInt(output)
-
-    // TAA
+    // Toggle between standard RenderPass and TAARenderPass
+    // This ensures something is always rendering the scene
+    renderPass.enabled = !traaEnabled
     traaPass.enabled = traaEnabled
+
+    // Update TRAA settings
     traaPass.sampleLevel = sampleLevel
     traaPass.unbiased = unbiased
-    traaPass.accumulate = true
-    traaPass.accumulateIndex = -1
+    traaPass.accumulate = traaEnabled
 
-    // Bloom
+    // Clear camera offset if TRAA is disabled to fix positioning issues
+    if (!traaEnabled && camera.clearViewOffset) {
+      camera.clearViewOffset()
+    }
+
+
+    // Update Bloom
     bloomPass.enabled = bloomEnabled
     bloomPass.strength = intensity
     bloomPass.threshold = luminanceThreshold
@@ -145,12 +128,15 @@ export default function PostProcessing({ dirty }) {
     bcPass.uniforms.brightness.value = brightness
     bcPass.uniforms.contrast.value = contrast
 
-  }, [
-    ssaoEnabled, ssaoRadius, minDistance, maxDistance, kernelRadius, kernelSize, output,
-    traaEnabled, sampleLevel, unbiased,
-    bloomEnabled, intensity, luminanceThreshold, bloomRadius,
-    bcEnabled, brightness, contrast, dirty
-  ])
+    // Sync OutputPass with renderer settings
+    outputPass.toneMapping = gl.toneMapping
+
+    // Reset TAA accumulation when any prop (including dirty) changes
+    if (traaPass) {
+      traaPass.accumulateIndex = -1
+    }
+
+  }, [gl.toneMapping, size, camera, traaEnabled, sampleLevel, unbiased, bloomEnabled, intensity, luminanceThreshold, bloomRadius, bcEnabled, brightness, contrast, dirty])
 
   // ⭐ RENDER LOOP
   useFrame((state) => {
