@@ -6,8 +6,10 @@ import { useControls } from "leva";
 // export default function Model({ url, envUrl, clonePos, cloneRot, cloneScale, normalIntensity, envIntensity, goldRoughness, silverRoughness, roughnessMapUrl, ...props }) {
 export default function Model({ url, envUrl, clonePos, cloneRot, cloneScale, normalIntensity, envIntensity, aoMapUrl, aoIntensity, viewOnlyAOMap, ...props }) {
   const { scene, nodes } = useGLTF(url);
+  console.log("Original Ring Position:", props.position || [0, 0, 0]);
+  console.log("Original Ring Rotation:", props.rotation);
 
-  console.log(envUrl);
+  console.log("Cloned Ring Position:", clonePos);
 
   // Extract maps safely from the model nodes
   const originalNormalMap = useMemo(() => {

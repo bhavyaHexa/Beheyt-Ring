@@ -40,7 +40,7 @@ function AssetControls({
 }) {
   const [, set] = useControls("Assets", () => ({
     modelUrl: {
-      value: modelUrl,
+      value: "/assets/Beheyt Artisanaal_174_V1.7.glb",
       onChange: (v) => onModelUrlChange(v),
     },
   }));
@@ -85,10 +85,11 @@ export default function ModelViewer({ modelUrl, envUrl }) {
     viewOnlyAOMap: { value: false, label: "View Only AO Map" }
   });
 
-  const { envIntensity, envRotation, showBackground } = useControls('Lighting.Environment', {
+  const { envIntensity, envRotation, showBackground, customEnvUrl } = useControls('Lighting.Environment', {
     envIntensity: { value: 0.7, min: 0, max: 10, step: 0.1, label: 'Intensity' },
     showBackground: { value: false, label: 'Show BG' },
     envRotation: { value: [0, -2.5, 0], step: 0.1, label: 'Rotation' },
+    customEnvUrl: { value: "", label: "Custom Env (PNG)" }
   });
 
   const [shadowY, setShadowY] = useState(0);
@@ -96,7 +97,7 @@ export default function ModelViewer({ modelUrl, envUrl }) {
 
   const { clonePos, cloneRot, cloneScale } = useControls("Cloned Ring", {
     clonePos: { value: [0.5, 0.0, 1.3], step: 0.1 },
-    cloneRot: { value: [-4.0, 0.1, -2.0], step: 0.1 },
+    cloneRot: { value: [-4.0, -0.2, -2.0], step: 0.1 },
     cloneScale: { value: 0.8, step: 0.05 }
   });
 
@@ -118,7 +119,7 @@ export default function ModelViewer({ modelUrl, envUrl }) {
           outputColorSpace: THREE.SRGBColorSpace
         }}
       >
-        <color attach="background" args={["#f9f9f9"]} />
+        <color attach="background" args={["#f7f3f3"]} />
         <PerspectiveCamera makeDefault position={[0, 3, 10.5]} fov={30} />
 
         <ToneMappingDebugger />
@@ -130,14 +131,15 @@ export default function ModelViewer({ modelUrl, envUrl }) {
 
 
         <Suspense fallback={null}>
-          <Lights envUrl={envUrl} envIntensity={envIntensity} envRotation={envRotation} showBackground={showBackground} />
+          <Lights envUrl={envUrl} customEnvUrl={customEnvUrl} envIntensity={envIntensity} envRotation={envRotation} showBackground={showBackground} />
 
           {/* Model component centered at [0,0,0] to ensure zoom stays centered */}
           <Center onCentered={({ height }) => setShadowY(-height / 2)}>
             <Model
               url={currentModelUrl}
               envUrl={envUrl}
-              rotation={[- Math.PI / 2, 0, Math.PI / 3]}
+              position={[0, 0, 0]}
+              rotation={[-Math.PI / 2, 0, Math.PI / 3]}
               clonePos={clonePos}
               cloneRot={cloneRot}
               cloneScale={cloneScale}

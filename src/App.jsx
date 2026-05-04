@@ -3,7 +3,7 @@ import ModelViewer from "./components/ModelViewer"
 import Dropzone from "./components/Dropzone"
 
 export default function App() {
-  const [modelURL, setModelURL] = useState("/Beheyt Artisanaal_174_V1.7.glb")
+  const [modelURL, setModelURL] = useState("/assets/Beheyt Artisanaal_174_V1.7.glb")
   const [modelName, setModelName] = useState("Beheyt Artisanaal_174_V1.7.glb")
   const envURL = "/08.hdr"
 

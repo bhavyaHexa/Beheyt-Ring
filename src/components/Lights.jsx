@@ -3,8 +3,9 @@ import { useFrame, useThree } from '@react-three/fiber'
 import { useControls, folder } from 'leva'
 import { useRef, useEffect } from 'react'
 import * as THREE from 'three'
+import EnvConverter from './EnvConverter'
 
-export default function Lights({ envUrl, envIntensity, envRotation, showBackground }) {
+export default function Lights({ envUrl, customEnvUrl, envIntensity, envRotation, showBackground }) {
   const light1 = useRef()
   const light2 = useRef()
   const groupRef = useRef()
@@ -94,14 +95,23 @@ export default function Lights({ envUrl, envIntensity, envRotation, showBackgrou
 
   return (
     <>
-      <Environment
-        files={envUrl}
-        background={showBackground}
-        resolution={256}
-        environmentIntensity={envIntensity}
-        rotation={envRotation}
-        backgroundRotation={envRotation}
-      />
+      {customEnvUrl ? (
+        <EnvConverter 
+          imageUrl={customEnvUrl} 
+          showBackground={showBackground} 
+          environmentIntensity={envIntensity}
+          envRotation={envRotation}
+        />
+      ) : (
+        <Environment
+          files={envUrl}
+          background={showBackground}
+          resolution={256}
+          environmentIntensity={envIntensity}
+          rotation={envRotation}
+          backgroundRotation={envRotation}
+        />
+      )}
 
       <group ref={groupRef}>
         <pointLight
