@@ -127,7 +127,7 @@ export default function ModelViewer({ modelUrl, envUrl }) {
           // outputColorSpace: THREE.SRGBColorSpace
         }}
       >
-        <color attach="background" args={["#e4e4e4"]} />
+        <color attach="background" args={["#f2efe8"]} />
         <PerspectiveCamera makeDefault position={[0, 3, 10.5]} fov={30} />
 
         <ToneMappingDebugger />

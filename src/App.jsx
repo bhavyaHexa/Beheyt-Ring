@@ -5,7 +5,7 @@ import Dropzone from "./components/Dropzone"
 export default function App() {
     const [modelURL, setModelURL] = useState("/models/Beheyt Artisanaal_174_V1.8.1.glb")
     const [modelName, setModelName] = useState("Beheyt Artisanaal_174_V1.8.glb")
-    const envURL = "/env/Jewelry-Light-HDRI-Vol3-www.3djewels.pro.hdr"
+    const envURL = "/env/08.hdr"
 
     console.log(modelURL)
 
