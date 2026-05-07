@@ -3,27 +3,27 @@ import ModelViewer from "./components/ModelViewer"
 import Dropzone from "./components/Dropzone"
 
 export default function App() {
-  const [modelURL, setModelURL] = useState("/assets/Beheyt Artisanaal_174_V1.7.glb")
-  const [modelName, setModelName] = useState("Beheyt Artisanaal_174_V1.7.glb")
-  const envURL = "/08.hdr"
+    const [modelURL, setModelURL] = useState("/models/Beheyt Artisanaal_174_V1.8.1.glb")
+    const [modelName, setModelName] = useState("Beheyt Artisanaal_174_V1.8.glb")
+    const envURL = "/env/Jewelry-Light-HDRI-Vol3-www.3djewels.pro.hdr"
 
+    console.log(modelURL)
 
+    const handleFileLoaded = (url, name) => {
+        setModelURL(url)
+        setModelName(name)
+    }
 
-  const handleFileLoaded = (url, name) => {
-    setModelURL(url)
-    setModelName(name)
-  }
+    return (
+        <div className="app-container">
+            <div className="ui-overlay">
+                <h1>Beheyt Ring Viewer</h1>
+                <p>{modelName}</p>
+            </div>
 
-  return (
-    <div className="app-container">
-      <div className="ui-overlay">
-        <h1>Beheyt Ring Viewer</h1>
-        <p>{modelName}</p>
-      </div>
+            <ModelViewer modelUrl={modelURL} envUrl={envURL} />
 
-      <ModelViewer modelUrl={modelURL} envUrl={envURL} />
-
-      <Dropzone onFileLoaded={handleFileLoaded} />
-    </div>
-  )
+            <Dropzone onFileLoaded={handleFileLoaded} />
+        </div>
+    )
 }

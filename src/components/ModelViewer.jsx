@@ -6,6 +6,8 @@ import Model from './Model'
 import Lights from './Lights'
 import PostProcessing from './PostProcessing'
 import * as THREE from 'three'
+import RawModel from './RawModel'
+import ModelLoad from './ModelLoad'
 
 function ToneMappingDebugger() {
   const { gl } = useThree();
@@ -40,7 +42,7 @@ function AssetControls({
 }) {
   const [, set] = useControls("Assets", () => ({
     modelUrl: {
-      value: "/assets/Beheyt Artisanaal_174_V1.7.glb",
+      value: "/Beheyt Artisanaal_174_V1.7.glb",
       onChange: (v) => onModelUrlChange(v),
     },
   }));
@@ -85,6 +87,12 @@ export default function ModelViewer({ modelUrl, envUrl }) {
     viewOnlyAOMap: { value: false, label: "View Only AO Map" }
   });
 
+  const { roughnessMapUrl, roughnessIntensity, roughnessRepeat } = useControls("Roughness Map", {
+    roughnessMapUrl: { value: "", label: "Roughness Map URL" },
+    roughnessIntensity: { value: 1, min: 0, max: 2, step: 0.1, label: "Intensity" },
+    roughnessRepeat: { value: [1, 1], step: 0.1, label: "Repeat (X, Y)" }
+  });
+
   const { envIntensity, envRotation, showBackground, customEnvUrl } = useControls('Lighting.Environment', {
     envIntensity: { value: 0.7, min: 0, max: 10, step: 0.1, label: 'Intensity' },
     showBackground: { value: false, label: 'Show BG' },
@@ -116,10 +124,10 @@ export default function ModelViewer({ modelUrl, envUrl }) {
           antialias: true,
           // As requested: default use NoToneMapping
           toneMapping: THREE.NoToneMapping,
-          outputColorSpace: THREE.SRGBColorSpace
+          // outputColorSpace: THREE.SRGBColorSpace
         }}
       >
-        <color attach="background" args={["#f7f3f3"]} />
+        <color attach="background" args={["#e4e4e4"]} />
         <PerspectiveCamera makeDefault position={[0, 3, 10.5]} fov={30} />
 
         <ToneMappingDebugger />
@@ -135,7 +143,7 @@ export default function ModelViewer({ modelUrl, envUrl }) {
 
           {/* Model component centered at [0,0,0] to ensure zoom stays centered */}
           <Center onCentered={({ height }) => setShadowY(-height / 2)}>
-            <Model
+            {/* <Model
               url={currentModelUrl}
               envUrl={envUrl}
               position={[0, 0, 0]}
@@ -148,7 +156,22 @@ export default function ModelViewer({ modelUrl, envUrl }) {
               aoMapUrl={aoMapUrl}
               aoIntensity={aoIntensity}
               viewOnlyAOMap={viewOnlyAOMap}
+              roughnessMapUrl={roughnessMapUrl}
+              roughnessIntensity={roughnessIntensity}
+              roughnessRepeat={roughnessRepeat}
+            /> */}
+
+
+            {/* <RawModel
+              url={currentModelUrl}
+              rotation={[-Math.PI / 2, 0, Math.PI / 3]}
+            /> */}
+
+            <ModelLoad
+              url={currentModelUrl}
+              rotation={[-Math.PI / 2, 0, Math.PI / 3]}
             />
+
           </Center>
 
 
@@ -164,7 +187,7 @@ export default function ModelViewer({ modelUrl, envUrl }) {
             height={20}
           />
 
-          <PostProcessing dirty={`${clonePos}-${cloneRot}-${cloneScale}-${normalIntensity}-${envIntensity}-${envRotation}`} />
+          {/* <PostProcessing dirty={`${clonePos}-${cloneRot}-${cloneScale}-${normalIntensity}-${envIntensity}-${envRotation}`} /> */}
         </Suspense>
 
         <CameraControls
