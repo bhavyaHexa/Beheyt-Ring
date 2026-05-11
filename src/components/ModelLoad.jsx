@@ -46,8 +46,11 @@ export default function ModelLoad({ url, ...props }) {
         // 1. Create the base material
         const material = new THREE.MeshStandardMaterial({
             color: "#f6f5f5",
-            roughness: 0.0,
+            roughness: 0.15,
             metalness: 1.0,
+            aoMap: materials.Silver.map,
+            aoMapIntensity: 1.5,
+
         });
 
         // 2. Conditionally apply the normal map
