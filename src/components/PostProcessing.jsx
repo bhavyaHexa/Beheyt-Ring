@@ -7,6 +7,7 @@ import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js'
 import { BrightnessContrastShader } from 'three/addons/shaders/BrightnessContrastShader.js'
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js'
+import { SSAOPass } from 'three/addons/postprocessing/SSAOPass.js'
 import { useControls } from 'leva'
 import * as THREE from 'three'
 
@@ -22,11 +23,11 @@ export default function PostProcessing({ dirty }) {
   // TRAA (Temporal Anti-Aliasing) Controls
   const { traaEnabled, sampleLevel, unbiased } = useControls("Post Processing.TRAA", {
     traaEnabled: { value: true, label: "Enabled" },
-    sampleLevel: { 
-      value: 3, 
-      min: 0, 
-      max: 5, 
-      step: 1, 
+    sampleLevel: {
+      value: 3,
+      min: 0,
+      max: 5,
+      step: 1,
       label: "Sample Level (2^n)",
       hint: "Higher levels provide better smoothing over time."
     },
@@ -41,6 +42,16 @@ export default function PostProcessing({ dirty }) {
     radius: { value: 0.4, min: 0, max: 1, step: 0.01, label: "Radius" },
   });
 
+  // SSAO Controls
+  const { ssaoEnabled, ssaoIntensity, kernelRadius, minDistance, maxDistance, ssaoOnly } = useControls("Post Processing.SSAO", {
+    ssaoEnabled: { value: true, label: "Enabled" },
+    ssaoOnly: { value: false, label: "SSAO Debug Output" },
+    ssaoIntensity: { value: 1.5, min: 0, max: 5, step: 0.1, label: "Intensity" },
+    kernelRadius: { value: 0.5, min: 0.01, max: 5, step: 0.01, label: "Kernel Radius" },
+    minDistance: { value: 1.0, min: 0, max: 50.0, step: 0.1, label: "Min Distance (x1000)" },
+    maxDistance: { value: 100.0, min: 0, max: 2000.0, step: 1.0, label: "Max Distance (x1000)" },
+  });
+
   // Brightness & Contrast Controls
   const { bcEnabled, brightness, contrast } = useControls("Post Processing.Brightness & Contrast", {
     bcEnabled: { value: true, label: "Enabled" },
@@ -52,7 +63,7 @@ export default function PostProcessing({ dirty }) {
   const composerState = useMemo(() => {
     const composer = new EffectComposer(gl)
     composer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-    
+
     // 0. Regular Render Pass (Fallback for when SSAA is disabled)
     // This provides the standard "jaggy" edges
     const renderPass = new RenderPass(scene, camera)
@@ -66,11 +77,44 @@ export default function PostProcessing({ dirty }) {
     traaPass.accumulate = true
     composer.addPass(traaPass)
 
+    // 1.5 SSAO Pass
+    const ssaoPass = new SSAOPass(scene, camera, size.width, size.height)
+
+    // Patch visibility to ignore transparent objects (like ContactShadows) during SSAO render
+    const originalVisibility = ssaoPass._overrideVisibility.bind(ssaoPass);
+    ssaoPass._overrideVisibility = function () {
+      originalVisibility();
+      this.scene.traverse((object) => {
+        if (object.isMesh && object.material && object.visible) {
+          const isTransparent = Array.isArray(object.material)
+            ? object.material.some(m => m.transparent)
+            : object.material.transparent;
+          if (isTransparent) {
+            object.visible = false;
+            this._visibilityCache.push(object);
+          }
+        }
+      });
+    };
+
+    // Inject intensity uniform into the SSAO shader
+    ssaoPass.ssaoMaterial.uniforms['intensity'] = { value: 1.0 }
+    ssaoPass.ssaoMaterial.fragmentShader = ssaoPass.ssaoMaterial.fragmentShader
+      .replace(
+        'uniform float kernelRadius;',
+        'uniform float kernelRadius;\nuniform float intensity;'
+      )
+      .replace(
+        'gl_FragColor = vec4( vec3( 1.0 - occlusion ), 1.0 );',
+        'gl_FragColor = vec4( vec3( 1.0 - occlusion * intensity ), 1.0 );'
+      )
+    composer.addPass(ssaoPass)
+
     // 2. Bloom Pass (UnrealBloomPass)
     const bloomPass = new UnrealBloomPass(
-      new THREE.Vector2(size.width, size.height), 
-      intensity, 
-      radius, 
+      new THREE.Vector2(size.width, size.height),
+      intensity,
+      radius,
       luminanceThreshold
     )
     composer.addPass(bloomPass)
@@ -84,18 +128,18 @@ export default function PostProcessing({ dirty }) {
     const outputPass = new OutputPass()
     composer.addPass(outputPass)
 
-    return { composer, renderPass, traaPass, bloomPass, bcPass, outputPass }
+    return { composer, renderPass, traaPass, ssaoPass, bloomPass, bcPass, outputPass }
   }, [gl, scene, camera])
 
   // Update pass parameters whenever controls change
   useEffect(() => {
-    const { composer, renderPass, traaPass, bloomPass, bcPass, outputPass } = composerState
+    const { composer, renderPass, traaPass, ssaoPass, bloomPass, bcPass, outputPass } = composerState
 
     // Toggle between standard RenderPass and TAARenderPass
     // This ensures something is always rendering the scene
     renderPass.enabled = !traaEnabled
     traaPass.enabled = traaEnabled
-    
+
     // Update TRAA settings
     traaPass.sampleLevel = sampleLevel
     traaPass.unbiased = unbiased
@@ -104,6 +148,32 @@ export default function PostProcessing({ dirty }) {
     // Clear camera offset if TRAA is disabled to fix positioning issues
     if (!traaEnabled && camera.clearViewOffset) {
       camera.clearViewOffset()
+    }
+
+    // Update SSAO
+    ssaoPass.enabled = ssaoEnabled
+    ssaoPass.kernelRadius = kernelRadius
+    ssaoPass.minDistance = minDistance / 1000
+    ssaoPass.maxDistance = maxDistance / 1000
+
+    // Sync camera near/far to prevent white-out issues if camera changes
+    if (ssaoPass.ssaoMaterial.uniforms['cameraNear']) {
+      ssaoPass.ssaoMaterial.uniforms['cameraNear'].value = camera.near;
+      ssaoPass.ssaoMaterial.uniforms['cameraFar'].value = camera.far;
+    }
+    if (ssaoPass.depthRenderMaterial.uniforms['cameraNear']) {
+      ssaoPass.depthRenderMaterial.uniforms['cameraNear'].value = camera.near;
+      ssaoPass.depthRenderMaterial.uniforms['cameraFar'].value = camera.far;
+    }
+
+    // Set custom injected intensity uniform
+    if (ssaoPass.ssaoMaterial.uniforms['intensity']) {
+      ssaoPass.ssaoMaterial.uniforms['intensity'].value = ssaoIntensity;
+    }
+
+    // Fix issue where changing intensity didn't immediately update or created errors
+    if (ssaoPass.output !== undefined) {
+      ssaoPass.output = ssaoOnly ? SSAOPass.OUTPUT.SSAO : SSAOPass.OUTPUT.Default
     }
 
     // Update Bloom
@@ -127,7 +197,7 @@ export default function PostProcessing({ dirty }) {
 
     // Sync size
     composer.setSize(size.width, size.height)
-  }, [composerState, gl.toneMapping, size, camera, traaEnabled, sampleLevel, unbiased, bloomEnabled, intensity, luminanceThreshold, radius, bcEnabled, brightness, contrast, dirty])
+  }, [composerState, gl.toneMapping, size, camera, traaEnabled, sampleLevel, unbiased, ssaoEnabled, ssaoOnly, ssaoIntensity, kernelRadius, minDistance, maxDistance, bloomEnabled, intensity, luminanceThreshold, radius, bcEnabled, brightness, contrast, dirty])
 
   // Render loop override
   useFrame((state) => {

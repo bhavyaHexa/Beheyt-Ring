@@ -1,11 +1,13 @@
 import { Canvas, useThree } from '@react-three/fiber'
 import { Environment, CameraControls, ContactShadows, PerspectiveCamera, Center, SoftShadows } from '@react-three/drei'
-import { Suspense, useState, useEffect } from 'react'
+import { Suspense, useState, useEffect, useMemo } from 'react'
 import { useControls } from 'leva'
 import Model from './Model'
 import Lights from './Lights'
 import PostProcessing from './PostProcessing'
 import * as THREE from 'three'
+import RawModel from './RawModel'
+import ModelLoad from './ModelLoad'
 
 function ToneMappingDebugger() {
   const { gl } = useThree();
@@ -40,7 +42,7 @@ function AssetControls({
 }) {
   const [, set] = useControls("Assets", () => ({
     modelUrl: {
-      value: modelUrl,
+      value: "/Beheyt Artisanaal_174_V1.7.glb",
       onChange: (v) => onModelUrlChange(v),
     },
   }));
@@ -58,9 +60,25 @@ function AssetControls({
 export default function ModelViewer({ modelUrl, envUrl }) {
   const [currentModelUrl, setCurrentModelUrl] = useState(modelUrl);
 
+  // Use THREE.Timer instead of THREE.Clock to resolve deprecation warning in Three.js 184+
+  const timerClock = useMemo(() => {
+    const timer = new THREE.Timer();
+    return {
+      getDelta: () => {
+        timer.update();
+        return timer.getDelta();
+      },
+      getElapsedTime: () => timer.getElapsed(),
+      get elapsedTime() { return timer.getElapsed(); },
+      start: () => { },
+      stop: () => { },
+    };
+  }, []);
+
   const { normalIntensity } = useControls("Normal Map", {
     normalIntensity: { value: 1, min: 0, max: 5, step: 0.05, label: "Intensity" }
   });
+
 
   const { aoMapUrl, aoIntensity, viewOnlyAOMap } = useControls("AO Map", {
     aoMapUrl: { value: "", label: "AO Map URL" },
@@ -68,10 +86,17 @@ export default function ModelViewer({ modelUrl, envUrl }) {
     viewOnlyAOMap: { value: false, label: "View Only AO Map" }
   });
 
-  const { envIntensity, envRotation, showBackground } = useControls('Lighting.Environment', {
+  const { roughnessMapUrl, roughnessIntensity, roughnessRepeat } = useControls("Roughness Map", {
+    roughnessMapUrl: { value: "", label: "Roughness Map URL" },
+    roughnessIntensity: { value: 1, min: 0, max: 2, step: 0.1, label: "Intensity" },
+    roughnessRepeat: { value: [1, 1], step: 0.1, label: "Repeat (X, Y)" }
+  });
+
+  const { envIntensity, envRotation, showBackground, customEnvUrl } = useControls('Lighting.Environment', {
     envIntensity: { value: 0.7, min: 0, max: 10, step: 0.1, label: 'Intensity' },
     showBackground: { value: false, label: 'Show BG' },
     envRotation: { value: [0, -2.5, 0], step: 0.1, label: 'Rotation' },
+    customEnvUrl: { value: "", label: "Custom Env (PNG)" }
   });
 
   const [shadowY, setShadowY] = useState(0);
@@ -79,7 +104,7 @@ export default function ModelViewer({ modelUrl, envUrl }) {
 
   const { clonePos, cloneRot, cloneScale } = useControls("Cloned Ring", {
     clonePos: { value: [0.5, 0.0, 1.3], step: 0.1 },
-    cloneRot: { value: [-4.0, 0.1, -2.0], step: 0.1 },
+    cloneRot: { value: [-4.0, -0.2, -2.0], step: 0.1 },
     cloneScale: { value: 0.8, step: 0.05 }
   });
 
@@ -93,14 +118,15 @@ export default function ModelViewer({ modelUrl, envUrl }) {
       <Canvas
         shadows
         dpr={[1, 2]}
+        clock={timerClock}
         gl={{
           antialias: true,
           // As requested: default use NoToneMapping
           toneMapping: THREE.NoToneMapping,
-          outputColorSpace: THREE.SRGBColorSpace
+          // outputColorSpace: THREE.SRGBColorSpace
         }}
       >
-        <color attach="background" args={["#f9f9f9"]} />
+        <color attach="background" args={["#f2efe8"]} />
         <PerspectiveCamera makeDefault position={[0, 3, 10.5]} fov={30} />
 
         <ToneMappingDebugger />
@@ -112,22 +138,12 @@ export default function ModelViewer({ modelUrl, envUrl }) {
 
 
         <Suspense fallback={null}>
-          <Lights envUrl={envUrl} envIntensity={envIntensity} envRotation={envRotation} showBackground={showBackground} />
+          <Lights envUrl={envUrl} customEnvUrl={customEnvUrl} envIntensity={envIntensity} envRotation={envRotation} showBackground={showBackground} />
 
-          {/* Model component centered at [0,0,0] to ensure zoom stays centered */}
           <Center onCentered={({ height }) => setShadowY(-height / 2)}>
-            <Model
+            <ModelLoad
               url={currentModelUrl}
-              envUrl={envUrl}
-              rotation={[- Math.PI / 2, 0, Math.PI / 3]}
-              clonePos={clonePos}
-              cloneRot={cloneRot}
-              cloneScale={cloneScale}
-              normalIntensity={normalIntensity}
-              envIntensity={envIntensity}
-              aoMapUrl={aoMapUrl}
-              aoIntensity={aoIntensity}
-              viewOnlyAOMap={viewOnlyAOMap}
+              rotation={[-Math.PI / 2, 0, Math.PI / 3]}
             />
           </Center>
 
