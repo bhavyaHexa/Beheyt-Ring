@@ -187,7 +187,7 @@ export default function ModelViewer({ modelUrl, envUrl }) {
             height={20}
           />
 
-          {/* <PostProcessing dirty={`${clonePos}-${cloneRot}-${cloneScale}-${normalIntensity}-${envIntensity}-${envRotation}`} /> */}
+          <PostProcessing dirty={`${clonePos}-${cloneRot}-${cloneScale}-${normalIntensity}-${envIntensity}-${envRotation}`} />
         </Suspense>
 
         <CameraControls
