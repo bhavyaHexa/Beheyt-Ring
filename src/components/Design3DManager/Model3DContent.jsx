@@ -1,12 +1,16 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useGLTF } from '@react-three/drei';
 import { observer } from 'mobx-react-lite';
 import { rootStore } from '../../managers/stateManager';
+import * as THREE from "three";
 
 // 3D Rendering Component
 const Model3DContent = observer(() => {
     const { design3DManager } = rootStore;
-    const url = design3DManager.activeModel.modelUrl || "/BehytRings/Briljant/546/4.5mm/Beheyt Briljant_546_V1.1.glb";
+    console.log(
+        design3DManager.activeModel.modelUrl
+    )
+    const url = design3DManager.activeModel.modelUrl;
 
     console.log("Rendering Model URL:", url)
 
@@ -19,7 +23,36 @@ const Model3DContent = observer(() => {
 
     if (!url) return null;
 
-    const { scene } = useGLTF(url);
+    const { scene, materials } = useGLTF(url);
+
+    console.log(materials)
+
+    const goldMaterial = useMemo(() => {
+        const material = new THREE.MeshPhysicalMaterial({
+            color: "#d4d3d1",
+            metalness: 1.0,
+            roughness: 0.0,
+            normalScale: new THREE.Vector2(1.0, 1.0),
+        });
+        return material;
+    }, []);
+
+    useMemo(() => {
+        scene.traverse((mesh) => {
+            if (mesh.isMesh) {
+                if (mesh.name.includes("Custom") || mesh.name.includes("Gold")) {
+                    mesh.material = goldMaterial;
+                }
+                // else if (mesh.name.includes("Engraving")) {
+                //     mesh.material = engraveMaterial;
+                // }
+                // else {
+                //     mesh.material = silverMaterial;
+                // }
+            }
+        })
+    }, [scene, goldMaterial])
+
     return <primitive object={scene} rotation={[-Math.PI / 2, 0, Math.PI / 3]} />;
 });
 

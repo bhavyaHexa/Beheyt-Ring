@@ -6,8 +6,8 @@ const DesignManager = observer(() => {
     const { designManager } = rootStore;
 
     const collections = ['briljant', 'artisanal'];
-    const modelIds = ['546', '548', '312'];
-    const variations = ['3.5 mm', '4.0 mm', '5.00 mm'];
+    const modelIds = ['546', '174', '548', '312'];
+    const variations = ['4.5 mm', '2.5 mm', '3.5 mm', '4.0 mm', '5.00 mm'];
     const colors = ['gold', 'silver', 'Rose-Gold'];
 
     return (

@@ -4,9 +4,14 @@ import { RootStore } from "./stateManager";
 export class DesignManagerStore {
     selectedCollection: string = "briljant";
     selectedModelId: string = "546";
-    selectedVariation: string = "3.5 mm";
+    selectedVariation: string = "4.5 mm";
     selectedColor: string = "gold";
-    selectedModelUrl: string = "/BehytRings/Briljant/546/4.5mm/Beheyt Briljant_546_V1.1.glb"
+
+    get selectedModelUrl(): string {
+        const collection = this.selectedCollection.charAt(0).toUpperCase() + this.selectedCollection.slice(1);
+        const variation = this.selectedVariation.replace(/\s+/g, '');
+        return `/BehytRings/${collection}/${this.selectedModelId}/${variation}/${this.selectedModelId}.glb`;
+    }
 
     rootStore: RootStore;
 
