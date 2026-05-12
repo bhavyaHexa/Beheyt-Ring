@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
-import { useGLTF } from '@react-three/drei';
+import { useGLTF, useTexture } from '@react-three/drei';
 import { observer } from 'mobx-react-lite';
 import { rootStore } from '../../managers/stateManager';
 import * as THREE from "three";
@@ -7,16 +7,33 @@ import * as THREE from "three";
 // 3D Rendering Component
 const Model3DContent = observer(() => {
     const { design3DManager } = rootStore;
-    console.log(
-        design3DManager.activeModel.modelUrl
-    )
-    const url = design3DManager.activeModel.modelUrl;
+    const { collection, modelId, variation, colorHex, modelUrl: url } = design3DManager.activeModel;
 
-    const color = design3DManager.activeModel.colorHex;
+    console.log("Model URL:", url);
+    console.log("Color:", colorHex);
 
-    console.log(color)
+    // Format selection for asset path
+    const formattedCollection = collection.charAt(0).toUpperCase() + collection.slice(1);
+    const formattedVariation = variation.replace(/\s+/g, '');
+    const aoMapUrlGold = `/BehytRings/${formattedCollection}/${modelId}/${formattedVariation}/Gold_Metal_AO.webp`;
+    const aoMapUrlSilver = `/BehytRings/${formattedCollection}/${modelId}/${formattedVariation}/Silver_Metal_AO.webp`;
 
-    console.log("Rendering Model URL:", url)
+    console.log("AO Map URL:", aoMapUrlGold);
+    console.log("AO Map Silver URL:", aoMapUrlSilver);
+
+
+    // Load textures
+    const aoTextureGold = useTexture(aoMapUrlGold);
+    if (aoTextureGold) {
+        aoTextureGold.flipY = false; // GLTF standard
+    }
+
+    const aoTextureSilver = useTexture(aoMapUrlSilver);
+    if (aoTextureSilver) {
+        aoTextureSilver.flipY = false; // GLTF standard
+    }
+
+    console.log("jdsfbds", aoTextureSilver)
 
     useEffect(() => {
         // Alert only if we have data loaded but no URL for the selection
@@ -27,19 +44,22 @@ const Model3DContent = observer(() => {
 
     if (!url) return null;
 
-    const { scene, materials } = useGLTF(url);
+    const { scene, materials, mesh } = useGLTF(url);
+    console.log(scene)
 
     console.log(materials)
 
     const goldMaterial = useMemo(() => {
         const material = new THREE.MeshPhysicalMaterial({
-            color: color,
+            color: colorHex,
             metalness: 1.0,
-            roughness: 0.2,
+            roughness: 0.0,
+            aoMap: aoTextureGold,
+            aoMapIntensity: 1.5,
             normalScale: new THREE.Vector2(1.0, 1.0),
         });
         return material;
-    }, [color]);
+    }, [colorHex, aoTextureGold]);
 
 
     const silverMaterial = useMemo(() => {
@@ -48,8 +68,9 @@ const Model3DContent = observer(() => {
             color: "#f6f5f5",
             roughness: 0.15,
             metalness: 1.0,
-            // aoMap: materials.Silver.map,
-            // aoMapIntensity: 1.5,
+            aoMap: aoTextureSilver,
+            aoMapIntensity: 2.5,
+
         });
         return material;
     }, [materials]);
@@ -69,6 +90,10 @@ const Model3DContent = observer(() => {
             if (mesh.isMesh) {
                 if (mesh.name.includes("Custom") || mesh.name === "Gold" || mesh.name === "Engraving_Mesh") {
                     mesh.material = goldMaterial;
+                    // Ensure UV2 exists for aoMap
+                    // if (mesh.geometry.attributes.uv && !mesh.geometry.attributes.uv2) {
+                    //     mesh.geometry.setAttribute('uv2', mesh.geometry.attributes.uv);
+                    // }
                 }
                 else if (mesh.name === "Diamond_Mesh") {
                     mesh.material = diamondMaterial;
