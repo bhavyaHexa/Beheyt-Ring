@@ -16,7 +16,9 @@ const ModelRender = observer(() => {
                 <Canvas shadows camera={{ position: [0, 0, 10], fov: 35 }}>
                     <color attach="background" args={["#f8f7f2"]} />
                     <Suspense fallback={null}>
-                        <Environment preset="city" />
+                        <Environment files={"/env/08.hdr"}
+                            environmentIntensity={0.8}
+                        />
                         <Center>
                             <Model3DContent />
                         </Center>
@@ -54,10 +56,9 @@ const ModelRender = observer(() => {
                     <div className="flex flex-col">
                         <label className="block text-[0.7rem] text-black/40 mb-1">Color</label>
                         <div className="flex items-center gap-2">
-                            <div className={`w-2.5 h-2.5 rounded-full ${
-                                color === 'gold' ? 'bg-[linear-gradient(135deg,#bf953f,#fcf6ba,#aa771c)]' :
+                            <div className={`w-2.5 h-2.5 rounded-full ${color === 'gold' ? 'bg-[linear-gradient(135deg,#bf953f,#fcf6ba,#aa771c)]' :
                                 color === 'silver' ? 'bg-[linear-gradient(135deg,#707070,#ffffff,#909090)]' : 'bg-gray-400'
-                            }`}></div>
+                                }`}></div>
                             <span className="text-[1rem] font-semibold text-black">{color}</span>
                         </div>
                     </div>

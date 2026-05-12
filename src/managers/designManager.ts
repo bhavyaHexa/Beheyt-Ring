@@ -4,13 +4,24 @@ import { RootStore } from "./stateManager";
 export class DesignManagerStore {
     selectedCollection: string = "briljant";
     selectedModelId: string = "546";
-    selectedVariation: string = "4.5 mm";
+    selectedVariation: string = "4.5mm";
     selectedColor: string = "gold";
+
+    colorMap: Record<string, string> = {
+        gold: "#ffc35c",
+        silver: "#f6f5f5",
+        rose_gold: "#ff00ff"
+
+    };
+
+    get selectedColorHex(): string {
+        return this.colorMap[this.selectedColor.toLowerCase()];
+    }
 
     get selectedModelUrl(): string {
         const collection = this.selectedCollection.charAt(0).toUpperCase() + this.selectedCollection.slice(1);
         const variation = this.selectedVariation.replace(/\s+/g, '');
-        return `/BehytRings/${collection}/${this.selectedModelId}/${variation}/${this.selectedModelId}.glb`;
+        return `/BehytRings/${collection}/${this.selectedModelId}/${variation}/${this.selectedModelId}_${this.selectedVariation}.glb`;
     }
 
     rootStore: RootStore;
@@ -42,6 +53,7 @@ export class DesignManagerStore {
             modelId: this.selectedModelId,
             variation: this.selectedVariation,
             color: this.selectedColor,
+            colorHex: this.selectedColorHex,
             modelUrl: this.selectedModelUrl
         };
     }
