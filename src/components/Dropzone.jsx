@@ -21,16 +21,16 @@ const Dropzone = ({ onFileLoaded }) => {
   });
 
   return (
-    <div 
-      {...getRootProps()} 
+    <div
+      {...getRootProps()}
       className={`dropzone-container ${isDragActive ? 'active' : ''}`}
     >
       <input {...getInputProps()} />
       <div className="dropzone-content">
         <Upload size={24} className="upload-icon" />
         <p>
-          {isDragActive 
-            ? "Drop the model here..." 
+          {isDragActive
+            ? "Drop the model here..."
             : "Drag & drop a 3D model (.glb, .gltf)"}
         </p>
         <span className="browse-text">or click to browse</span>

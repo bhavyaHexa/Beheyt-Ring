@@ -1,0 +1,18 @@
+{
+    "rings": {
+        "briljant": {
+            "546": {
+                "4.5mm": {
+                    "modelUrl": "/BehytRings/Briljant/546/4.5mm/model.glb",
+                    "textures": {
+                        "albedo": "/BehytRings/Briljant/546/4.5mm/albedo.jpg",
+                        "normal": "/BehytRings/Briljant/546/4.5mm/normal.jpg",
+                        "roughness": "/BehytRings/Briljant/546/4.5mm/roughness.jpg",
+                        "metalness": "/BehytRings/Briljant/546/4.5mm/metalness.jpg",
+                        "ao": "/BehytRings/Briljant/546/4.5mm/ao.jpg"
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,6 +1,8 @@
 import { useState } from "react"
 import ModelViewer from "./components/ModelViewer"
 import Dropzone from "./components/Dropzone"
+import DesignManager from "./components/DesignManager/DesignManager"
+import ModelRender from "./components/Design3DManager/ModelRender"
 
 export default function App() {
     const [modelURL, setModelURL] = useState("/models/Beheyt Artisanaal_174_V1.10.glb")
@@ -16,12 +18,18 @@ export default function App() {
 
     return (
         <div className="app-container">
-            <div className="ui-overlay">
-                <h1>Beheyt Ring Viewer</h1>
-                <p>{modelName}</p>
+            <ModelRender />
+
+            <div className="ui-overlay flex flex-col gap-4 pointer-events-auto">
+                <div className="top-info">
+                    <h1>Beheyt Ring Viewer</h1>
+                    <p>{modelName}</p>
+                </div>
+
+                <DesignManager />
             </div>
 
-            <ModelViewer modelUrl={modelURL} envUrl={envURL} />
+            {/* <ModelViewer modelUrl={modelURL} envUrl={envURL} /> */}
 
             <Dropzone onFileLoaded={handleFileLoaded} />
         </div>
