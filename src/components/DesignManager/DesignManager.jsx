@@ -5,9 +5,9 @@ import { rootStore } from '../../managers/stateManager';
 const DesignManager = observer(() => {
     const { designManager } = rootStore;
 
-    const collections = ['briljant', 'artisanal'];
-    const modelIds = ['546', '174', '548', '312'];
-    const variations = ['4.5mm', '2.5mm', '3.5mm', '4.0mm', '5.0mm'];
+    const collections = ['briljant'];
+    const modelIds = ['546'];
+    const variations = ['4.5mm', '5.0mm'];
     const colors = ['gold', 'silver', 'Rose_Gold'];
 
     return (

@@ -59,6 +59,11 @@ const Model3DContent = observer(() => {
             if (node.isMesh) {
                 const mesh = node;
 
+                // Hide Silver_Diamond mesh
+                if (mesh.name === "Silver_Diamond") {
+                    mesh.visible = false;
+                }
+
                 // --- START: NEWLY IMPLEMENTED DIAMOND LOGIC ---
                 if (mesh.name === "Diamond_Mesh" || mesh.name.includes("Diam_Centr")) {
                     // 1. Create BVH for the geometry (required for refraction bounces)
@@ -71,9 +76,9 @@ const Model3DContent = observer(() => {
                         envMap: diamondEnvMap,
                         resolution: new THREE.Vector2(size.width, size.height),
                         ior: 2.4,
-                        bounces: 8,
+                        bounces: 2,
                         aberrationStrength: 0.0001,
-                        color: "#ffffff", // Use white for pure diamond, or change as needed
+                        // color: "#ffffff", // Use white for pure diamond, or change as needed
                     });
                 }
                 // --- END: NEWLY IMPLEMENTED DIAMOND LOGIC ---
@@ -81,7 +86,7 @@ const Model3DContent = observer(() => {
                 else if (mesh.name.includes("Custom") || mesh.name === "Gold" || mesh.name === "Engraving_Mesh") {
                     mesh.material = goldMaterial;
                 }
-                else if (mesh.name === "Silver_Diamond" || mesh.name === "Silver_Metal") {
+                else if (mesh.name === "Silver_Metal") {
                     mesh.material = silverMaterial;
                 }
             }
