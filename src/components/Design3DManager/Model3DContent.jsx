@@ -53,9 +53,9 @@ const Model3DContent = observer(() => {
         const material = new THREE.MeshPhysicalMaterial({
             color: colorHex,
             metalness: 1.0,
-            roughness: 0.0,
+            roughness: 0.15,
             aoMap: aoTextureGold,
-            aoMapIntensity: 1.5,
+            aoMapIntensity: 1.0,
             normalScale: new THREE.Vector2(1.0, 1.0),
         });
         return material;
