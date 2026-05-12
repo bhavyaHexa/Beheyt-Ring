@@ -10,7 +10,7 @@ import Model3DContent from './Model3DContent';
 // Helper component to sync environment rotation
 const EnvironmentSync = ({ x, y, z }) => {
     const { scene } = useThree();
-    
+
     useEffect(() => {
         if (scene) {
             // Convert degrees to radians and apply to scene environment rotation
@@ -28,7 +28,7 @@ const EnvironmentSync = ({ x, y, z }) => {
             );
         }
     }, [scene, x, y, z]);
-    
+
     return null;
 };
 

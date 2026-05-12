@@ -1,109 +1,92 @@
 import React, { useEffect, useMemo } from 'react';
-import { useGLTF, useTexture } from '@react-three/drei';
+import { useGLTF, useTexture, useEnvironment } from '@react-three/drei';
 import { observer } from 'mobx-react-lite';
 import { rootStore } from '../../managers/stateManager';
 import * as THREE from "three";
+import { useThree } from '@react-three/fiber';
+import { MeshBVH } from 'three-mesh-bvh';
 
-// 3D Rendering Component
+// START: NEWLY IMPLEMENTED IMPORTS
+import MeshRefractionMaterialWebGL from '../../material/MeshRefractionMaterial.js';
+// END: NEWLY IMPLEMENTED IMPORTS
+
 const Model3DContent = observer(() => {
     const { design3DManager } = rootStore;
     const { collection, modelId, variation, colorHex, modelUrl: url } = design3DManager.activeModel;
+    const { size } = useThree();
 
-    console.log("Model URL:", url);
-    console.log("Color:", colorHex);
+    // Load Environment Map for the Diamond Refraction
+    const diamondEnvMap = useEnvironment({ files: '/gemEnv.exr' });
 
-    // Format selection for asset path
+    // Texture loading for metal
     const formattedCollection = collection.charAt(0).toUpperCase() + collection.slice(1);
     const formattedVariation = variation.replace(/\s+/g, '');
     const aoMapUrlGold = `/BehytRings/${formattedCollection}/${modelId}/${formattedVariation}/Gold_Metal_AO.webp`;
     const aoMapUrlSilver = `/BehytRings/${formattedCollection}/${modelId}/${formattedVariation}/Silver_Metal_AO.webp`;
 
-    console.log("AO Map URL:", aoMapUrlGold);
-    console.log("AO Map Silver URL:", aoMapUrlSilver);
-
-
-    // Load textures
     const aoTextureGold = useTexture(aoMapUrlGold);
-    if (aoTextureGold) {
-        aoTextureGold.flipY = false; // GLTF standard
-    }
+    if (aoTextureGold) aoTextureGold.flipY = false;
 
     const aoTextureSilver = useTexture(aoMapUrlSilver);
-    if (aoTextureSilver) {
-        aoTextureSilver.flipY = false; // GLTF standard
-    }
+    if (aoTextureSilver) aoTextureSilver.flipY = false;
 
-    console.log("jdsfbds", aoTextureSilver)
+    const { scene } = useGLTF(url);
 
-    useEffect(() => {
-        // Alert only if we have data loaded but no URL for the selection
-        if (!url && design3DManager.ringsData) {
-            alert("model is not present");
-        }
-    }, [url, design3DManager.ringsData]);
-
-    if (!url) return null;
-
-    const { scene, materials, mesh } = useGLTF(url);
-    console.log(scene)
-
-    console.log(materials)
-
+    // Metal Materials
     const goldMaterial = useMemo(() => {
-        const material = new THREE.MeshPhysicalMaterial({
+        return new THREE.MeshPhysicalMaterial({
             color: colorHex,
             metalness: 1.0,
             roughness: 0.15,
             aoMap: aoTextureGold,
             aoMapIntensity: 1.0,
-            normalScale: new THREE.Vector2(1.0, 1.0),
         });
-        return material;
     }, [colorHex, aoTextureGold]);
 
-
     const silverMaterial = useMemo(() => {
-        // 1. Create the base material
-        const material = new THREE.MeshStandardMaterial({
+        return new THREE.MeshStandardMaterial({
             color: "#f6f5f5",
             roughness: 0.15,
             metalness: 1.0,
             aoMap: aoTextureSilver,
-            aoMapIntensity: 2.5,
-
+            aoMapIntensity: 0.8,
         });
-        return material;
-    }, [materials]);
+    }, [aoTextureSilver]);
 
-    const diamondMaterial = useMemo(() => {
-        const material = new THREE.MeshPhysicalMaterial({
-            color: "#ff0000",
-
-        });
-        return material;
-    }, []);
-
-
-
+    // Mesh Processing Logic
     useMemo(() => {
-        scene.traverse((mesh) => {
-            if (mesh.isMesh) {
-                if (mesh.name.includes("Custom") || mesh.name === "Gold" || mesh.name === "Engraving_Mesh") {
-                    mesh.material = goldMaterial;
-                    // Ensure UV2 exists for aoMap
-                    // if (mesh.geometry.attributes.uv && !mesh.geometry.attributes.uv2) {
-                    //     mesh.geometry.setAttribute('uv2', mesh.geometry.attributes.uv);
-                    // }
+        scene.traverse((node) => {
+            if (node.isMesh) {
+                const mesh = node;
+
+                // --- START: NEWLY IMPLEMENTED DIAMOND LOGIC ---
+                if (mesh.name === "Diamond_Mesh" || mesh.name.includes("Diam_Centr")) {
+                    // 1. Create BVH for the geometry (required for refraction bounces)
+                    const bvh = new MeshBVH(mesh.geometry, { strategy: 1 });
+
+                    // 2. Assign the advanced Refraction Material
+                    mesh.material = new MeshRefractionMaterialWebGL({
+                        geometry: mesh.geometry,
+                        bvh: bvh,
+                        envMap: diamondEnvMap,
+                        resolution: new THREE.Vector2(size.width, size.height),
+                        ior: 2.4,
+                        bounces: 8,
+                        aberrationStrength: 0.0001,
+                        color: "#ffffff", // Use white for pure diamond, or change as needed
+                    });
                 }
-                else if (mesh.name === "Diamond_Mesh") {
-                    mesh.material = diamondMaterial;
+                // --- END: NEWLY IMPLEMENTED DIAMOND LOGIC ---
+
+                else if (mesh.name.includes("Custom") || mesh.name === "Gold" || mesh.name === "Engraving_Mesh") {
+                    mesh.material = goldMaterial;
                 }
                 else if (mesh.name === "Silver_Diamond" || mesh.name === "Silver_Metal") {
                     mesh.material = silverMaterial;
                 }
             }
-        })
-    }, [scene, goldMaterial])
+        });
+    }, [scene, goldMaterial, silverMaterial, diamondEnvMap, size]);
 
     return <primitive object={scene} rotation={[-Math.PI / 2, 0, Math.PI / 3]} />;
 });

@@ -27,7 +27,7 @@ const DesignManager = observer(() => {
                     {collections.map(col => (
                         <button
                             key={col}
-                            className={`p-3 bg-black/5 border border-black/10 rounded-[0.75rem] text-black/80 cursor-pointer transition-all duration-200 text-[0.85rem] font-medium hover:bg-black/10 hover:-translate-y-0.5 ${designManager.selectedCollection === col ? 'bg-black text-white border-black shadow-[0_4px_15px_rgba(0,0,0,0.2)]' : ''
+                            className={`p-3 bg-black/5 border border-black/10 rounded-[0.75rem] text-black cursor-pointer transition-all duration-200 text-[0.85rem] font-semibold hover:bg-black/10 hover:-translate-y-0.5 ${designManager.selectedCollection === col ? 'bg-black/20 font-bold border-black/20 shadow-[0_4px_15px_rgba(0,0,0,0.2)]' : ''
                                 }`}
                             onClick={() => designManager.setCollection(col)}
                         >
@@ -43,7 +43,7 @@ const DesignManager = observer(() => {
                     {modelIds.map(id => (
                         <button
                             key={id}
-                            className={`p-3 bg-black/5 border border-black/10 rounded-[0.75rem] text-black/80 cursor-pointer transition-all duration-200 text-[0.85rem] font-medium hover:bg-black/10 hover:-translate-y-0.5 ${designManager.selectedModelId === id ? 'bg-black text-white border-black shadow-[0_4px_15px_rgba(0,0,0,0.2)]' : ''
+                            className={`p-3 bg-black/5 border border-black/10 rounded-[0.75rem] text-black cursor-pointer transition-all duration-200 text-[0.85rem] font-semibold hover:bg-black/10 hover:-translate-y-0.5 ${designManager.selectedModelId === id ? 'bg-black/20 font-bold border-black/20 shadow-none' : ''
                                 }`}
                             onClick={() => designManager.setModelId(id)}
                         >
@@ -59,7 +59,7 @@ const DesignManager = observer(() => {
                     {variations.map(v => (
                         <button
                             key={v}
-                            className={`p-3 bg-black/5 border border-black/10 rounded-[0.75rem] text-black/80 cursor-pointer transition-all duration-200 text-[0.85rem] font-medium hover:bg-black/10 hover:-translate-y-0.5 ${designManager.selectedVariation === v ? 'bg-black text-white border-black shadow-[0_4px_15px_rgba(0,0,0,0.2)]' : ''
+                            className={`p-3 bg-black/5 border border-black/10 rounded-[0.75rem] text-black cursor-pointer transition-all duration-200 text-[0.85rem] font-semibold hover:bg-black/10 hover:-translate-y-0.5 ${designManager.selectedVariation === v ? 'bg-black/20 font-bold border-black/20 shadow-none' : ''
                                 }`}
                             onClick={() => designManager.setVariation(v)}
                         >
