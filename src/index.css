@@ -63,12 +63,10 @@
   }
 
   .ui-overlay {
-    @apply absolute top-8 left-8 z-10 pointer-events-none p-6 rounded-[20px] bg-white/40 border border-white/50 shadow-[0_4px_24px_rgba(0,0,0,0.05)];
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    @apply absolute top-8 left-8 z-10 pointer-events-none;
   }
 
-  .ui-overlay * {
+  .ui-overlay > * {
     @apply pointer-events-auto;
   }
 
@@ -105,5 +103,22 @@
 
   .browse-text {
     @apply text-[0.75rem] text-white/40 uppercase tracking-wider;
+  }
+
+  /* Custom Scrollbar */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-black/10 rounded-full transition-colors duration-300;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    @apply bg-black/20;
   }
 }

@@ -12,7 +12,7 @@ export default function App() {
         <div className="app-container">
             <ModelRender />
 
-            <div className="ui-overlay flex flex-col gap-4 pointer-events-auto">
+            <div className="ui-overlay flex flex-col gap-4">
                 <DesignManager />
             </div>
         </div >

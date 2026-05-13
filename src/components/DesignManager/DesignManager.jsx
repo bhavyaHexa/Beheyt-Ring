@@ -11,7 +11,7 @@ const DesignManager = observer(() => {
     const colors = ['gold', 'silver', 'Rose Gold'];
 
     return (
-        <div className="p-8 bg-white/70 backdrop-blur-[20px] rounded-[1.5rem] border border-black/10 text-black max-w-[400px] shadow-[0_10px_30px_rgba(0,0,0,0.1)]">
+        <div className="p-8 bg-white/70 backdrop-blur-[20px] rounded-[1.5rem] border border-black/10 text-black max-w-[400px] max-h-[calc(100vh-4rem)] overflow-y-auto shadow-[0_10px_30px_rgba(0,0,0,0.1)] custom-scrollbar">
             <header className="mb-8">
                 <h2 className="m-0 text-2xl font-bold bg-[linear-gradient(135deg,#000_0%,#444_100%)] bg-clip-text text-transparent">
                     Design Configurator
@@ -94,7 +94,7 @@ const DesignManager = observer(() => {
             </div>
 
             <div className="mt-8">
-                <h3 className="text-[0.8rem] uppercase tracking-[0.1rem] text-black/50 mb-4 font-semibold">Finish</h3>
+                <h3 className="text-[0.8rem] uppercase tracking-[0.1rem] text-black/50 mb-4 font-semibold">Finition</h3>
                 <div className="grid grid-cols-2 gap-3">
                     {['polished', 'matte'].map(f => (
                         <button
