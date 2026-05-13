@@ -1,9 +1,9 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { useGLTF, useTexture, useEnvironment } from '@react-three/drei';
 import { observer } from 'mobx-react-lite';
 import { rootStore } from '../../managers/stateManager';
 import * as THREE from "three";
-import { useThree } from '@react-three/fiber';
+import { useThree, useFrame } from '@react-three/fiber';
 import { MeshBVH } from 'three-mesh-bvh';
 
 // START: NEWLY IMPLEMENTED IMPORTS
@@ -33,20 +33,42 @@ const SingleModel = observer(({ variation, diamondEnvMap, size }) => {
     // Load the GLTF for this variation
     const { scene } = useGLTF(url);
 
-    // Clone the scene to ensure independent visibility/materials if needed, 
-    // though useGLTF handles caching, we want to make sure we don't conflict if the same model is used elsewhere.
-    // However, since we are rendering both and they have different URLs, they are unique in cache.
+    // --- START: LERP ANIMATION CHANGES ---
 
-    // Metal Materials
-    const goldMaterial = useMemo(() => {
-        return new THREE.MeshPhysicalMaterial({
+    // Stable ref to the target color (updated on colorHex change)
+    const targetColor = useRef(new THREE.Color(colorHex));
+
+    // Update target color whenever colorHex changes
+    useEffect(() => {
+        targetColor.current.set(colorHex);
+    }, [colorHex]);
+
+    // Create goldMaterial ONCE and hold it in a ref — never recreate on color change
+    const goldMaterialRef = useRef(
+        new THREE.MeshPhysicalMaterial({
             color: colorHex,
             metalness: 1.0,
             roughness: 0.15,
             aoMap: aoTextureGold,
             aoMapIntensity: 1.0,
-        });
-    }, [colorHex, aoTextureGold]);
+        })
+    );
+
+    // Keep aoMap in sync if the texture changes (e.g. modelId/variation swap)
+    useEffect(() => {
+        goldMaterialRef.current.aoMap = aoTextureGold;
+        goldMaterialRef.current.needsUpdate = true;
+    }, [aoTextureGold]);
+
+    // Lerp the gold material color toward the target every frame
+    useFrame((_, delta) => {
+        goldMaterialRef.current.color.lerp(
+            targetColor.current,
+            1 - Math.pow(0.01, delta) // framerate-independent smooth lerp (~0.3s transition)
+        );
+    });
+
+    // --- END: LERP ANIMATION CHANGES ---
 
     const silverMaterial = useMemo(() => {
         return new THREE.MeshStandardMaterial({
@@ -96,18 +118,18 @@ const SingleModel = observer(({ variation, diamondEnvMap, size }) => {
                 }
 
                 else if (mesh.name.includes("Custom") || mesh.name === "Gold" || mesh.name === "Engraving_Mesh") {
-                    mesh.material = goldMaterial;
+                    mesh.material = goldMaterialRef.current; // <-- uses stable ref
                 }
             }
         });
-    }, [scene, goldMaterial, silverMaterial, diamondEnvMap, size, showDiamond]);
+    }, [scene, goldMaterialRef.current, silverMaterial, diamondEnvMap, size, showDiamond]);
 
     return <primitive object={scene} visible={isVisible} rotation={[-Math.PI / 4, -Math.PI / 10, Math.PI / 3]} />;
 });
 
 const Model3DContent = observer(() => {
     const { size } = useThree();
-    
+
     // Load Environment Map for the Diamond Refraction (shared)
     const diamondEnvMap = useEnvironment({ files: '/08.hdr' });
 
@@ -117,11 +139,11 @@ const Model3DContent = observer(() => {
     return (
         <group>
             {variations.map((v) => (
-                <SingleModel 
-                    key={v} 
-                    variation={v} 
-                    diamondEnvMap={diamondEnvMap} 
-                    size={size} 
+                <SingleModel
+                    key={v}
+                    variation={v}
+                    diamondEnvMap={diamondEnvMap}
+                    size={size}
                 />
             ))}
         </group>
