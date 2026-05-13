@@ -69,7 +69,7 @@ const ModelRender = observer(() => {
                     <Suspense fallback={null}>
                         <EnvironmentSync x={envRotationX} y={envRotationY} z={envRotationZ} />
                         <Environment files={"/env/08.hdr"}
-                            environmentIntensity={0.9}
+                            environmentIntensity={1.0}
                         />
                         <Center>
                             <Model3DContent />

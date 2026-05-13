@@ -49,7 +49,7 @@ const Model3DContent = observer(() => {
             roughness: 0.15,
             metalness: 1.0,
             aoMap: aoTextureSilver,
-            aoMapIntensity: 0.8,
+            aoMapIntensity: 0.6,
         });
     }, [aoTextureSilver]);
 
