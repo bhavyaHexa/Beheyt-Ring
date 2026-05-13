@@ -6,6 +6,7 @@ import { useControls } from 'leva';
 import * as THREE from 'three';
 import { rootStore } from '../../managers/stateManager';
 import Model3DContent from './Model3DContent';
+import PostProcessing from '../PostProcessing';
 
 // Helper component to sync environment rotation
 const EnvironmentSync = ({ x, y, z }) => {
@@ -39,7 +40,7 @@ const ModelRender = observer(() => {
             {/* Main 3D Viewport - fills the background */}
             <div className="w-full h-full pointer-events-auto">
                 <Canvas shadows camera={{ position: [0, 0, 10], fov: 35 }}>
-                    <color attach="background" args={["#f8f7f2"]} />
+                    <color attach="background" args={["#ffffff"]} />
                     <Suspense fallback={null}>
 
                         <Environment files={"/env/08.hdr"}
@@ -57,6 +58,9 @@ const ModelRender = observer(() => {
                             far={4.5}
                         />
                         <CameraControls makeDefault />
+
+                        <PostProcessing />
+
                     </Suspense>
                 </Canvas>
             </div>

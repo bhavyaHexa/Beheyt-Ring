@@ -59,6 +59,8 @@ const Model3DContent = observer(() => {
             if (node.isMesh) {
                 const mesh = node;
 
+
+
                 // Handle Visibility based on showDiamond
                 if (mesh.name === "Silver_Metal") {
                     mesh.visible = !showDiamond;
