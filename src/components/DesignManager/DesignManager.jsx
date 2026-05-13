@@ -54,7 +54,7 @@ const DesignManager = observer(() => {
             </div>
 
             <div className="mt-8">
-                <h3 className="text-[0.8rem] uppercase tracking-[0.1rem] text-black/50 mb-4 font-semibold">Variation</h3>
+                <h3 className="text-[0.8rem] uppercase tracking-[0.1rem] text-black/50 mb-4 font-semibold">Width</h3>
                 <div className="grid grid-cols-[repeat(auto-fill,minmax(80px,1fr))] gap-3">
                     {variations.map(v => (
                         <button
@@ -81,7 +81,7 @@ const DesignManager = observer(() => {
                         >
                             <div className={`w-10 h-10 rounded-full border-2 border-black/10 transition-all duration-300 group-hover:scale-110 group-hover:border-black/50 ${color === 'gold' ? 'bg-[linear-gradient(135deg,#bf953f,#fcf6ba,#b38728,#fcf6ba,#aa771c)]' :
                                 color === 'silver' ? 'bg-[linear-gradient(135deg,#707070,#e0e0e0,#808080,#ffffff,#909090)]' :
-                                    color === 'Rose Gold' ? 'bg-[linear-gradient(135deg,#b76e79,#ffd1dc,#b76e79)]' : 'bg-gray-400'
+                                    color === 'Rose Gold' ? 'bg-[linear-gradient(135deg,#a85f44,#e8a274,#fddde6,#e8a274,#a85f44)]' : 'bg-gray-400'
                                 } ${designManager.selectedColor === color ? 'scale-115 border-black shadow-[0_0_20px_rgba(0,0,0,0.2)]' : ''
                                 }`}></div>
                             <span className={`text-[0.75rem] capitalize transition-all duration-300 ${designManager.selectedColor === color ? 'text-black font-semibold' : 'text-black/50'
