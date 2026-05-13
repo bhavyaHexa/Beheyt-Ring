@@ -33,32 +33,6 @@ const EnvironmentSync = ({ x, y, z }) => {
 };
 
 const ModelRender = observer(() => {
-    const { design3DManager } = rootStore;
-    const { collection, modelId, variation, color, modelUrl } = design3DManager.activeModel;
-
-    const { envRotationX, envRotationY, envRotationZ } = useControls("Environment", {
-        envRotationX: {
-            value: 0,
-            min: 0,
-            max: 360,
-            step: 1,
-            label: 'Rotation X (deg)'
-        },
-        envRotationY: {
-            value: 0,
-            min: 0,
-            max: 360,
-            step: 1,
-            label: 'Rotation Y (deg)'
-        },
-        envRotationZ: {
-            value: 0,
-            min: 0,
-            max: 360,
-            step: 1,
-            label: 'Rotation Z (deg)'
-        }
-    });
 
     return (
         <div className="fixed inset-0 z-0 pointer-events-none">
@@ -67,9 +41,10 @@ const ModelRender = observer(() => {
                 <Canvas shadows camera={{ position: [0, 0, 10], fov: 35 }}>
                     <color attach="background" args={["#f8f7f2"]} />
                     <Suspense fallback={null}>
-                        <EnvironmentSync x={envRotationX} y={envRotationY} z={envRotationZ} />
+
                         <Environment files={"/env/08.hdr"}
                             environmentIntensity={1.0}
+                            environmentRotation={[0, 3.63, 0]}
                         />
                         <Center>
                             <Model3DContent />

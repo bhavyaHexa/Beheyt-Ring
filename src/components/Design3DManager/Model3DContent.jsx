@@ -16,7 +16,7 @@ const Model3DContent = observer(() => {
     const { size } = useThree();
 
     // Load Environment Map for the Diamond Refraction
-    const diamondEnvMap = useEnvironment({ files: '/gemEnv.exr' });
+    const diamondEnvMap = useEnvironment({ files: '/env/01.hdr' });
 
     // Texture loading for metal
     const formattedCollection = collection.charAt(0).toUpperCase() + collection.slice(1);
@@ -37,7 +37,7 @@ const Model3DContent = observer(() => {
         return new THREE.MeshPhysicalMaterial({
             color: colorHex,
             metalness: 1.0,
-            roughness: 0.15,
+            roughness: 0.0,
             aoMap: aoTextureGold,
             aoMapIntensity: 1.0,
         });
@@ -84,8 +84,8 @@ const Model3DContent = observer(() => {
                             envMap: diamondEnvMap,
                             resolution: new THREE.Vector2(size.width, size.height),
                             ior: 2.4,
-                            bounces: 2,
-                            aberrationStrength: 0.0001,
+                            bounces: 3,
+                            aberrationStrength: 0.01,
                         });
                     }
                 }
