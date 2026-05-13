@@ -1,0 +1,26 @@
+.loader-overlay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.enterprise-spinner {
+    width: 48px;
+    height: 48px;
+    border: 2.5px solid rgba(139, 107, 13, 0.1);
+    border-top: 2.5px solid #8b6b0d;
+    border-radius: 50%;
+    animation: premium-spin 0.8s cubic-bezier(0.5, 0.15, 0.5, 0.85) infinite;
+    filter: drop-shadow(0 0 15px rgba(139, 107, 13, 0.3));
+}
+
+@keyframes premium-spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}

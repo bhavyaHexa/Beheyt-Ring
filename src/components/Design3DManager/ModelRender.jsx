@@ -4,6 +4,7 @@ import { Center, Environment, CameraControls, ContactShadows } from '@react-thre
 import { observer } from 'mobx-react-lite';
 
 import Model3DContent from './Model3DContent';
+import Loader from '../Loader/Loader';
 
 
 
@@ -15,7 +16,7 @@ const ModelRender = observer(() => {
             <div className="w-full h-full pointer-events-auto">
                 <Canvas shadows camera={{ position: [0, 0, 8], fov: 35 }}>
                     <color attach="background" args={["#f8f7f2"]} />
-                    <Suspense fallback={null}>
+                    <Suspense fallback={<Loader />}>
                         <Environment files={"/env/08.hdr"}
                             environmentIntensity={0.9}
                             environmentRotation={[0, 3.63, 0]}
