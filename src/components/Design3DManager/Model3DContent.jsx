@@ -10,27 +10,32 @@ import { MeshBVH } from 'three-mesh-bvh';
 import MeshRefractionMaterialWebGL from '../../material/MeshRefractionMaterial.js';
 // END: NEWLY IMPLEMENTED IMPORTS
 
-const Model3DContent = observer(() => {
+const SingleModel = observer(({ variation, diamondEnvMap, size }) => {
     const { design3DManager } = rootStore;
-    const { collection, modelId, variation, colorHex, modelUrl: url, showDiamond } = design3DManager.activeModel;
-    const { size } = useThree();
+    const { collection, modelId, colorHex, showDiamond, variation: selectedVariation } = design3DManager.activeModel;
 
-    // Load Environment Map for the Diamond Refraction
-    const diamondEnvMap = useEnvironment({ files: '/08.hdr' });
+    const isVisible = selectedVariation === variation;
 
-    // Texture loading for metal
+    // Build URL and paths for this specific variation
+    const url = design3DManager.rootStore.designManager.getModelUrlForVariation(variation);
     const formattedCollection = collection.charAt(0).toUpperCase() + collection.slice(1);
     const formattedVariation = variation.replace(/\s+/g, '');
     const aoMapUrlGold = `/BehytRings/${formattedCollection}/${modelId}/${formattedVariation}/Gold_Metal_AO.webp`;
     const aoMapUrlSilver = `/BehytRings/${formattedCollection}/${modelId}/${formattedVariation}/Silver_Metal_AO.webp`;
 
+    // Load textures for this variation
     const aoTextureGold = useTexture(aoMapUrlGold);
     if (aoTextureGold) aoTextureGold.flipY = false;
 
     const aoTextureSilver = useTexture(aoMapUrlSilver);
     if (aoTextureSilver) aoTextureSilver.flipY = false;
 
+    // Load the GLTF for this variation
     const { scene } = useGLTF(url);
+
+    // Clone the scene to ensure independent visibility/materials if needed, 
+    // though useGLTF handles caching, we want to make sure we don't conflict if the same model is used elsewhere.
+    // However, since we are rendering both and they have different URLs, they are unique in cache.
 
     // Metal Materials
     const goldMaterial = useMemo(() => {
@@ -97,7 +102,30 @@ const Model3DContent = observer(() => {
         });
     }, [scene, goldMaterial, silverMaterial, diamondEnvMap, size, showDiamond]);
 
-    return <primitive object={scene} rotation={[-Math.PI / 4, -Math.PI / 10, Math.PI / 3]} />;
+    return <primitive object={scene} visible={isVisible} rotation={[-Math.PI / 4, -Math.PI / 10, Math.PI / 3]} />;
+});
+
+const Model3DContent = observer(() => {
+    const { size } = useThree();
+    
+    // Load Environment Map for the Diamond Refraction (shared)
+    const diamondEnvMap = useEnvironment({ files: '/08.hdr' });
+
+    // Define the variations we want to preload
+    const variations = ["4.5mm", "5.0mm"];
+
+    return (
+        <group>
+            {variations.map((v) => (
+                <SingleModel 
+                    key={v} 
+                    variation={v} 
+                    diamondEnvMap={diamondEnvMap} 
+                    size={size} 
+                />
+            ))}
+        </group>
+    );
 });
 
 export default Model3DContent;

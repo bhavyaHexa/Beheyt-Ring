@@ -18,10 +18,14 @@ export class DesignManagerStore {
         return this.colorMap[this.selectedColor.toLowerCase()];
     }
 
-    get selectedModelUrl(): string {
+    getModelUrlForVariation(variation: string): string {
         const collection = this.selectedCollection.charAt(0).toUpperCase() + this.selectedCollection.slice(1);
-        const variation = this.selectedVariation.replace(/\s+/g, '');
-        return `/BehytRings/${collection}/${this.selectedModelId}/${variation}/${this.selectedModelId}_${this.selectedVariation}.glb`;
+        const formattedVariation = variation.replace(/\s+/g, '');
+        return `/BehytRings/${collection}/${this.selectedModelId}/${formattedVariation}/${this.selectedModelId}_${variation}.glb`;
+    }
+
+    get selectedModelUrl(): string {
+        return this.getModelUrlForVariation(this.selectedVariation);
     }
 
     rootStore: RootStore;
