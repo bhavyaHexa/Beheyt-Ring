@@ -6,6 +6,7 @@ export class DesignManagerStore {
     selectedModelId: string = "546";
     selectedVariation: string = "4.5mm";
     selectedColor: string = "gold";
+    showDiamond: boolean = true;
 
     colorMap: Record<string, string> = {
         gold: "#f2bd61",
@@ -46,6 +47,10 @@ export class DesignManagerStore {
         this.selectedColor = color;
     }
 
+    setDiamond(show: boolean) {
+        this.showDiamond = show;
+    }
+
     get selection() {
         return {
             collection: this.selectedCollection,
@@ -53,7 +58,8 @@ export class DesignManagerStore {
             variation: this.selectedVariation,
             color: this.selectedColor,
             colorHex: this.selectedColorHex,
-            modelUrl: this.selectedModelUrl
+            modelUrl: this.selectedModelUrl,
+            showDiamond: this.showDiamond
         };
     }
 }

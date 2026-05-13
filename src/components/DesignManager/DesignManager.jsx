@@ -92,6 +92,23 @@ const DesignManager = observer(() => {
                     ))}
                 </div>
             </div>
+
+            <div className="mt-8 bg-black/5 p-4 rounded-[1rem] border border-black/5">
+                <div className="flex items-center justify-between">
+                    <div>
+                        <h3 className="text-[0.8rem] uppercase tracking-[0.1rem] text-black/50 font-semibold mb-1">Diamonds</h3>
+                        <p className="text-[0.7rem] text-black/40">Toggle diamond visibility</p>
+                    </div>
+                    <div 
+                        className={`relative w-14 h-8 rounded-full cursor-pointer transition-all duration-500 ease-in-out ${designManager.showDiamond ? 'bg-black shadow-[0_0_15px_rgba(0,0,0,0.2)]' : 'bg-black/10'}`}
+                        onClick={() => designManager.setDiamond(!designManager.showDiamond)}
+                    >
+                        <div className={`absolute top-1 left-1 w-6 h-6 bg-white rounded-full transition-all duration-500 ease-in-out transform ${designManager.showDiamond ? 'translate-x-6' : 'translate-x-0'} shadow-md flex items-center justify-center`}>
+                            <div className={`w-1 h-1 rounded-full transition-all duration-500 ${designManager.showDiamond ? 'bg-black scale-100' : 'bg-black/20 scale-50'}`} />
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 });

@@ -12,7 +12,7 @@ import MeshRefractionMaterialWebGL from '../../material/MeshRefractionMaterial.j
 
 const Model3DContent = observer(() => {
     const { design3DManager } = rootStore;
-    const { collection, modelId, variation, colorHex, modelUrl: url } = design3DManager.activeModel;
+    const { collection, modelId, variation, colorHex, modelUrl: url, showDiamond } = design3DManager.activeModel;
     const { size } = useThree();
 
     // Load Environment Map for the Diamond Refraction
@@ -59,39 +59,44 @@ const Model3DContent = observer(() => {
             if (node.isMesh) {
                 const mesh = node;
 
-                // Hide Silver_Diamond mesh
+                // Handle Visibility based on showDiamond
+                if (mesh.name === "Silver_Metal") {
+                    mesh.visible = !showDiamond;
+                    mesh.material = silverMaterial;
+                }
                 if (mesh.name === "Silver_Diamond") {
-                    mesh.visible = false;
+                    mesh.visible = showDiamond;
+                    mesh.material = silverMaterial;
                 }
 
                 // --- START: NEWLY IMPLEMENTED DIAMOND LOGIC ---
                 if (mesh.name === "Diamond_Mesh" || mesh.name.includes("Diam_Centr")) {
-                    // 1. Create BVH for the geometry (required for refraction bounces)
-                    const bvh = new MeshBVH(mesh.geometry, { strategy: 1 });
+                    mesh.visible = showDiamond;
 
-                    // 2. Assign the advanced Refraction Material
-                    mesh.material = new MeshRefractionMaterialWebGL({
-                        geometry: mesh.geometry,
-                        bvh: bvh,
-                        envMap: diamondEnvMap,
-                        resolution: new THREE.Vector2(size.width, size.height),
-                        ior: 2.4,
-                        bounces: 2,
-                        aberrationStrength: 0.0001,
-                        // color: "#ffffff", // Use white for pure diamond, or change as needed
-                    });
+                    if (showDiamond) {
+                        // 1. Create BVH for the geometry (required for refraction bounces)
+                        const bvh = new MeshBVH(mesh.geometry, { strategy: 1 });
+
+                        // 2. Assign the advanced Refraction Material
+                        mesh.material = new MeshRefractionMaterialWebGL({
+                            geometry: mesh.geometry,
+                            bvh: bvh,
+                            envMap: diamondEnvMap,
+                            resolution: new THREE.Vector2(size.width, size.height),
+                            ior: 2.4,
+                            bounces: 2,
+                            aberrationStrength: 0.0001,
+                        });
+                    }
                 }
                 // --- END: NEWLY IMPLEMENTED DIAMOND LOGIC ---
 
                 else if (mesh.name.includes("Custom") || mesh.name === "Gold" || mesh.name === "Engraving_Mesh") {
                     mesh.material = goldMaterial;
                 }
-                else if (mesh.name === "Silver_Metal") {
-                    mesh.material = silverMaterial;
-                }
             }
         });
-    }, [scene, goldMaterial, silverMaterial, diamondEnvMap, size]);
+    }, [scene, goldMaterial, silverMaterial, diamondEnvMap, size, showDiamond]);
 
     return <primitive object={scene} rotation={[-Math.PI / 2, 0, Math.PI / 3]} />;
 });
