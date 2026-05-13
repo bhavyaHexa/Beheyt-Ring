@@ -31,7 +31,7 @@ export default function App() {
 
             {/* <ModelViewer modelUrl={modelURL} envUrl={envURL} /> */}
 
-            <Dropzone onFileLoaded={handleFileLoaded} />
+            {/* <Dropzone onFileLoaded={handleFileLoaded} /> */}
         </div >
     )
 }
