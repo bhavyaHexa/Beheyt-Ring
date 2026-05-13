@@ -16,7 +16,7 @@ const Model3DContent = observer(() => {
     const { size } = useThree();
 
     // Load Environment Map for the Diamond Refraction
-    const diamondEnvMap = useEnvironment({ files: '/gemEnv.exr' });
+    const diamondEnvMap = useEnvironment({ files: '/08.hdr' });
 
     // Texture loading for metal
     const formattedCollection = collection.charAt(0).toUpperCase() + collection.slice(1);
@@ -84,12 +84,11 @@ const Model3DContent = observer(() => {
                             envMap: diamondEnvMap,
                             resolution: new THREE.Vector2(size.width, size.height),
                             ior: 2.4,
-                            bounces: 2,
-                            aberrationStrength: 0.0001,
+                            bounces: 3,
+                            aberrationStrength: 0.0005,
                         });
                     }
                 }
-                // --- END: NEWLY IMPLEMENTED DIAMOND LOGIC ---
 
                 else if (mesh.name.includes("Custom") || mesh.name === "Gold" || mesh.name === "Engraving_Mesh") {
                     mesh.material = goldMaterial;
@@ -98,7 +97,7 @@ const Model3DContent = observer(() => {
         });
     }, [scene, goldMaterial, silverMaterial, diamondEnvMap, size, showDiamond]);
 
-    return <primitive object={scene} rotation={[-Math.PI / 2, 0, Math.PI / 3]} />;
+    return <primitive object={scene} rotation={[-Math.PI / 4, -Math.PI / 10, Math.PI / 3]} />;
 });
 
 export default Model3DContent;
