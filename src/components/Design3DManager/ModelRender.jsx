@@ -24,11 +24,11 @@ const ModelRender = observer(() => {
                             <Model3DContent />
                         </Center>
                         <ContactShadows
-                            position={[0, -2, 0]}
-                            opacity={0.6}
-                            scale={10}
-                            blur={2.5}
-                            far={4.5}
+                            position={[0, -1, 0]}
+                            opacity={0.5}
+                            scale={4}
+                            blur={4.5}
+                            far={4}
                         />
                         <CameraControls
                             makeDefault
