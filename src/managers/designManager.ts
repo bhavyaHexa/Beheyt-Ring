@@ -11,7 +11,7 @@ export class DesignManagerStore {
     colorMap: Record<string, string> = {
         gold: "#f2bd61",
         silver: "#f6f5f5",
-        rose_gold: "#e8a274"  //f4a068
+        'rose gold': "#e8a274"  //f4a068
     };
 
     get selectedColorHex(): string {

@@ -8,7 +8,7 @@ const DesignManager = observer(() => {
     const collections = ['briljant'];
     const modelIds = ['546'];
     const variations = ['4.5mm', '5.0mm'];
-    const colors = ['gold', 'silver', 'Rose_Gold'];
+    const colors = ['gold', 'silver', 'Rose Gold'];
 
     return (
         <div className="p-8 bg-white/70 backdrop-blur-[20px] rounded-[1.5rem] border border-black/10 text-black max-w-[400px] shadow-[0_10px_30px_rgba(0,0,0,0.1)]">
@@ -81,7 +81,7 @@ const DesignManager = observer(() => {
                         >
                             <div className={`w-10 h-10 rounded-full border-2 border-black/10 transition-all duration-300 group-hover:scale-110 group-hover:border-black/50 ${color === 'gold' ? 'bg-[linear-gradient(135deg,#bf953f,#fcf6ba,#b38728,#fcf6ba,#aa771c)]' :
                                 color === 'silver' ? 'bg-[linear-gradient(135deg,#707070,#e0e0e0,#808080,#ffffff,#909090)]' :
-                                    color === 'Rose_Gold' ? 'bg-[linear-gradient(135deg,#b76e79,#ffd1dc,#b76e79)]' : 'bg-gray-400'
+                                    color === 'Rose Gold' ? 'bg-[linear-gradient(135deg,#b76e79,#ffd1dc,#b76e79)]' : 'bg-gray-400'
                                 } ${designManager.selectedColor === color ? 'scale-115 border-black shadow-[0_0_20px_rgba(0,0,0,0.2)]' : ''
                                 }`}></div>
                             <span className={`text-[0.75rem] capitalize transition-all duration-300 ${designManager.selectedColor === color ? 'text-black font-semibold' : 'text-black/50'
@@ -97,9 +97,9 @@ const DesignManager = observer(() => {
                 <div className="flex items-center justify-between">
                     <div>
                         <h3 className="text-[0.8rem] uppercase tracking-[0.1rem] text-black/50 font-semibold mb-1">Diamonds</h3>
-                        <p className="text-[0.7rem] text-black/40">Toggle diamond visibility</p>
+
                     </div>
-                    <div 
+                    <div
                         className={`relative w-14 h-8 rounded-full cursor-pointer transition-all duration-500 ease-in-out ${designManager.showDiamond ? 'bg-black shadow-[0_0_15px_rgba(0,0,0,0.2)]' : 'bg-black/10'}`}
                         onClick={() => designManager.setDiamond(!designManager.showDiamond)}
                     >

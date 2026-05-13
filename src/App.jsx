@@ -21,10 +21,10 @@ export default function App() {
             <ModelRender />
 
             <div className="ui-overlay flex flex-col gap-4 pointer-events-auto">
-                <div className="top-info">
-                    <h1>Beheyt Ring Viewer</h1>
-                    <p>{modelName}</p>
-                </div>
+                {/* <div className="top-info">
+                <h1>Beheyt Ring Viewer</h1>
+                <p>{modelName}</p>
+            </div> */}
 
                 <DesignManager />
             </div>
@@ -32,6 +32,6 @@ export default function App() {
             {/* <ModelViewer modelUrl={modelURL} envUrl={envURL} /> */}
 
             <Dropzone onFileLoaded={handleFileLoaded} />
-        </div>
+        </div >
     )
 }
