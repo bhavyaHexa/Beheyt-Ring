@@ -9,7 +9,7 @@ export class DesignManagerStore {
     showDiamond: boolean = true;
 
     colorMap: Record<string, string> = {
-        gold: "#f8bc5c", //ffb948  //ffa930
+        gold: "#f1b95f", //ffb948  //ffa930
         silver: "#e2e2e2",
         'rose gold': "#f4a26b"  //f4a068
     };

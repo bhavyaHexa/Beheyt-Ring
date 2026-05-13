@@ -80,11 +80,13 @@ const Model3DContent = observer(() => {
                         const bvh = new MeshBVH(mesh.geometry, { strategy: 1 });
 
                         // 2. Assign the advanced Refraction Material
+                        // We use the drawing buffer size (physical pixels) to ensure the refraction is sharp
+                        const pixelRatio = window.devicePixelRatio || 1;
                         mesh.material = new MeshRefractionMaterialWebGL({
                             geometry: mesh.geometry,
                             bvh: bvh,
                             envMap: diamondEnvMap,
-                            resolution: new THREE.Vector2(size.width, size.height),
+                            resolution: new THREE.Vector2(size.width * pixelRatio, size.height * pixelRatio),
                             ior: 2.4,
                             bounces: 3,
                             aberrationStrength: 0.01,

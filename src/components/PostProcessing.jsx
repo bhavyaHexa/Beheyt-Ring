@@ -5,58 +5,78 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js'
 import { TAARenderPass } from 'three/addons/postprocessing/TAARenderPass.js'
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js'
 import { GammaCorrectionShader } from 'three/addons/shaders/GammaCorrectionShader.js'
-import { useControls } from 'leva'
+import { useControls, folder } from 'leva'
 import * as THREE from 'three'
 
 /**
- * Custom PostProcessing component using vanilla Three.js EffectComposer.
- * Focused exclusively on TRAA (Temporal Anti-Aliasing) for high-quality smooth edges.
- * Uses GammaCorrectionShader to ensure color accuracy without shifting the background.
+ * Optimized PostProcessing component.
+ * Focused exclusively on TRAA (Temporal Anti-Aliasing) for maximum smoothness.
  */
-export default function PostProcessing({ dirty }) {
+export default function PostProcessing({ dirty, modelKey }) {
   const { gl, scene, camera, size } = useThree()
   const lastMatrix = useRef(new THREE.Matrix4())
 
-  // TRAA (Temporal Anti-Aliasing) Controls
-  const { traaEnabled, sampleLevel, unbiased } = useControls("Post Processing.TRAA", {
-    traaEnabled: { value: true, label: "Enabled" },
-    sampleLevel: {
-      value: 3,
-      min: 0,
-      max: 5,
-      step: 1,
-      label: "Sample Level (2^n)",
-      hint: "Higher levels provide better smoothing over time."
-    },
-    unbiased: { value: true, label: "Unbiased" },
+  // AA Selection and Controls
+  const { traaEnabled, traaSampleLevel, traaUnbiased } = useControls("Post Processing", {
+    "Anti-Aliasing": folder({
+      traaEnabled: {
+        value: true,
+        label: "Enable TRAA"
+      },
+      traaSampleLevel: {
+        value: 3,
+        min: 0,
+        max: 5,
+        step: 1,
+        label: "TRAA Level",
+        render: (get) => get("Post Processing.Anti-Aliasing.traaEnabled")
+      },
+      traaUnbiased: {
+        value: true,
+        label: "TRAA Unbiased",
+        render: (get) => get("Post Processing.Anti-Aliasing.traaEnabled")
+      }
+    })
   })
 
   // Create composer and passes
   const composerState = useMemo(() => {
-    const composer = new EffectComposer(gl)
-    composer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    // 0. Create a standard Render Target for the composer
+    // We disable hardware MSAA here to let TRAA handle all anti-aliasing
+    const renderTarget = new THREE.WebGLRenderTarget(
+      size.width * gl.getPixelRatio(),
+      size.height * gl.getPixelRatio(),
+      {
+        samples: 0,
+        type: THREE.HalfFloatType,
+        format: THREE.RGBAFormat,
+        colorSpace: THREE.SRGBColorSpace
+      }
+    )
 
-    // 1. Regular Render Pass (Fallback for when TRAA is disabled)
+    const composer = new EffectComposer(gl, renderTarget)
+    composer.setPixelRatio(gl.getPixelRatio())
+
+    // 1. Regular Render Pass (used when TRAA is off)
     const renderPass = new RenderPass(scene, camera)
     composer.addPass(renderPass)
 
     // 2. TRAA Pass (Temporal Anti-Aliasing)
+    // This renders the scene with sub-pixel jitter over multiple frames
     const traaPass = new TAARenderPass(scene, camera)
-    traaPass.unbiased = unbiased
-    traaPass.sampleLevel = sampleLevel
+    traaPass.unbiased = traaUnbiased
+    traaPass.sampleLevel = traaSampleLevel
     traaPass.accumulate = true
     composer.addPass(traaPass)
 
-    // 3. Gamma Correction Pass
-    // This fixes the "orange gold" by converting linear to sRGB,
-    // but unlike OutputPass, it won't shift pure white backgrounds.
+    // 3. Gamma Correction Pass (Final Output)
     const gammaPass = new ShaderPass(GammaCorrectionShader)
     composer.addPass(gammaPass)
 
     return { composer, renderPass, traaPass, gammaPass }
   }, [gl, scene, camera])
 
-  // Update pass parameters whenever controls change
+  // Update pass parameters whenever controls change or model changes
   useEffect(() => {
     const { composer, renderPass, traaPass } = composerState
 
@@ -65,29 +85,29 @@ export default function PostProcessing({ dirty }) {
     traaPass.enabled = traaEnabled
 
     // Update TRAA settings
-    traaPass.sampleLevel = sampleLevel
-    traaPass.unbiased = unbiased
-    traaPass.accumulate = traaEnabled
+    if (traaPass) {
+      traaPass.sampleLevel = traaSampleLevel
+      traaPass.unbiased = traaUnbiased
+      traaPass.accumulate = traaEnabled
+      // CRITICAL: Reset accumulation index to -1 to force a re-render of the new scene/model
+      traaPass.accumulateIndex = -1
+    }
 
     // Clear camera offset if TRAA is disabled
     if (!traaEnabled && camera.clearViewOffset) {
       camera.clearViewOffset()
     }
 
-    // Reset TAA accumulation
-    if (traaPass) {
-      traaPass.accumulateIndex = -1
-    }
-
     // Sync size
     composer.setSize(size.width, size.height)
-  }, [composerState, size, camera, traaEnabled, sampleLevel, unbiased, dirty])
+  }, [composerState, size, camera, traaEnabled, traaSampleLevel, traaUnbiased, dirty, modelKey])
 
   // Render loop override
   useFrame((state) => {
     const { composer, traaPass } = composerState
 
     if (traaEnabled && traaPass) {
+      // Reset accumulation if camera moves
       if (!state.camera.matrixWorld.equals(lastMatrix.current)) {
         traaPass.accumulateIndex = -1
         lastMatrix.current.copy(state.camera.matrixWorld)

@@ -59,7 +59,7 @@ const ModelRender = observer(() => {
                         />
                         <CameraControls makeDefault />
 
-                        <PostProcessing />
+                        <PostProcessing modelKey={rootStore.design3DManager.activeModel.modelUrl} />
 
                     </Suspense>
                 </Canvas>
