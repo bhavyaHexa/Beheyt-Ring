@@ -70,7 +70,7 @@ export class DesignManagerStore {
             modelUrl: this.selectedModelUrl,
             showDiamond: this.showDiamond,
             finish: this.selectedFinish,
-            roughness: this.selectedFinish === "polished" ? 0.1 : 0.75
+            roughness: this.selectedFinish === "polished" ? 0.2 : 0.75
         };
     }
 }
