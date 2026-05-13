@@ -6,6 +6,7 @@ export class DesignManagerStore {
     selectedModelId: string = "546";
     selectedVariation: string = "4.5mm";
     selectedColor: string = "gold";
+    selectedFinish: string = "polished";
     showDiamond: boolean = true;
 
     colorMap: Record<string, string> = {
@@ -51,6 +52,10 @@ export class DesignManagerStore {
         this.selectedColor = color;
     }
 
+    setFinish(finish: string) {
+        this.selectedFinish = finish;
+    }
+
     setDiamond(show: boolean) {
         this.showDiamond = show;
     }
@@ -63,7 +68,9 @@ export class DesignManagerStore {
             color: this.selectedColor,
             colorHex: this.selectedColorHex,
             modelUrl: this.selectedModelUrl,
-            showDiamond: this.showDiamond
+            showDiamond: this.showDiamond,
+            finish: this.selectedFinish,
+            roughness: this.selectedFinish === "polished" ? 0.1 : 0.75
         };
     }
 }

@@ -12,7 +12,7 @@ import MeshRefractionMaterialWebGL from '../../material/MeshRefractionMaterial.j
 
 const SingleModel = observer(({ variation, diamondEnvMap, size }) => {
     const { design3DManager } = rootStore;
-    const { collection, modelId, colorHex, showDiamond, variation: selectedVariation } = design3DManager.activeModel;
+    const { collection, modelId, colorHex, roughness, finish, showDiamond, variation: selectedVariation } = design3DManager.activeModel;
 
     const isVisible = selectedVariation === variation;
 
@@ -22,6 +22,7 @@ const SingleModel = observer(({ variation, diamondEnvMap, size }) => {
     const formattedVariation = variation.replace(/\s+/g, '');
     const aoMapUrlGold = `/BehytRings/${formattedCollection}/${modelId}/${formattedVariation}/Gold_Metal_AO.webp`;
     const aoMapUrlSilver = `/BehytRings/${formattedCollection}/${modelId}/${formattedVariation}/Silver_Metal_AO.webp`;
+    const roughnessMapUrl = `/BehytRings/${formattedCollection}/${modelId}/${formattedVariation}/Roughness_Map.jpg`;
 
     // Load textures for this variation
     const aoTextureGold = useTexture(aoMapUrlGold);
@@ -30,55 +31,73 @@ const SingleModel = observer(({ variation, diamondEnvMap, size }) => {
     const aoTextureSilver = useTexture(aoMapUrlSilver);
     if (aoTextureSilver) aoTextureSilver.flipY = false;
 
+    const roughnessTexture = useTexture(roughnessMapUrl);
+    if (roughnessTexture) roughnessTexture.flipY = false;
+
     // Load the GLTF for this variation
     const { scene } = useGLTF(url);
 
     // --- START: LERP ANIMATION CHANGES ---
 
-    // Stable ref to the target color (updated on colorHex change)
+    // Stable ref to the target color and roughness (updated on selection change)
     const targetColor = useRef(new THREE.Color(colorHex));
+    const targetRoughness = useRef(roughness);
 
-    // Update target color whenever colorHex changes
+    // Update target values whenever they change
     useEffect(() => {
         targetColor.current.set(colorHex);
-    }, [colorHex]);
+        targetRoughness.current = roughness;
+    }, [colorHex, roughness]);
 
-    // Create goldMaterial ONCE and hold it in a ref — never recreate on color change
+    // Create goldMaterial ONCE and hold it in a ref
     const goldMaterialRef = useRef(
         new THREE.MeshPhysicalMaterial({
             color: colorHex,
             metalness: 1.0,
-            roughness: 0.15,
+            roughness: roughness,
             aoMap: aoTextureGold,
             aoMapIntensity: 1.0,
+            roughnessMap: finish === "matte" ? roughnessTexture : null
         })
     );
 
-    // Keep aoMap in sync if the texture changes (e.g. modelId/variation swap)
+    // Keep textures in sync if they change (e.g. modelId/variation swap)
     useEffect(() => {
         goldMaterialRef.current.aoMap = aoTextureGold;
+        goldMaterialRef.current.roughnessMap = finish === "matte" ? roughnessTexture : null;
         goldMaterialRef.current.needsUpdate = true;
-    }, [aoTextureGold]);
+    }, [aoTextureGold, roughnessTexture, finish]);
 
-    // Lerp the gold material color toward the target every frame
+    // Lerp the gold material color and roughness toward the target every frame
     useFrame((_, delta) => {
+        const factor = 1 - Math.pow(0.01, delta); // framerate-independent smooth lerp (~0.3s transition)
+
         goldMaterialRef.current.color.lerp(
             targetColor.current,
-            1 - Math.pow(0.01, delta) // framerate-independent smooth lerp (~0.3s transition)
+            factor
+        );
+
+        // Roughness update (smooth transition)
+        goldMaterialRef.current.roughness = THREE.MathUtils.lerp(
+            goldMaterialRef.current.roughness,
+            targetRoughness.current,
+            factor
         );
     });
 
     // --- END: LERP ANIMATION CHANGES ---
 
     const silverMaterial = useMemo(() => {
-        return new THREE.MeshStandardMaterial({
+        const isMatte = finish === "matte";
+        return new THREE.MeshPhysicalMaterial({
             color: "#f6f5f5",
-            roughness: 0.15,
+            roughness: roughness,
             metalness: 1.0,
             aoMap: aoTextureSilver,
             aoMapIntensity: 0.8,
+            roughnessMap: isMatte ? roughnessTexture : null
         });
-    }, [aoTextureSilver]);
+    }, [aoTextureSilver, roughnessTexture, roughness, finish]);
 
     // Mesh Processing Logic
     useMemo(() => {

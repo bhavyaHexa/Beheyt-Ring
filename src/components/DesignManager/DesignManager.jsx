@@ -93,6 +93,22 @@ const DesignManager = observer(() => {
                 </div>
             </div>
 
+            <div className="mt-8">
+                <h3 className="text-[0.8rem] uppercase tracking-[0.1rem] text-black/50 mb-4 font-semibold">Finish</h3>
+                <div className="grid grid-cols-2 gap-3">
+                    {['polished', 'matte'].map(f => (
+                        <button
+                            key={f}
+                            className={`p-3 bg-black/5 border border-black/10 rounded-[0.75rem] text-black cursor-pointer transition-all duration-200 text-[0.85rem] font-semibold hover:bg-black/10 hover:-translate-y-0.5 capitalize ${designManager.selectedFinish === f ? 'bg-black/20 font-bold border-black/20 shadow-none' : ''
+                                }`}
+                            onClick={() => designManager.setFinish(f)}
+                        >
+                            {f}
+                        </button>
+                    ))}
+                </div>
+            </div>
+
             <div className="mt-8 bg-black/5 p-4 rounded-[1rem] border border-black/5">
                 <div className="flex items-center justify-between">
                     <div>
