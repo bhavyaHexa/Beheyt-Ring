@@ -28,23 +28,4 @@ export class Design3DManagerStore {
         return this.rootStore.designManager.selection;
     }
 
-    //     get activeModelUrl() {
-    //         if (!this.ringsData) return null;
-
-    //         const { collection, modelId, variation, modelUrl } = this.activeModel;
-
-    //         console.log(modelUrl)
-
-    //         // Normalize keys for lookup (e.g., "4.5 mm" -> "4.5mm")
-    //         const colKey = collection.toLowerCase();
-    //         const idKey = modelId;
-    //         const varKey = variation.replace(/\s+/g, '').toLowerCase();
-
-    //         try {
-    //             const modelData = this.ringsData.rings?.[colKey]?.[idKey]?.[varKey];
-    //             return modelData?.modelUrl || null;
-    //         } catch (e) {
-    //             return null;
-    //         }
-    //     }
 }
