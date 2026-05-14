@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
-import { sceneStore } from '../../stores/SceneStore';
 import { rootStore } from '../../managers/stateManager';
+import { engraveManager } from '../../managers/engraveManager';
 import '../../styles/Sidebar.css';
 
 const EngraveModelDesign = observer(() => {
@@ -27,13 +27,13 @@ const EngraveModelDesign = observer(() => {
                         <input 
                             type="text" 
                             className="p-2 bg-black/20 border border-white/10 rounded text-white"
-                            value={sceneStore.engraving} 
-                            onChange={(event) => sceneStore.setEngraving(event.target.value)} 
+                            value={engraveManager.engraving} 
+                            onChange={(event) => engraveManager.setEngraving(event.target.value)} 
                         />
                     </div>
                     <div>
                         <label>Your Input</label><br />
-                        <span className="text-white/70">{sceneStore.engraving}</span>
+                        <span className="text-white/70">{engraveManager.engraving}</span>
                     </div>
                 </section>
 
@@ -47,8 +47,8 @@ const EngraveModelDesign = observer(() => {
                             min="0"
                             max="2"
                             step="0.1"
-                            value={sceneStore.ambientIntensity}
-                            onChange={(event) => sceneStore.setAmbientIntensity(Number(event.target.value))}
+                            value={engraveManager.ambientIntensity}
+                            onChange={(event) => engraveManager.setAmbientIntensity(Number(event.target.value))}
                         />
                     </div>
                 </section>

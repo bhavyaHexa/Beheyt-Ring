@@ -18,7 +18,7 @@ export function generateTextHeightMap(options: TextHeightMapOptions): HTMLCanvas
         fontFamily = 'Arial, sans-serif',
         blur = 5,
         mode = 'emboss',
-        offsetY = -50
+        offsetY = 0
     } = options;
 
     const canvas = document.createElement('canvas');
@@ -67,6 +67,7 @@ export function convertHeightToNormalMap(
 
     // Read the grayscale pixel data from the height map
     const heightData = heightCtx.getImageData(0, 0, width, height);
+    console.log(heightData)
     const normalData = ctx.createImageData(width, height);
 
     const getVal = (x: number, y: number) => {
@@ -95,6 +96,11 @@ export function convertHeightToNormalMap(
             const nx = dx / length;
             const ny = dy / length;
             const nz = dz / length;
+
+            // console.log(nx)
+            // console.log(ny)
+            // console.log(nz)
+
 
             // Map from [-1, 1] range to [0, 255] RGB color space
             const i = (y * width + x) * 4;
