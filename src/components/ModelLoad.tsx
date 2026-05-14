@@ -3,8 +3,13 @@ import { useMemo, useEffect } from "react";
 import { useControls } from "leva";
 import * as THREE from "three";
 
-export default function ModelLoad({ url, ...props }) {
-    const { scene, materials } = useGLTF(url);
+interface ModelLoadProps {
+    url: string;
+    [key: string]: any;
+}
+
+export default function ModelLoad({ url, ...props }: ModelLoadProps) {
+    const { scene, materials } = useGLTF(url) as any;
     console.log("materials", materials);
 
     // console.log("map  ", materials.Gold.map);
@@ -77,8 +82,9 @@ export default function ModelLoad({ url, ...props }) {
     console.log(silverMaterial.map)
 
     useMemo(() => {
-        scene.traverse((mesh) => {
-            if (mesh.isMesh) {
+        scene.traverse((node: THREE.Object3D) => {
+            if (node instanceof THREE.Mesh) {
+                const mesh = node;
                 if (mesh.name.includes("Custom") || mesh.name.includes("Gold")) {
                     mesh.material = goldMaterial;
                 }

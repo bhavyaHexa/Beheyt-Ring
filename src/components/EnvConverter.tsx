@@ -1,7 +1,14 @@
 import * as THREE from 'three'
 import { Environment, useTexture } from '@react-three/drei'
 
-export default function EnvConverter({ imageUrl, showBackground = false, environmentIntensity = 1, envRotation = [0, 0, 0] }) {
+interface EnvConverterProps {
+  imageUrl: string;
+  showBackground?: boolean;
+  environmentIntensity?: number;
+  envRotation?: [number, number, number];
+}
+
+export default function EnvConverter({ imageUrl, showBackground = false, environmentIntensity = 1, envRotation = [0, 0, 0] }: EnvConverterProps) {
   // useTexture handles the loading and suspends the component until ready
   const texture = useTexture(imageUrl)
   
@@ -16,7 +23,7 @@ export default function EnvConverter({ imageUrl, showBackground = false, environ
       map={texture} 
       background={showBackground} 
       environmentIntensity={environmentIntensity}
-      rotation={envRotation}
+      environmentRotation={envRotation}
       backgroundRotation={envRotation}
     />
   )

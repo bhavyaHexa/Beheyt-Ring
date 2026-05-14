@@ -5,12 +5,13 @@ import { rootStore } from '../../managers/stateManager';
 import * as THREE from "three";
 import { useThree, useFrame } from '@react-three/fiber';
 import { MeshBVH } from 'three-mesh-bvh';
+import { SingleModelProps } from '../../types';
 
 // START: NEWLY IMPLEMENTED IMPORTS
 import MeshRefractionMaterialWebGL from '../../material/MeshRefractionMaterial.js';
 // END: NEWLY IMPLEMENTED IMPORTS
 
-const SingleModel = observer(({ variation, diamondEnvMap, size }) => {
+const SingleModel = observer(({ variation, diamondEnvMap, size }: SingleModelProps) => {
     const { design3DManager } = rootStore;
     const { collection, modelId, colorHex, roughness, finish, showDiamond, variation: selectedVariation } = design3DManager.activeModel;
 
@@ -138,8 +139,8 @@ const SingleModel = observer(({ variation, diamondEnvMap, size }) => {
 
     // Mesh Processing Logic
     useMemo(() => {
-        scene.traverse((node) => {
-            if (node.isMesh) {
+        scene.traverse((node: THREE.Object3D) => {
+            if (node instanceof THREE.Mesh) {
                 const mesh = node;
 
                 // Handle Visibility based on showDiamond
@@ -164,7 +165,7 @@ const SingleModel = observer(({ variation, diamondEnvMap, size }) => {
                         mesh.material = new MeshRefractionMaterialWebGL({
                             geometry: mesh.geometry,
                             bvh: bvh,
-                            envMap: diamondEnvMap,
+                            envMap: diamondEnvMap as THREE.Texture,
                             resolution: new THREE.Vector2(size.width, size.height),
                             ior: 2.4,
                             bounces: 3,

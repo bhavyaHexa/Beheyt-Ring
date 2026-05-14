@@ -16,7 +16,11 @@ import * as THREE from 'three'
  * This allows us to use TAARenderPass (Temporal Anti-Aliasing) for high-quality smooth edges.
  * Note: While Three.js calls this TAA, it provides the temporal smoothing the user requested.
  */
-export default function PostProcessing({ dirty }) {
+interface PostProcessingProps {
+  dirty: string;
+}
+
+export default function PostProcessing({ dirty }: PostProcessingProps) {
   const { gl, scene, camera, size } = useThree()
   const lastMatrix = useRef(new THREE.Matrix4())
 
@@ -81,11 +85,12 @@ export default function PostProcessing({ dirty }) {
     const ssaoPass = new SSAOPass(scene, camera, size.width, size.height)
 
     // Patch visibility to ignore transparent objects (like ContactShadows) during SSAO render
-    const originalVisibility = ssaoPass._overrideVisibility.bind(ssaoPass);
-    ssaoPass._overrideVisibility = function () {
+    const ssaoPassAny = ssaoPass as any;
+    const originalVisibility = ssaoPassAny._overrideVisibility.bind(ssaoPassAny);
+    ssaoPassAny._overrideVisibility = function () {
       originalVisibility();
-      this.scene.traverse((object) => {
-        if (object.isMesh && object.material && object.visible) {
+      this.scene.traverse((object: THREE.Object3D) => {
+        if (object instanceof THREE.Mesh && object.material && object.visible) {
           const isTransparent = Array.isArray(object.material)
             ? object.material.some(m => m.transparent)
             : object.material.transparent;
@@ -98,8 +103,8 @@ export default function PostProcessing({ dirty }) {
     };
 
     // Inject intensity uniform into the SSAO shader
-    ssaoPass.ssaoMaterial.uniforms['intensity'] = { value: 1.0 }
-    ssaoPass.ssaoMaterial.fragmentShader = ssaoPass.ssaoMaterial.fragmentShader
+    ssaoPassAny.ssaoMaterial.uniforms['intensity'] = { value: 1.0 }
+    ssaoPassAny.ssaoMaterial.fragmentShader = ssaoPassAny.ssaoMaterial.fragmentShader
       .replace(
         'uniform float kernelRadius;',
         'uniform float kernelRadius;\nuniform float intensity;'
@@ -146,8 +151,8 @@ export default function PostProcessing({ dirty }) {
     traaPass.accumulate = traaEnabled
 
     // Clear camera offset if TRAA is disabled to fix positioning issues
-    if (!traaEnabled && camera.clearViewOffset) {
-      camera.clearViewOffset()
+    if (!traaEnabled && (camera as any).clearViewOffset) {
+      (camera as any).clearViewOffset()
     }
 
     // Update SSAO
@@ -184,15 +189,15 @@ export default function PostProcessing({ dirty }) {
 
     // Update Brightness/Contrast
     bcPass.enabled = bcEnabled
-    bcPass.uniforms.brightness.value = brightness
-    bcPass.uniforms.contrast.value = contrast
-
+    bcPass.uniforms.brightness.value = brightness;
+    bcPass.uniforms.contrast.value = contrast;
+    
     // Sync OutputPass with renderer settings
-    outputPass.toneMapping = gl.toneMapping
+    (outputPass as any).toneMapping = gl.toneMapping;
 
     // Reset TAA accumulation when any prop (including dirty) changes
     if (traaPass) {
-      traaPass.accumulateIndex = -1
+      (traaPass as any).accumulateIndex = -1
     }
 
     // Sync size
@@ -206,7 +211,7 @@ export default function PostProcessing({ dirty }) {
     if (traaEnabled && traaPass) {
       // Reset TRAA accumulation if camera moves, otherwise OrbitControls feels "stuck" or blurry
       if (!state.camera.matrixWorld.equals(lastMatrix.current)) {
-        traaPass.accumulateIndex = -1
+        (traaPass as any).accumulateIndex = -1
         lastMatrix.current.copy(state.camera.matrixWorld)
       }
     }

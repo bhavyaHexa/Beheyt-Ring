@@ -1,9 +1,10 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import { RootStore } from "./stateManager";
+import { RingsData } from "../types";
 
 export class Design3DManagerStore {
     rootStore: RootStore;
-    ringsData: any = null;
+    ringsData: RingsData | null = null;
 
     constructor(rootStore: RootStore) {
         makeAutoObservable(this, { rootStore: false });

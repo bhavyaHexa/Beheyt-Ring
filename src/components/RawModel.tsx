@@ -1,8 +1,17 @@
 import { useGLTF } from "@react-three/drei";
 import { useMemo, useState, useEffect } from "react";
 import { MeshPhysicalMaterial, TextureLoader } from "three";
+import * as THREE from "three";
 
-export default function RawModel({ url, roughnessMapUrl, roughnessIntensity, roughnessRepeat, ...props }) {
+interface RawModelProps {
+  url: string;
+  roughnessMapUrl: string;
+  roughnessIntensity: number;
+  roughnessRepeat: [number, number];
+  [key: string]: any;
+}
+
+export default function RawModel({ url, roughnessMapUrl, roughnessIntensity, roughnessRepeat, ...props }: RawModelProps) {
   const { scene } = useGLTF(url);
 
   // Define simple materials
@@ -19,7 +28,7 @@ export default function RawModel({ url, roughnessMapUrl, roughnessIntensity, rou
   }), []);
 
   // Extract existing roughness map and handle external one
-  const [externalRoughnessMap, setExternalRoughnessMap] = useState(null);
+  const [externalRoughnessMap, setExternalRoughnessMap] = useState<THREE.Texture | null>(null);
 
   useEffect(() => {
     if (roughnessMapUrl) {
@@ -34,7 +43,8 @@ export default function RawModel({ url, roughnessMapUrl, roughnessIntensity, rou
 
   // Determine the active map and log it
   useEffect(() => {
-    const originalRoughnessMap = scene.getObjectByName("Circle002")?.material?.roughnessMap;
+    const circle002 = scene.getObjectByName("Circle002");
+    const originalRoughnessMap = circle002 instanceof THREE.Mesh ? circle002.material?.roughnessMap : null;
     const activeMap = externalRoughnessMap || originalRoughnessMap;
 
     if (activeMap) {
@@ -52,8 +62,8 @@ export default function RawModel({ url, roughnessMapUrl, roughnessIntensity, rou
 
   // Apply materials to meshes based on their names
   useMemo(() => {
-    scene.traverse((node) => {
-      if (node.isMesh) {
+    scene.traverse((node: THREE.Object3D) => {
+      if (node instanceof THREE.Mesh) {
         const originalRoughnessMap = node.material?.roughnessMap;
         if (originalRoughnessMap) {
           console.log(`Original Roughness Map found on ${node.name}:`, originalRoughnessMap);

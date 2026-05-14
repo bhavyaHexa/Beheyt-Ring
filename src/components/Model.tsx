@@ -1,10 +1,28 @@
 import { useGLTF, Clone } from "@react-three/drei";
 import { useMemo, useEffect, useState } from "react";
 import { MeshPhysicalMaterial, Vector2, TextureLoader, MeshBasicMaterial } from "three";
+import * as THREE from "three";
 import { useControls } from "leva";
 
-export default function Model({ url, envUrl, clonePos, cloneRot, cloneScale, normalIntensity, envIntensity, aoMapUrl, aoIntensity, viewOnlyAOMap, roughnessMapUrl, roughnessIntensity, roughnessRepeat, ...props }) {
-  const { scene, nodes } = useGLTF(url);
+interface ModelProps {
+  url: string;
+  envUrl: string;
+  clonePos: [number, number, number];
+  cloneRot: [number, number, number];
+  cloneScale: number;
+  normalIntensity: number;
+  envIntensity: number;
+  aoMapUrl: string;
+  aoIntensity: number;
+  viewOnlyAOMap: boolean;
+  roughnessMapUrl: string;
+  roughnessIntensity: number;
+  roughnessRepeat: [number, number];
+  [key: string]: any;
+}
+
+export default function Model({ url, envUrl, clonePos, cloneRot, cloneScale, normalIntensity, envIntensity, aoMapUrl, aoIntensity, viewOnlyAOMap, roughnessMapUrl, roughnessIntensity, roughnessRepeat, ...props }: ModelProps) {
+  const { scene, nodes } = useGLTF(url) as any;
   console.log("Original Ring Position:", props.position || [0, 0, 0]);
   console.log("Original Ring Rotation:", props.rotation);
 
@@ -35,8 +53,8 @@ export default function Model({ url, envUrl, clonePos, cloneRot, cloneScale, nor
   }, [nodes]);
 
   // State for external maps
-  const [externalAOMap, setExternalAOMap] = useState(null);
-  const [externalRoughnessMap, setExternalRoughnessMap] = useState(null);
+  const [externalAOMap, setExternalAOMap] = useState<THREE.Texture | null>(null);
+  const [externalRoughnessMap, setExternalRoughnessMap] = useState<THREE.Texture | null>(null);
 
   useEffect(() => {
     if (aoMapUrl) {
@@ -144,8 +162,8 @@ export default function Model({ url, envUrl, clonePos, cloneRot, cloneScale, nor
         object={scene}
         castShadow
         receiveShadow
-        inject={(node) => {
-          if (node.isMesh) {
+        inject={(node: THREE.Object3D) => {
+          if (node instanceof THREE.Mesh) {
             if (node.name === "Circle002") {
               return <primitive object={circle002Material} attach="material" />
             }
@@ -166,8 +184,8 @@ export default function Model({ url, envUrl, clonePos, cloneRot, cloneScale, nor
         position={clonePos}
         rotation={cloneRot}
         scale={cloneScale}
-        inject={(node) => {
-          if (node.isMesh) {
+        inject={(node: THREE.Object3D) => {
+          if (node instanceof THREE.Mesh) {
             if (node.name === "Circle002") {
               return <primitive object={circle002Material} attach="material" />
             }

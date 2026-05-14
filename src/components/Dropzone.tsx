@@ -2,8 +2,12 @@ import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Upload } from 'lucide-react';
 
-const Dropzone = ({ onFileLoaded }) => {
-  const onDrop = useCallback((acceptedFiles) => {
+interface DropzoneProps {
+  onFileLoaded: (url: string, filename: string) => void;
+}
+
+const Dropzone = ({ onFileLoaded }: DropzoneProps) => {
+  const onDrop = useCallback((acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
     if (file) {
       const url = URL.createObjectURL(file);

@@ -15,7 +15,7 @@ export const BackgroundTextureProvider: React.FC<{ children: React.ReactNode }> 
     useFrame(() => {
         // Optimization: Use visibility toggle on anything named Diam_Centr
         const diamonds: THREE.Object3D[] = [];
-        scene.traverse((obj) => {
+        scene.traverse((obj: THREE.Object3D) => {
             if (obj.name.includes('Diam_Centr')) {
                 diamonds.push(obj);
                 obj.visible = false;

@@ -1,12 +1,13 @@
 import { makeAutoObservable } from "mobx";
 import { RootStore } from "./stateManager";
+import { DesignSelection, ColorType, FinishType } from "../types";
 
 export class DesignManagerStore {
     selectedCollection: string = "briljant";
     selectedModelId: string = "546";
     selectedVariation: string = "4.5mm";
-    selectedColor: string = "gold";
-    selectedFinish: string = "polished";
+    selectedColor: ColorType = "gold";
+    selectedFinish: FinishType = "polished";
     showDiamond: boolean = true;
 
     colorMap: Record<string, string> = {
@@ -48,11 +49,11 @@ export class DesignManagerStore {
         this.selectedVariation = variation;
     }
 
-    setColor(color: string) {
+    setColor(color: ColorType) {
         this.selectedColor = color;
     }
 
-    setFinish(finish: string) {
+    setFinish(finish: FinishType) {
         this.selectedFinish = finish;
     }
 
@@ -60,7 +61,7 @@ export class DesignManagerStore {
         this.showDiamond = show;
     }
 
-    get selection() {
+    get selection(): DesignSelection {
         return {
             collection: this.selectedCollection,
             modelId: this.selectedModelId,

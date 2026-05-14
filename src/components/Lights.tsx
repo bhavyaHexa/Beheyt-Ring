@@ -5,10 +5,18 @@ import { useRef, useEffect } from 'react'
 import * as THREE from 'three'
 import EnvConverter from './EnvConverter'
 
-export default function Lights({ envUrl, customEnvUrl, envIntensity, envRotation, showBackground }) {
-  const light1 = useRef()
-  const light2 = useRef()
-  const groupRef = useRef()
+interface LightsProps {
+  envUrl: string;
+  customEnvUrl: string;
+  envIntensity: number;
+  envRotation: [number, number, number];
+  showBackground: boolean;
+}
+
+export default function Lights({ envUrl, customEnvUrl, envIntensity, envRotation, showBackground }: LightsProps) {
+  const light1 = useRef<THREE.PointLight>(null!)
+  const light2 = useRef<THREE.PointLight>(null!)
+  const groupRef = useRef<THREE.Group>(null!)
 
   const {
     showHelpers,
@@ -108,7 +116,7 @@ export default function Lights({ envUrl, customEnvUrl, envIntensity, envRotation
           background={showBackground}
           resolution={256}
           environmentIntensity={envIntensity}
-          rotation={envRotation}
+          environmentRotation={envRotation}
           backgroundRotation={envRotation}
         />
       )}
