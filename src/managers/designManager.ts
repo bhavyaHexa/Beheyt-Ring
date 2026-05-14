@@ -9,6 +9,7 @@ export class DesignManagerStore {
     selectedColor: ColorType = "gold";
     selectedFinish: FinishType = "polished";
     showDiamond: boolean = true;
+    currentView: 'home' | 'engrave' = 'home';
 
     colorMap: Record<string, string> = {
         gold: "#f2bd61",
@@ -59,6 +60,10 @@ export class DesignManagerStore {
 
     setDiamond(show: boolean) {
         this.showDiamond = show;
+    }
+
+    setCurrentView(view: 'home' | 'engrave') {
+        this.currentView = view;
     }
 
     get selection(): DesignSelection {

@@ -1,13 +1,10 @@
-import { useState } from "react"
+import { observer } from "mobx-react-lite"
 import ModelViewer from "./components/ModelViewer"
 import Dropzone from "./components/Dropzone"
 import DesignManager from "./components/DesignManager/DesignManager"
 import ModelRender from "./components/Design3DManager/ModelRender"
 
-export default function App() {
-
-
-
+const App = observer(() => {
     return (
         <div className="app-container">
             <ModelRender />
@@ -17,4 +14,6 @@ export default function App() {
             </div>
         </div >
     )
-}
+});
+
+export default App;
