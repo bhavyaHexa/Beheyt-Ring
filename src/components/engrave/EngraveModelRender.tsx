@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import { engraveManager } from '../../managers/engraveManager';
 import { generateTextHeightMap, convertHeightToNormalMap } from '../../utils/normalUtils';
 import { useGLTF } from '@react-three/drei';
+import { BoundaryPointsEvaluator } from '../../utils/geometry/BoundaryPointsEvaluator';
 
 import { rootStore } from '../../managers/stateManager'
 
@@ -80,37 +81,15 @@ const RedCube = observer(function RedCube() {
     useEffect(() => {
         if (!ringMesh || !ringMesh.geometry) return; // guard: wait until mesh exists
 
-        // --- paste the function definition ---
-        function findUVsInERegion(mesh: THREE.Mesh) {
-            const uvAttr = mesh.geometry.attributes.uv;
-            if (!uvAttr) { console.warn("No UV attribute found"); return; }
-
-            const bounds = {
-                uMin: 0.476,
-                uMax: 0.525,
-                vMin: 0.539,
-                vMax: 0.578,
-            };
-
-            const covered: { vertexIndex: number; u: number; v: number }[] = [];
-
-            for (let i = 0; i < uvAttr.count; i++) {
-                const u = uvAttr.getX(i);
-                const v = uvAttr.getY(i);
-
-                if (u >= bounds.uMin && u <= bounds.uMax &&
-                    v >= bounds.vMin && v <= bounds.vMax) {
-                    covered.push({ vertexIndex: i, u, v });
-                }
-            }
-
-            console.log(`Vertices inside E region: ${covered.length}`);
-            console.table(covered);
-            return covered;
-        }
-
-        // ✅ CALL IT HERE
-        findUVsInERegion(ringMesh);
+        // Use the newly implemented BoundaryPointsEvaluator
+        const evaluator = new BoundaryPointsEvaluator(ringMesh.geometry);
+        const boundaryPoints = evaluator.getBoundaryPoints(true);
+        
+        console.log('Boundary Points for Engraving_Mesh:', boundaryPoints);
+        
+        // If you need recursive boundary loops:
+        // const boundaryLoops = evaluator.getBoundaryPointsRecursive(true);
+        // console.log('Boundary Loops:', boundaryLoops);
 
     }, [ringMesh]); // 👈 dependency is ringMesh — runs when mesh loads/changes
 
