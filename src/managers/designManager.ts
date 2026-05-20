@@ -22,6 +22,19 @@ export class DesignManagerStore {
     }
 
     getModelUrlForVariation(variation: string): string {
+        const ringsData = this.rootStore.design3DManager.ringsData;
+        if (ringsData) {
+            const collectionData = ringsData.rings[this.selectedCollection];
+            if (collectionData) {
+                const modelData = collectionData[this.selectedModelId];
+                if (modelData) {
+                    const variationData = modelData[variation];
+                    if (variationData && variationData.modelUrl) {
+                        return variationData.modelUrl;
+                    }
+                }
+            }
+        }
         const collection = this.selectedCollection.charAt(0).toUpperCase() + this.selectedCollection.slice(1);
         const formattedVariation = variation.replace(/\s+/g, '');
         return `/BehytRings/${collection}/${this.selectedModelId}/${formattedVariation}/${this.selectedModelId}_${variation}.glb`;
@@ -40,10 +53,36 @@ export class DesignManagerStore {
 
     setCollection(collection: string) {
         this.selectedCollection = collection;
+        if (collection.toLowerCase() === "artisanal") {
+            this.showDiamond = false;
+        } else {
+            this.showDiamond = true;
+        }
+        const ringsData = this.rootStore.design3DManager.ringsData;
+        if (ringsData && ringsData.rings[collection]) {
+            const modelIds = Object.keys(ringsData.rings[collection]);
+            if (modelIds.length > 0) {
+                if (!modelIds.includes(this.selectedModelId)) {
+                    this.selectedModelId = modelIds[0];
+                }
+                const variations = Object.keys(ringsData.rings[collection][this.selectedModelId] || {});
+                if (variations.length > 0 && !variations.includes(this.selectedVariation)) {
+                    this.selectedVariation = variations[0];
+                }
+            }
+        }
     }
 
     setModelId(id: string) {
         this.selectedModelId = id;
+        const ringsData = this.rootStore.design3DManager.ringsData;
+        const collection = this.selectedCollection;
+        if (ringsData && ringsData.rings[collection] && ringsData.rings[collection][id]) {
+            const variations = Object.keys(ringsData.rings[collection][id]);
+            if (variations.length > 0 && !variations.includes(this.selectedVariation)) {
+                this.selectedVariation = variations[0];
+            }
+        }
     }
 
     setVariation(variation: string) {

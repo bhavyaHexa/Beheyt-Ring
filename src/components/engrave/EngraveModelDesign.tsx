@@ -31,10 +31,17 @@ const EngraveModelDesign = observer(() => {
                             onChange={(event) => engraveManager.setEngraving(event.target.value)} 
                         />
                     </div>
-                    <div>
+                    <div className="mb-4">
                         <label>Your Input</label><br />
                         <span className="text-white/70">{engraveManager.engraving}</span>
                     </div>
+                    
+                    <button 
+                        onClick={() => engraveManager.triggerUVDownload()}
+                        className="w-full p-2 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors text-sm font-semibold cursor-pointer border-none"
+                    >
+                        Download UV Layout
+                    </button>
                 </section>
 
                 <section className="control-group">

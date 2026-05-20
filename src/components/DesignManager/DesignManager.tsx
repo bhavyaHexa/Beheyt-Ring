@@ -4,13 +4,19 @@ import { rootStore } from '../../managers/stateManager';
 import { ColorType, FinishType } from '../../types';
 
 const DesignManager = observer(() => {
-    const { designManager } = rootStore;
+    const { designManager, design3DManager } = rootStore;
 
     if (designManager.currentView !== 'home') return null;
 
-    const collections = ['briljant'];
-    const modelIds = ['546'];
-    const variations = ['4.5mm', '5.0mm'];
+    const ringsData = design3DManager.ringsData;
+    const collections = ringsData ? Object.keys(ringsData.rings) : [];
+    const modelIds = (ringsData && designManager.selectedCollection) 
+        ? Object.keys(ringsData.rings[designManager.selectedCollection] || {}) 
+        : [];
+    const variations = (ringsData && designManager.selectedCollection && designManager.selectedModelId) 
+        ? Object.keys(ringsData.rings[designManager.selectedCollection]?.[designManager.selectedModelId] || {}) 
+        : [];
+
     const colors: ColorType[] = ['gold', 'silver', 'rose gold'];
     const finishes: FinishType[] = ['polished', 'matte'];
 

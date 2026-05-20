@@ -29,11 +29,13 @@ export interface DesignSelection {
  * Texture set for a specific ring variation
  */
 export interface TextureSet {
-    albedo: string;
-    normal: string;
-    roughness: string;
-    metalness: string;
-    ao: string;
+    albedo?: string;
+    normal?: string;
+    roughness?: string;
+    metalness?: string;
+    ao?: string;
+    aoGold?: string;
+    aoSilver?: string;
 }
 
 /**

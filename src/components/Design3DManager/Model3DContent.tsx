@@ -17,22 +17,47 @@ const SingleModel = observer(({ variation, diamondEnvMap, size }: SingleModelPro
 
     const isVisible = selectedVariation === variation;
 
+    // Get the variation data from ringsData
+    const variationData = useMemo(() => {
+        if (!design3DManager.ringsData) return null;
+        return design3DManager.ringsData.rings[collection]?.[modelId]?.[variation] || null;
+    }, [design3DManager.ringsData, collection, modelId, variation]);
+
     // Build URL and paths for this specific variation
-    const url = design3DManager.rootStore.designManager.getModelUrlForVariation(variation);
+    const url = variationData?.modelUrl || design3DManager.rootStore.designManager.getModelUrlForVariation(variation);
     const formattedCollection = collection.charAt(0).toUpperCase() + collection.slice(1);
     const formattedVariation = variation.replace(/\s+/g, '');
-    const aoMapUrlGold = `/BehytRings/${formattedCollection}/${modelId}/${formattedVariation}/Gold_Metal_AO.webp`;
-    const aoMapUrlSilver = `/BehytRings/${formattedCollection}/${modelId}/${formattedVariation}/Silver_Metal_AO.webp`;
-    const roughnessMapUrl = `/BehytRings/${formattedCollection}/${modelId}/${formattedVariation}/Roughness_Map.jpg`;
+
+    const fallbackTextureUrl = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
+    const texturesAny = variationData?.textures as any;
+    const hasAoGold = !!texturesAny?.aoGold;
+    const hasAoSilver = !!texturesAny?.aoSilver;
+    const aoEngravingKey = texturesAny?.aoEngraving || 
+                           texturesAny?.aoEngrave || 
+                           texturesAny?.aoEngravingMesh || 
+                           texturesAny?.aoEngraving_Mesh || 
+                           texturesAny?.Engraving_Mesh_AO;
+    const hasAoEngraving = !!aoEngravingKey;
+
+    const aoMapUrlGold = hasAoGold && texturesAny?.aoGold ? texturesAny.aoGold : fallbackTextureUrl;
+    const aoMapUrlSilver = hasAoSilver && texturesAny?.aoSilver ? texturesAny.aoSilver : fallbackTextureUrl;
+    const aoMapUrlEngraving = hasAoEngraving ? aoEngravingKey : fallbackTextureUrl;
+
+    const roughnessMapUrl = (variationData?.textures?.roughness && !variationData.textures.roughness.endsWith('roughness.jpg'))
+        ? variationData.textures.roughness
+        : `/BehytRings/${formattedCollection}/${modelId}/${formattedVariation}/Roughness_Map.jpg`;
 
     // Load textures for this variation
-    const aoTextureGold = useTexture(aoMapUrlGold);
+    const aoTextureGold = useTexture(aoMapUrlGold) as THREE.Texture;
     if (aoTextureGold) aoTextureGold.flipY = false;
 
-    const aoTextureSilver = useTexture(aoMapUrlSilver);
+    const aoTextureSilver = useTexture(aoMapUrlSilver) as THREE.Texture;
     if (aoTextureSilver) aoTextureSilver.flipY = false;
 
-    const roughnessTexture = useTexture(roughnessMapUrl);
+    const aoTextureEngraving = useTexture(aoMapUrlEngraving) as THREE.Texture;
+    if (aoTextureEngraving) aoTextureEngraving.flipY = false;
+
+    const roughnessTexture = useTexture(roughnessMapUrl) as THREE.Texture;
     if (roughnessTexture) roughnessTexture.flipY = false;
 
     // Load the GLTF for this variation
@@ -56,11 +81,12 @@ const SingleModel = observer(({ variation, diamondEnvMap, size }: SingleModelPro
             color: colorHex,
             metalness: 1.0,
             roughness: roughness,
-            aoMap: aoTextureGold,
-            aoMapIntensity: 1.0,
+            aoMap: hasAoGold ? aoTextureGold : null,
+            aoMapIntensity: hasAoGold ? 1.0 : 0.0,
             roughnessMap: roughnessTexture,
             clearcoat: finish === "polished" ? 1.0 : 0.0,
-            clearcoatRoughness: 0.1
+            normalScale: new THREE.Vector2(1, 1),
+            normalMap: null,
         })
     );
 
@@ -69,8 +95,21 @@ const SingleModel = observer(({ variation, diamondEnvMap, size }: SingleModelPro
             color: "#f6f5f5",
             metalness: 1.0,
             roughness: roughness,
-            aoMap: aoTextureSilver,
-            aoMapIntensity: 0.8,
+            aoMap: hasAoSilver ? aoTextureSilver : null,
+            aoMapIntensity: hasAoSilver ? 0.8 : 0.0,
+            roughnessMap: roughnessTexture,
+            clearcoat: finish === "polished" ? 1.0 : 0.0,
+            clearcoatRoughness: 0.1
+        })
+    );
+
+    const engravingMaterialRef = useRef(
+        new THREE.MeshPhysicalMaterial({
+            color: colorHex,
+            metalness: 1.0,
+            roughness: roughness,
+            aoMap: hasAoEngraving ? aoTextureEngraving : null,
+            aoMapIntensity: hasAoEngraving ? 1.0 : 0.0,
             roughnessMap: roughnessTexture,
             clearcoat: finish === "polished" ? 1.0 : 0.0,
             clearcoatRoughness: 0.1
@@ -80,15 +119,23 @@ const SingleModel = observer(({ variation, diamondEnvMap, size }: SingleModelPro
     // Keep textures in sync if they change (e.g. modelId/variation swap)
     useEffect(() => {
         // Update Gold Material
-        goldMaterialRef.current.aoMap = aoTextureGold;
+        goldMaterialRef.current.aoMap = hasAoGold ? aoTextureGold : null;
+        goldMaterialRef.current.aoMapIntensity = hasAoGold ? 1.0 : 0.0;
         goldMaterialRef.current.roughnessMap = roughnessTexture;
         goldMaterialRef.current.needsUpdate = true;
 
         // Update Silver Material
-        silverMaterialRef.current.aoMap = aoTextureSilver;
+        silverMaterialRef.current.aoMap = hasAoSilver ? aoTextureSilver : null;
+        silverMaterialRef.current.aoMapIntensity = hasAoSilver ? 0.5 : 0.5;
         silverMaterialRef.current.roughnessMap = roughnessTexture;
         silverMaterialRef.current.needsUpdate = true;
-    }, [aoTextureGold, aoTextureSilver, roughnessTexture]);
+
+        // Update Engraving Material
+        engravingMaterialRef.current.aoMap = hasAoEngraving ? aoTextureEngraving : null;
+        engravingMaterialRef.current.aoMapIntensity = hasAoEngraving ? 1.0 : 0.0;
+        engravingMaterialRef.current.roughnessMap = roughnessTexture;
+        engravingMaterialRef.current.needsUpdate = true;
+    }, [aoTextureGold, aoTextureSilver, aoTextureEngraving, roughnessTexture, hasAoGold, hasAoSilver, hasAoEngraving]);
 
     // Lerp material properties toward target values every frame
     useFrame((_, delta) => {
@@ -131,6 +178,32 @@ const SingleModel = observer(({ variation, diamondEnvMap, size }: SingleModelPro
             0.1,
             factor
         );
+
+        // Update Engraving Material
+        const isArtisanal = collection.toLowerCase() === "artisanal";
+        const isArtisanal526 = isArtisanal && modelId === "526";
+        const isGold = !(isArtisanal && !isArtisanal526);
+
+        if (isGold) {
+            engravingMaterialRef.current.color.lerp(targetColor.current, factor);
+        } else {
+            engravingMaterialRef.current.color.set("#f6f5f5");
+        }
+        engravingMaterialRef.current.roughness = THREE.MathUtils.lerp(
+            engravingMaterialRef.current.roughness,
+            targetRoughness.current,
+            factor
+        );
+        engravingMaterialRef.current.clearcoat = THREE.MathUtils.lerp(
+            engravingMaterialRef.current.clearcoat,
+            targetClearcoat,
+            factor
+        );
+        engravingMaterialRef.current.clearcoatRoughness = THREE.MathUtils.lerp(
+            engravingMaterialRef.current.clearcoatRoughness,
+            0.1,
+            factor
+        );
     });
 
     // --- END: LERP ANIMATION CHANGES ---
@@ -139,18 +212,54 @@ const SingleModel = observer(({ variation, diamondEnvMap, size }: SingleModelPro
 
     // Mesh Processing Logic
     useMemo(() => {
+        console.log(`--- Traversing scene for variation: ${variation} ---`);
+        
+        // Reset normal maps on shared materials before traversing
+        goldMaterialRef.current.normalMap = null;
+        silverMaterialRef.current.normalMap = null;
+        engravingMaterialRef.current.normalMap = null;
+
         scene.traverse((node: THREE.Object3D) => {
             if (node instanceof THREE.Mesh) {
                 const mesh = node;
+                
+                // Cache original normal map and scale on first traversal
+                if (mesh.userData.originalNormalMap === undefined) {
+                    mesh.userData.originalNormalMap = (mesh.material as any)?.normalMap || null;
+                    mesh.userData.originalNormalScale = (mesh.material as any)?.normalScale 
+                        ? (mesh.material as any).normalScale.clone() 
+                        : null;
+                }
+                const originalNormalMap = mesh.userData.originalNormalMap;
+                const originalNormalScale = mesh.userData.originalNormalScale;
+
+                console.log(`Mesh Node: "${mesh.name}"`, {
+                    material: mesh.material,
+                    normalMap: originalNormalMap
+                });
 
                 // Handle Visibility based on showDiamond
                 if (mesh.name === "Silver_Metal") {
                     mesh.visible = !showDiamond;
                     mesh.material = silverMaterialRef.current;
+                    console.log("The Silver_Metal", mesh.material);
+                    if (originalNormalMap) {
+                        silverMaterialRef.current.normalMap = originalNormalMap;
+                        console.log("The Silver_Metal normalMap", silverMaterialRef.current.normalMap); 
+                        if (originalNormalScale) {
+                            silverMaterialRef.current.normalScale.copy(originalNormalScale);
+                        }
+                    }
                 }
                 if (mesh.name === "Silver_Diamond") {
                     mesh.visible = showDiamond;
                     mesh.material = silverMaterialRef.current;
+                    if (originalNormalMap) {
+                        silverMaterialRef.current.normalMap = originalNormalMap;
+                        if (originalNormalScale) {
+                            silverMaterialRef.current.normalScale.copy(originalNormalScale);
+                        }
+                    }
                 }
 
                 // --- START: NEWLY IMPLEMENTED DIAMOND LOGIC ---
@@ -174,30 +283,66 @@ const SingleModel = observer(({ variation, diamondEnvMap, size }: SingleModelPro
                     }
                 }
 
-                else if (mesh.name.includes("Custom") || mesh.name === "Gold" || mesh.name === "Engraving_Mesh") {
+                else if (mesh.name === "Engraving_Mesh") {
+                    mesh.material = engravingMaterialRef.current;
+                    console.log(mesh.material);
+                    if (originalNormalMap) {
+                        engravingMaterialRef.current.normalMap = originalNormalMap;
+                        if (originalNormalScale) {
+                            engravingMaterialRef.current.normalScale.copy(originalNormalScale);
+                        }
+                    }
+                }
+                else if (mesh.name.includes("Custom") || mesh.name === "Gold" || mesh.name === "Base_Metal" || mesh.name.includes("Base")) {
                     mesh.material = goldMaterialRef.current; // <-- uses stable ref
+                    console.log("The Base_Metal", mesh.material);
+                    if (originalNormalMap) {
+                        goldMaterialRef.current.normalMap = originalNormalMap;
+                        if (originalNormalScale) {
+                            goldMaterialRef.current.normalScale.copy(originalNormalScale);
+                        }
+                    }
+                }
+                else if (mesh.name === "Finishing_Metal" || mesh.name.includes("Finishing")) {
+                    mesh.material = silverMaterialRef.current;
+                    console.log("The Finishing_Metal", mesh.material);
+                    if (originalNormalMap) {
+                        silverMaterialRef.current.normalMap = originalNormalMap;
+                        if (originalNormalScale) {
+                            silverMaterialRef.current.normalScale.copy(originalNormalScale);
+                        }
+                    }
                 }
             }
         });
-    }, [scene, goldMaterialRef.current, silverMaterialRef.current, diamondEnvMap, size, showDiamond]);
+    }, [scene, goldMaterialRef.current, silverMaterialRef.current, engravingMaterialRef.current, diamondEnvMap, size, showDiamond, collection, modelId, aoTextureEngraving]);
 
     return <primitive object={scene} visible={isVisible} rotation={[-Math.PI / 4, -Math.PI / 10, Math.PI / 3]} />;
 });
 
 const Model3DContent = observer(() => {
     const { size } = useThree();
+    const { design3DManager } = rootStore;
+    const { collection, modelId } = design3DManager.activeModel;
 
     // Load Environment Map for the Diamond Refraction (shared)
     const diamondEnvMap = useEnvironment({ files: '/08.hdr' });
 
-    // Define the variations we want to preload
-    const variations = ["4.5mm", "5.0mm"];
+    // Define the variations dynamically based on the active model in ringsData
+    const variations = useMemo(() => {
+        if (!design3DManager.ringsData) return [];
+        const colData = design3DManager.ringsData.rings[collection];
+        if (!colData) return [];
+        const modelData = colData[modelId];
+        if (!modelData) return [];
+        return Object.keys(modelData);
+    }, [design3DManager.ringsData, collection, modelId]);
 
     return (
         <group>
             {variations.map((v) => (
                 <SingleModel
-                    key={v}
+                    key={`${collection}-${modelId}-${v}`}
                     variation={v}
                     diamondEnvMap={diamondEnvMap}
                     size={size}
