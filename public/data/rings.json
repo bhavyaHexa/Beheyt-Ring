@@ -68,8 +68,8 @@
                 "2.0mm": {
                     "modelUrl": "/BehytRings/Vintage/44/2.0mm/44_2.0mm.glb",
                     "textures": {
-                        "aoGold": "/BehytRings/Vintage/44/2.0mm/Gold_Metal_AO.png",
-                        "aoSilver": "/BehytRings/Vintage/44/2.0mm/Silver_Metal_AO.png",
+                        "aoGold": "/BehytRings/Vintage/44/2.0mm/Base_Metal_AO.webp",
+                        "aoSilver": "/BehytRings/Vintage/44/2.0mm/Finishing_Metal_AO.webp",
                         "roughness": "/BehytRings/Vintage/44/2.0mm/Roughness_Map.jpg"
                     }
                 }
@@ -78,8 +78,8 @@
                 "2.0mm": {
                     "modelUrl": "/BehytRings/Vintage/258/2.0mm/258_2.0mm.glb",
                     "textures": {
-                        "aoGold": "/BehytRings/Vintage/258/2.0mm/Gold_Metal_AO.webp",
-                        "aoSilver": "/BehytRings/Vintage/258/2.0mm/Silver_Metal_AO.webp",
+                        "aoGold": "/BehytRings/Vintage/258/2.0mm/Base_Metal_AO.webp",
+                        "aoSilver": "/BehytRings/Vintage/258/2.0mm/Finishing_Metal_AO.webp",
                         "roughness": "/BehytRings/Vintage/258/2.0mm/Roughness_Map.jpg"
                     }
                 }
@@ -88,8 +88,8 @@
                 "2.0mm": {
                     "modelUrl": "/BehytRings/Vintage/259/2.0mm/259_2.0mm.glb",
                     "textures": {
-                        "aoGold": "/BehytRings/Vintage/259/2.0mm/Gold_Metal_AO.webp",
-                        "aoSilver": "/BehytRings/Vintage/259/2.0mm/Silver_Metal_AO.webp",
+                        "aoGold": "/BehytRings/Vintage/259/2.0mm/Base_Metal_AO.webp",
+                        "aoSilver": "/BehytRings/Vintage/259/2.0mm/Finishing_Metal_Ao.webp",
                         "roughness": "/BehytRings/Vintage/259/2.0mm/Roughness_Map.jpg"
                     }
                 }
@@ -98,8 +98,8 @@
                 "2.0mm": {
                     "modelUrl": "/BehytRings/Vintage/299/2.0mm/299_2.0mm.glb",
                     "textures": {
-                        "aoGold": "/BehytRings/Vintage/299/2.0mm/Gold_Metal_AO.webp",
-                        "aoSilver": "/BehytRings/Vintage/299/2.0mm/Silver_Metal_AO.webp",
+                        "aoGold": "/BehytRings/Vintage/299/2.0mm/Base_Metal_AO.webp",
+                        "aoSilver": "/BehytRings/Vintage/299/2.0mm/Finishing_Metal_AO.webp",
                         "roughness": "/BehytRings/Vintage/299/2.0mm/Roughness_Map.jpg"
                     }
                 }
@@ -113,6 +113,14 @@
                         "aoGold": "/BehytRings/testing/174/2.0mm/Gold_Metal_AO.webp",
                         "aoSilver": "/BehytRings/testing/174/2.0mm/Silver_Metal_AO.webp",
                         "roughness": "/BehytRings/testing/174/2.0mm/Roughness_Map.jpg"
+                    }
+                },
+                "3.0mm": {
+                    "modelUrl": "/BehytRings/testing/174/3.0mm/174_3.0mm.glb",
+                    "textures": {
+                        "aoGold": "/BehytRings/testing/174/3.0mm/Gold_Metal_AO.webp",
+                        "aoSilver": "/BehytRings/testing/174/3.0mm/Silver_Metal_AO.webp",
+                        "roughness": "/BehytRings/testing/174/3.0mm/Roughness_Map.jpg"
                     }
                 }
             }

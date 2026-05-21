@@ -36,6 +36,7 @@ export interface TextureSet {
     ao?: string;
     aoGold?: string;
     aoSilver?: string;
+    [key: string]: any;
 }
 
 /**

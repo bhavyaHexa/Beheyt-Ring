@@ -1,15 +1,91 @@
 import React, { useEffect, useMemo, useRef } from 'react';
-import { useGLTF, useTexture, useEnvironment } from '@react-three/drei';
+import { useGLTF, useEnvironment } from '@react-three/drei';
 import { observer } from 'mobx-react-lite';
 import { rootStore } from '../../managers/stateManager';
 import * as THREE from "three";
-import { useThree, useFrame } from '@react-three/fiber';
+import { useThree, useFrame, useLoader } from '@react-three/fiber';
 import { MeshBVH } from 'three-mesh-bvh';
 import { SingleModelProps } from '../../types';
 
 // START: NEWLY IMPLEMENTED IMPORTS
 import MeshRefractionMaterialWebGL from '../../material/MeshRefractionMaterial.js';
 // END: NEWLY IMPLEMENTED IMPORTS
+
+class SafeTextureLoader extends THREE.TextureLoader {
+    load(
+        url: string,
+        onLoad?: (texture: THREE.Texture) => void,
+        onProgress?: (event: ProgressEvent) => void,
+        onError?: (event: ErrorEvent) => void
+    ): THREE.Texture {
+        return super.load(
+            url,
+            (texture) => {
+                if (onLoad) onLoad(texture);
+            },
+            onProgress,
+            (err) => {
+                console.warn(`SafeTextureLoader: Failed to load texture at ${url}. Falling back to default.`);
+                const fallbackUrl = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
+                super.load(
+                    fallbackUrl,
+                    (fallbackTexture) => {
+                        if (onLoad) onLoad(fallbackTexture);
+                    },
+                    undefined,
+                    (fallbackErr) => {
+                        if (onError) onError(fallbackErr);
+                    }
+                );
+            }
+        );
+    }
+}
+
+class ModelErrorBoundary extends React.Component<
+    { children: React.ReactNode; name?: string },
+    { hasError: boolean }
+> {
+    state = { hasError: false };
+
+    static getDerivedStateFromError() {
+        return { hasError: true };
+    }
+
+    componentDidCatch(error: any, errorInfo: any) {
+        console.warn(`ModelErrorBoundary caught an error for ${this.props.name || 'model'}:`, error, errorInfo);
+    }
+
+    render() {
+        if (this.state.hasError) {
+            return null;
+        }
+        return this.props.children;
+    }
+}
+
+/**
+ * Helper to retrieve a texture URL from the textures configuration object using
+ * a list of potential keys, performing both exact and case-insensitive lookups.
+ */
+const getTextureValue = (texturesObj: any, searchKeys: string[]): string | undefined => {
+    if (!texturesObj) return undefined;
+    
+    // 1. Try exact matches in priority order
+    for (const key of searchKeys) {
+        if (texturesObj[key]) return texturesObj[key];
+    }
+    
+    // 2. Try case-insensitive matching
+    const searchKeysLower = searchKeys.map(k => k.toLowerCase());
+    for (const key of Object.keys(texturesObj)) {
+        if (searchKeysLower.includes(key.toLowerCase())) {
+            return texturesObj[key];
+        }
+    }
+    
+    return undefined;
+};
 
 const SingleModel = observer(({ variation, diamondEnvMap, size }: SingleModelProps) => {
     const { design3DManager } = rootStore;
@@ -30,34 +106,70 @@ const SingleModel = observer(({ variation, diamondEnvMap, size }: SingleModelPro
 
     const fallbackTextureUrl = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
     const texturesAny = variationData?.textures as any;
-    const hasAoGold = !!texturesAny?.aoGold;
-    const hasAoSilver = !!texturesAny?.aoSilver;
-    const aoEngravingKey = texturesAny?.aoEngraving || 
-                           texturesAny?.aoEngrave || 
-                           texturesAny?.aoEngravingMesh || 
-                           texturesAny?.aoEngraving_Mesh || 
-                           texturesAny?.Engraving_Mesh_AO;
-    const hasAoEngraving = !!aoEngravingKey;
 
-    const aoMapUrlGold = hasAoGold && texturesAny?.aoGold ? texturesAny.aoGold : fallbackTextureUrl;
-    const aoMapUrlSilver = hasAoSilver && texturesAny?.aoSilver ? texturesAny.aoSilver : fallbackTextureUrl;
-    const aoMapUrlEngraving = hasAoEngraving ? aoEngravingKey : fallbackTextureUrl;
+    // Resolve AO map for Gold (Base Metal)
+    const aoGoldUrl = getTextureValue(texturesAny, [
+        'aoGold',
+        'Base_metal_AO',
+        'Base_Metal_AO',
+        'Base_metal_Ao',
+        'base_metal_ao',
+        'Gold_Metal_AO',
+        'Gold_metal_AO',
+        'Gold_Metal_Ao',
+        'gold_metal_ao',
+        'Base_Metal',
+        'Gold_Metal'
+    ]);
+    const hasAoGold = !!aoGoldUrl;
+
+    // Resolve AO map for Silver (Finishing Metal)
+    const aoSilverUrl = getTextureValue(texturesAny, [
+        'aoSilver',
+        'Finishing_Metal_Ao',
+        'Finishing_Metal_AO',
+        'Finishing_metal_AO',
+        'Finishing_metal_Ao',
+        'finishing_metal_ao',
+        'Silver_Metal_AO',
+        'Silver_metal_AO',
+        'Silver_Metal_Ao',
+        'silver_metal_ao',
+        'Finishing_Metal',
+        'Silver_Metal'
+    ]);
+    const hasAoSilver = !!aoSilverUrl;
+
+    // Resolve AO map for Engraving Mesh
+    const aoEngravingUrl = getTextureValue(texturesAny, [
+        'aoEngraving',
+        'aoEngrave',
+        'aoEngravingMesh',
+        'aoEngraving_Mesh',
+        'Engraving_Mesh_AO',
+        'Engraving_Mesh'
+    ]);
+    const hasAoEngraving = !!aoEngravingUrl;
+
+    const aoMapUrlGold = hasAoGold && aoGoldUrl ? aoGoldUrl : fallbackTextureUrl;
+    const aoMapUrlSilver = hasAoSilver && aoSilverUrl ? aoSilverUrl : fallbackTextureUrl;
+    const aoMapUrlEngraving = hasAoEngraving && aoEngravingUrl ? aoEngravingUrl : fallbackTextureUrl;
 
     const roughnessMapUrl = (variationData?.textures?.roughness && !variationData.textures.roughness.endsWith('roughness.jpg'))
         ? variationData.textures.roughness
         : `/BehytRings/${formattedCollection}/${modelId}/${formattedVariation}/Roughness_Map.jpg`;
 
-    // Load textures for this variation
-    const aoTextureGold = useTexture(aoMapUrlGold) as THREE.Texture;
+    // Load textures safely for this variation
+    const aoTextureGold = useLoader(SafeTextureLoader, aoMapUrlGold) as THREE.Texture;
     if (aoTextureGold) aoTextureGold.flipY = false;
 
-    const aoTextureSilver = useTexture(aoMapUrlSilver) as THREE.Texture;
+    const aoTextureSilver = useLoader(SafeTextureLoader, aoMapUrlSilver) as THREE.Texture;
     if (aoTextureSilver) aoTextureSilver.flipY = false;
 
-    const aoTextureEngraving = useTexture(aoMapUrlEngraving) as THREE.Texture;
+    const aoTextureEngraving = useLoader(SafeTextureLoader, aoMapUrlEngraving) as THREE.Texture;
     if (aoTextureEngraving) aoTextureEngraving.flipY = false;
 
-    const roughnessTexture = useTexture(roughnessMapUrl) as THREE.Texture;
+    const roughnessTexture = useLoader(SafeTextureLoader, roughnessMapUrl) as THREE.Texture;
     if (roughnessTexture) roughnessTexture.flipY = false;
 
     // Load the GLTF for this variation
@@ -263,7 +375,7 @@ const SingleModel = observer(({ variation, diamondEnvMap, size }: SingleModelPro
                 }
 
                 // --- START: NEWLY IMPLEMENTED DIAMOND LOGIC ---
-                if (mesh.name === "Diamond_Mesh" || mesh.name.includes("Diam_Centr")) {
+                if (mesh.name === "Diamond_Mesh" || mesh.name.includes("Diam_Centr") || mesh.name.includes("Diamond_Metal")) {
                     mesh.visible = showDiamond;
 
                     if (showDiamond) {
@@ -341,12 +453,13 @@ const Model3DContent = observer(() => {
     return (
         <group>
             {variations.map((v) => (
-                <SingleModel
-                    key={`${collection}-${modelId}-${v}`}
-                    variation={v}
-                    diamondEnvMap={diamondEnvMap}
-                    size={size}
-                />
+                <ModelErrorBoundary key={`${collection}-${modelId}-${v}`} name={`${collection}-${modelId}-${v}`}>
+                    <SingleModel
+                        variation={v}
+                        diamondEnvMap={diamondEnvMap}
+                        size={size}
+                    />
+                </ModelErrorBoundary>
             ))}
         </group>
     );
