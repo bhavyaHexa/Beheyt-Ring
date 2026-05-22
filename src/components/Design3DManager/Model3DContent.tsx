@@ -207,7 +207,11 @@ const SingleModel = observer(({
         'aoEngravingMesh',
         'aoEngraving_Mesh',
         'Engraving_Mesh_AO',
-        'Engraving_Mesh'
+        'Engraving_Mesh',
+        'aoEngravingMetal',
+        'aoEngraving_Metal',
+        'Engraving_Metal_AO',
+        'Engraving_Metal'
     ]);
     const hasAoEngraving = !!aoEngravingUrl;
 
@@ -278,7 +282,12 @@ const SingleModel = observer(({
     // Resolve custom color fields from JSON configuration if present
     const baseMetalColorVal = getValueIgnoreCaseAndSymbols(variationData, ["Base_Metal_Color", "baseMetalColor", "Base Metal Color", "base_metal_color"]);
     const finishingMetalColorVal = getValueIgnoreCaseAndSymbols(variationData, ["finishing_metal_color", "finishingMetalColor", "finishing metal color", "finshing metal color", "finshing_metal_color", "finshingMetalColor"]);
-    const engravingMeshColorVal = getValueIgnoreCaseAndSymbols(variationData, ["engraving_mesh_color", "engravingMeshColor", "engraving mesh color", "engrave_mesh_color", "engraveMeshColor", "engrave mesh color"]);
+    const engravingMeshColorVal = getValueIgnoreCaseAndSymbols(variationData, [
+        "engraving_mesh_color", "engravingMeshColor", "engraving mesh color", 
+        "engrave_mesh_color", "engraveMeshColor", "engrave mesh color",
+        "engraving_metal_color", "engravingMetalColor", "engraving metal color",
+        "engrave_metal_color", "engraveMetalColor", "engrave metal color"
+    ]);
     const colorChangeVal = getValueIgnoreCaseAndSymbols(variationData, ["colorChange", "color_change", "colorChangeMesh", "color change"]);
 
     // Stable refs to the target colors and roughness
@@ -326,7 +335,7 @@ const SingleModel = observer(({
                 targetFinishingColor.current.set(resolveColor(finishingMetalColorVal, "#f6f5f5"));
             }
 
-            if (changeMesh === "engravingmesh" || changeMesh === "engraving" || changeMesh === "engrave" || changeMesh === "basemetal" || changeMesh === "base" || changeMesh === "gold" || changeMesh === "both") {
+            if (changeMesh === "engravingmesh" || changeMesh === "engravingmetal" || changeMesh === "engraving" || changeMesh === "engrave" || changeMesh === "basemetal" || changeMesh === "base" || changeMesh === "gold" || changeMesh === "both") {
                 targetEngravingColor.current.set(colorHex);
             } else {
                 targetEngravingColor.current.set(resolveColor(engravingMeshColorVal, "#ffc35c"));
@@ -614,7 +623,7 @@ const SingleModel = observer(({
                     }
                 }
 
-                else if (mesh.name === "Engraving_Mesh") {
+                else if (mesh.name === "Engraving Mesh" || mesh.name === "Engraving Metal" || mesh.name === "Engraving_Mesh" || mesh.name === "Engraving_Metal" || mesh.name.includes("Engraving")) {
                     mesh.material = engravingMaterialRef.current;
                     if (originalNormalMap) {
                         engravingMaterialRef.current.normalMap = originalNormalMap;
@@ -623,7 +632,7 @@ const SingleModel = observer(({
                         }
                     }
                 }
-                else if (mesh.name.includes("Custom") || mesh.name === "Gold" || mesh.name === "Base_Metal" || mesh.name.includes("Base")) {
+                else if (mesh.name.includes("Custom") || mesh.name === "Gold" || mesh.name === "Base_Metal" ||  mesh.name === "Base_metal"|| mesh.name.includes("Base")) {
                     mesh.material = targetBaseMaterial;
                     if (hasNormalBase) {
                         targetBaseMaterial.normalMap = normalBaseTexture;

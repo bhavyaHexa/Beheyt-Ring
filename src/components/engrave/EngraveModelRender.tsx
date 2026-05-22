@@ -76,19 +76,37 @@ const EngraveModelRender = observer(function EngraveModelRender() {
         return { normalTexture: nTex, aoTexture: aoTex, hCanvas };
     }, [engraveManager.engraving, textOffsetX]);
 
-    // Add UV2 to the loaded GLB Geometry
-    const ringMesh = nodes['Engraving_Mesh'] as THREE.Mesh;
+    // Find the engraving mesh (either Engraving Mesh, Engraving Metal, Engraving_Mesh, or Engraving_Metal)
+    const ringMesh = useMemo(() => {
+        if (!nodes) return null;
+        const targetNames = ['Engraving Mesh', 'Engraving Metal', 'Engraving_Mesh', 'Engraving_Metal'];
+        for (const name of targetNames) {
+            if (nodes[name] instanceof THREE.Mesh) {
+                return nodes[name] as THREE.Mesh;
+            }
+        }
+        for (const key of Object.keys(nodes)) {
+            const node = nodes[key];
+            if (node instanceof THREE.Mesh) {
+                const lowerName = node.name.toLowerCase();
+                if (lowerName === 'engraving mesh' || lowerName === 'engraving metal' || lowerName === 'engraving_mesh' || lowerName === 'engraving_metal') {
+                    return node;
+                }
+            }
+        }
+        return null;
+    }, [nodes]);
 
     useEffect(() => {
+        if (!ringMesh || !ringMesh.geometry) return;
+
         // Fix the GLB Ring Geometry
-        if (ringMesh && ringMesh.geometry && ringMesh.geometry.attributes.uv && !ringMesh.geometry.attributes.uv2) {
+        if (ringMesh.geometry.attributes.uv && !ringMesh.geometry.attributes.uv2) {
             ringMesh.geometry.setAttribute(
                 'uv2', // Use 'uv1' if you are on Three.js r151 or newer
                 new Float32BufferAttribute(ringMesh.geometry.attributes.uv.array, 2)
             );
         }
-
-        if (!ringMesh || !ringMesh.geometry) return;
 
         // Create a floating UI button to download the UV map
         const btn = document.createElement('button');
