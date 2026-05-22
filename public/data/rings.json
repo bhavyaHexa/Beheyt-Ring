@@ -46,6 +46,10 @@
             "526": {
                 "4.0mm": {
                     "modelUrl": "/BehytRings/Artisanal/526/4.0mm/526_4.0mm.glb",
+                    "Base_Metal_Color": "gold",
+                    "finshing metal color": "silver",
+                    "engraving mesh color": "gold",
+                    "colorChange": "Base_Metal",
                     "textures": {
                         "aoGold": "/BehytRings/Artisanal/526/4.0mm/Gold_Metal_AO.webp",
                         "aoSilver": "/BehytRings/Artisanal/526/4.0mm/Silver_Metal_AO.webp",
@@ -147,6 +151,10 @@
             "529": {
                 "3.5mm": {
                     "modelUrl": "/BehytRings/Artisanal/529/3.5mm/529_3.5mm.glb",
+                    "Base_Metal_Color": "gold",
+                    "finshing metal color": "silver",
+                    "engraving mesh color": "gold",
+                    "colorChange": "Base_Metal",
                     "textures": {
                         "aoGold": "/BehytRings/Artisanal/529/3.5mm/Base_Metal_AO.webp",
                         "aoSilver": "/BehytRings/Artisanal/529/3.5mm/Finishing_Metal_AO.webp",
