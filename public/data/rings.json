@@ -24,10 +24,14 @@
             "174": {
                 "3.5mm": {
                     "modelUrl": "/BehytRings/Artisanal/174/3.5mm/174_3.5mm.glb",
+                    "Base_Metal_Color": "silver",
+                    "finshing metal color": "gold",
+                    "engraving mesh color": "silver",
+                    "colorChange": "Finishing_Metal",
                     "textures": {
-                        "aoGold": "/BehytRings/Artisanal/174/3.5mm/Gold_Metal_AO.webp",
-                        "aoSilver": "/BehytRings/Artisanal/174/3.5mm/Silver_Metal_AO.webp",
-                        "roughness": "/BehytRings/Artisanal/174/3.5mm/Roughness_Map.jpg"
+                        "aoSilver": "/BehytRings/Artisanal/174/3.5mm/Finishing_Metal_AO.webp",
+                        "roughness": "/BehytRings/Artisanal/174/3.5mm/Roughness_Map.jpg",
+                        "normalFinishing": "/BehytRings/Artisanal/174/3.5mm/Finishing_Metal_Normal.webp"
                     }
                 },
                 "4.0mm": {
@@ -46,7 +50,109 @@
                         "aoGold": "/BehytRings/Artisanal/526/4.0mm/Gold_Metal_AO.webp",
                         "aoSilver": "/BehytRings/Artisanal/526/4.0mm/Silver_Metal_AO.webp",
                         "roughness": "/BehytRings/Artisanal/526/4.0mm/Roughness_Map.jpg",
-                        "aoEngrave": "/BehytRings/Artisanal/526/4.0mm/Engraving_Mesh_AO.webp"
+                        "aoEngrave": "/BehytRings/Artisanal/526/4.0mm/Engraving_Mesh_AO.webp",
+                        "normalBase": "/BehytRings/Artisanal/526/4.0mm/Base_Metal_Normal.webp"
+                    }
+                }
+            },
+             "470": {
+                "4.0mm": {
+                    "modelUrl": "/BehytRings/Artisanal/470/4.0mm/470_4.0mm.glb",
+                    "Base_Metal_Color": "gold",
+                    "finshing metal color": "gold",
+                    "engraving mesh color": "gold",
+                    "colorChange": "Base_Metal",
+                    "textures": {
+                        "aoGold": "/BehytRings/Artisanal/470/4.0mm/Base_Metal_AO.webp",
+                        "roughness": "/BehytRings/Artisanal/470/4.0mm/Roughness_Map.jpg",
+                        "aoEngrave": "/BehytRings/Artisanal/470/4.0mm/Engraving_Mesh_AO.webp",
+                        "normalBase": "/BehytRings/Artisanal/470/4.0mm/Base_Metal_Normal.webp"
+                     
+                    }
+                }
+            },
+            "468": {
+                "3.5mm": {
+                    "modelUrl": "/BehytRings/Artisanal/468/3.5mm/468_3.5mm.glb",
+                    "Base_Metal_Color": "silver",
+                    "finshing metal color": "gold",
+                    "engraving mesh color": "silver",
+                    "colorChange": "Finishing_Metal",
+                    "textures": {
+                        "aoGold": "/BehytRings/Artisanal/468/3.5mm/Base_Metal_AO.webp",
+                        "aoSilver": "/BehytRings/Artisanal/468/3.5mm/Finishing_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Artisanal/468/3.5mm/Engraving_Mesh_AO.webp",
+                        "normalFinishing": "/BehytRings/Artisanal/468/3.5mm/Finishing_Metal_Normal.webp"
+                    }
+                }
+            },"469": {
+                "3.5mm": {
+                    "modelUrl": "/BehytRings/Artisanal/469/3.5mm/469_3.5mm.glb",
+                    "Base_Metal_Color": "gold",
+                    "finshing metal color": "silver",
+                    "engraving mesh color": "gold",
+                    "colorChange": "Base_Metal",
+                    "textures": {
+                        "aoGold": "/BehytRings/Artisanal/469/3.5mm/Base_Metal_AO.webp",
+                        "aoSilver": "/BehytRings/Artisanal/469/3.5mm/Finishing_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Artisanal/469/3.5mm/Engraving_Mesh_AO.webp",
+                        "normalBase": "/BehytRings/Artisanal/469/3.5mm/Base_Metal_Normal.webp"
+                    }
+                }
+            },
+            "471": {
+                "3.5mm": {
+                    "modelUrl": "/BehytRings/Artisanal/471/3.5mm/471_3.5mm.glb",
+                    "Base_Metal_Color": "gold",
+                    "finshing metal color": "gold",
+                    "engraving mesh color": "gold",
+                    "colorChange": "both",
+                    "textures": {
+                        "aoGold": "/BehytRings/Artisanal/471/3.5mm/Base_Metal_AO.webp",
+                        "aoSilver": "/BehytRings/Artisanal/471/3.5mm/Finishing_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Artisanal/471/3.5mm/Engraving_Mesh_AO.webp",
+                        "normalFinishing": "/BehytRings/Artisanal/471/3.5mm/Finishing_Metal_Normal.webp"
+                    }
+                }
+            },
+            "472": {
+                "3.5mm": {
+                    "modelUrl": "/BehytRings/Artisanal/472/3.5mm/472_3.5mm.glb",
+                    "Base_Metal_Color": "silver",
+                    "finshing metal color": "rose gold",
+                    "engraving mesh color": "silver",
+                    "colorChange": "Finishing_Metal",
+                    "textures": {
+                        "aoGold": "/BehytRings/Artisanal/472/3.5mm/Base_Metal_AO.webp",
+                        "aoSilver": "/BehytRings/Artisanal/472/3.5mm/Finishing_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Artisanal/472/3.5mm/Engraving_Mesh_AO.webp",
+                        "normalBase": "/BehytRings/Artisanal/472/3.5mm/Base_Metal_Normal.webp"
+                    }
+                }
+            },
+            "524": {
+                "3.5mm": {
+                    "modelUrl": "/BehytRings/Artisanal/524/3.5mm/524_3.5mm.glb",
+                    "Base_Metal_Color": "gold",
+                    "finshing metal color": "silver",
+                    "engraving mesh color": "gold",
+                    "colorChange": "Base_Metal",
+                    "textures": {
+                        "aoSilver": "/BehytRings/Artisanal/524/3.5mm/Finishing_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Artisanal/524/3.5mm/Engraving_Mesh_AO.webp",
+                        "normalFinishing": "/BehytRings/Artisanal/524/3.5mm/Finishing_Metal_Normal.webp"
+                    }
+                }
+            },
+            "529": {
+                "3.5mm": {
+                    "modelUrl": "/BehytRings/Artisanal/529/3.5mm/529_3.5mm.glb",
+                    "textures": {
+                        "aoGold": "/BehytRings/Artisanal/529/3.5mm/Base_Metal_AO.webp",
+                        "aoSilver": "/BehytRings/Artisanal/529/3.5mm/Finishing_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Artisanal/529/3.5mm/Engraving_Mesh_AO.webp",
+                        "normalFinishing": "/BehytRings/Artisanal/529/3.5mm/Finishing_Metal_Normal.webp",
+                        "normalBase":"/BehytRings/Artisanal/529/3.5mm/Base_Metal_Normal.webp"
                     }
                 }
             }

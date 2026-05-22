@@ -12,7 +12,7 @@ export class DesignManagerStore {
     currentView: 'home' | 'engrave' = 'home';
 
     colorMap: Record<string, string> = {
-        gold: "#f2bd61",
+        gold: "#ffc35c",
         silver: "#f6f5f5",
         'rose gold': "#e8a274"  //f4a068
     };
@@ -71,6 +71,7 @@ export class DesignManagerStore {
                 }
             }
         }
+        this.updateDefaultColorForActiveModel();
     }
 
     setModelId(id: string) {
@@ -83,10 +84,12 @@ export class DesignManagerStore {
                 this.selectedVariation = variations[0];
             }
         }
+        this.updateDefaultColorForActiveModel();
     }
 
     setVariation(variation: string) {
         this.selectedVariation = variation;
+        this.updateDefaultColorForActiveModel();
     }
 
     setColor(color: ColorType) {
@@ -117,5 +120,71 @@ export class DesignManagerStore {
             finish: this.selectedFinish,
             roughness: this.selectedFinish === "polished" ? 0.2 : 0.75
         };
+    }
+
+    updateDefaultColorForActiveModel() {
+        const ringsData = this.rootStore.design3DManager.ringsData;
+        if (!ringsData) return;
+
+        const collectionData = ringsData.rings[this.selectedCollection];
+        if (!collectionData) return;
+
+        const modelData = collectionData[this.selectedModelId];
+        if (!modelData) return;
+
+        const variationData = modelData[this.selectedVariation];
+        if (!variationData) return;
+
+        // Determine the color change mesh
+        const normalize = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
+        
+        // Find colorChange
+        let colorChangeVal = "";
+        for (const key of Object.keys(variationData)) {
+            if (normalize(key) === "colorchange") {
+                colorChangeVal = variationData[key];
+                break;
+            }
+        }
+
+        if (!colorChangeVal) return;
+
+        const changeMesh = normalize(colorChangeVal);
+        let defaultColorName = "";
+
+        if (changeMesh === "basemetal" || changeMesh === "base" || changeMesh === "gold") {
+            // Find Base Metal Color key
+            for (const key of Object.keys(variationData)) {
+                if (normalize(key) === "basemetalcolor") {
+                    defaultColorName = variationData[key];
+                    break;
+                }
+            }
+        } else if (changeMesh === "finishingmetal" || changeMesh === "finishing" || changeMesh === "finshing" || changeMesh === "finshingmetal" || changeMesh === "silver") {
+            // Find Finishing Metal Color key
+            for (const key of Object.keys(variationData)) {
+                const normKey = normalize(key);
+                if (normKey === "finishingmetalcolor" || normKey === "finshingmetalcolor") {
+                    defaultColorName = variationData[key];
+                    break;
+                }
+            }
+        } else if (changeMesh === "both") {
+            // Find either Base Metal Color or Finishing Metal Color
+            for (const key of Object.keys(variationData)) {
+                if (normalize(key) === "basemetalcolor") {
+                    defaultColorName = variationData[key];
+                    break;
+                }
+            }
+        }
+
+        if (defaultColorName) {
+            const cleanColor = defaultColorName.trim().toLowerCase();
+            if (cleanColor === "gold" || cleanColor === "silver" || cleanColor === "rose gold" || cleanColor === "rosegold") {
+                const finalColor = cleanColor === "rosegold" ? "rose gold" : cleanColor;
+                this.selectedColor = finalColor as ColorType;
+            }
+        }
     }
 }

@@ -45,6 +45,17 @@ export interface TextureSet {
 export interface VariationData {
     modelUrl: string;
     textures: TextureSet;
+    Base_Metal_Color?: string;
+    base_metal_color?: string;
+    baseMetalColor?: string;
+    finishing_metal_color?: string;
+    finishingMetalColor?: string;
+    engraving_mesh_color?: string;
+    engravingMeshColor?: string;
+    colorChange?: string;
+    color_change?: string;
+    ColorChange?: string;
+    [key: string]: any;
 }
 
 /**

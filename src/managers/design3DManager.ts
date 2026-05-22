@@ -42,6 +42,7 @@ export class Design3DManagerStore {
                         }
                     }
                 }
+                dm.updateDefaultColorForActiveModel();
             });
         } catch (error) {
             console.error("Failed to load rings data:", error);
