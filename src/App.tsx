@@ -1,6 +1,7 @@
 import { observer } from "mobx-react-lite"
 import DesignManager from "./components/DesignManager/DesignManager"
 import ModelRender from "./components/Design3DManager/ModelRender"
+import SheetManager from "./components/SheetManager/SheetManager"
 
 const App = observer(() => {
     return (
@@ -10,6 +11,8 @@ const App = observer(() => {
             <div className="ui-overlay flex flex-col gap-4">
                 <DesignManager />
             </div>
+
+            <SheetManager />
         </div >
     )
 });

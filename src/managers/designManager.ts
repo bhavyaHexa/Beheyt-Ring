@@ -10,6 +10,8 @@ export class DesignManagerStore {
     selectedFinish: FinishType = "polished";
     showDiamond: boolean = true;
     currentView: 'home' | 'engrave' = 'home';
+    normalIntensity: number = 1.0;
+
 
     colorMap: Record<string, string> = {
         gold: "#ffc35c",
@@ -186,5 +188,105 @@ export class DesignManagerStore {
                 this.selectedColor = finalColor as ColorType;
             }
         }
+    }
+
+    setNormalIntensity(value: number) {
+        this.normalIntensity = value;
+    }
+
+    get activeNormalMaps() {
+        const ringsData = this.rootStore.design3DManager.ringsData;
+        if (!ringsData) return [];
+
+        const collectionData = ringsData.rings[this.selectedCollection];
+        if (!collectionData) return [];
+
+        const modelData = collectionData[this.selectedModelId];
+        if (!modelData) return [];
+
+        const variationData = modelData[this.selectedVariation];
+        if (!variationData) return [];
+
+        const texturesAny = variationData.textures as any;
+        if (!texturesAny) return [];
+
+        // Helper to retrieve normal map texture URL by checking both keys and values
+        const getTextureValue = (texturesObj: any, searchKeys: string[]): string | undefined => {
+            if (!texturesObj) return undefined;
+            for (const key of searchKeys) {
+                if (texturesObj[key]) return texturesObj[key];
+            }
+            const searchKeysLower = searchKeys.map(k => k.toLowerCase());
+            for (const key of Object.keys(texturesObj)) {
+                if (searchKeysLower.includes(key.toLowerCase())) {
+                    return texturesObj[key];
+                }
+            }
+            return undefined;
+        };
+
+        const getNormalMapValue = (texturesObj: any, matchTerms: string[]): string | undefined => {
+            if (!texturesObj) return undefined;
+            const matchTermsLower = matchTerms.map(t => t.toLowerCase());
+            for (const key of Object.keys(texturesObj)) {
+                const keyLower = key.toLowerCase();
+                for (const term of matchTermsLower) {
+                    if (keyLower.includes(term)) {
+                        return texturesObj[key];
+                    }
+                }
+            }
+            for (const key of Object.keys(texturesObj)) {
+                const val = texturesObj[key];
+                if (typeof val === 'string') {
+                    const valLower = val.toLowerCase();
+                    for (const term of matchTermsLower) {
+                        if (valLower.includes(term)) {
+                            return val;
+                        }
+                    }
+                }
+            }
+            return undefined;
+        };
+
+        const normalBaseUrl = getTextureValue(texturesAny, [
+            'normalBase',
+            'Base_Metal_Normal',
+            'Base_metal_Normal',
+            'base_metal_normal',
+            'Base_Metal_Normal.webp',
+            'Base_metal_Normal.webp',
+            'base_metal_normal.webp'
+        ]) || getNormalMapValue(texturesAny, ['Base_Metal_Normal', 'base_metal_normal']);
+
+        const normalFinishingUrl = getTextureValue(texturesAny, [
+            'normalFinishing',
+            'Finishing_Metal_Normal',
+            'Finishing_metal_Normal',
+            'finishing_metal_normal',
+            'Finishing_Metal_Normal.webp',
+            'Finishing_metal_Normal.webp',
+            'finishing_metal_normal.webp'
+        ]) || getNormalMapValue(texturesAny, ['Finishing_Metal_Normal', 'finishing_metal_normal']);
+
+        const results = [];
+        if (normalBaseUrl) {
+            results.push({
+                type: 'base',
+                meshName: 'Base_Metal',
+                url: normalBaseUrl,
+                filename: normalBaseUrl.substring(normalBaseUrl.lastIndexOf('/') + 1)
+            });
+        }
+        if (normalFinishingUrl) {
+            results.push({
+                type: 'finishing',
+                meshName: 'Finishing_Metal',
+                url: normalFinishingUrl,
+                filename: normalFinishingUrl.substring(normalFinishingUrl.lastIndexOf('/') + 1)
+            });
+        }
+        return results;
     }
 }

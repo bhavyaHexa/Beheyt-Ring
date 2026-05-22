@@ -681,16 +681,21 @@ const SingleModel = observer(({
 
 const Model3DContent = observer(() => {
     const { size } = useThree();
-    const { design3DManager } = rootStore;
+    const { design3DManager, designManager } = rootStore;
     const { collection, modelId } = design3DManager.activeModel;
 
     // Load Environment Map for the Diamond Refraction (shared)
     const diamondEnvMap = useEnvironment({ files: '/08.hdr' });
 
-    // Leva controls to scale the normals properly`
+    // Leva controls to scale the normals properly
     const { normalIntensity } = useControls('Normal Map Controls', {
         normalIntensity: { value: 1.0, min: -5.0, max: 5.0, step: 0.05 },
     });
+
+    // Keep MobX store in sync with Leva controls
+    useEffect(() => {
+        designManager.setNormalIntensity(normalIntensity);
+    }, [normalIntensity, designManager]);
 
     // Define the variations dynamically based on the active model in ringsData
     const variations = useMemo(() => {
@@ -710,7 +715,7 @@ const Model3DContent = observer(() => {
                         variation={v}
                         diamondEnvMap={diamondEnvMap}
                         size={size}
-                        normalIntensity={normalIntensity}
+                        normalIntensity={designManager.normalIntensity}
                     />
                 </ModelErrorBoundary>
             ))}
