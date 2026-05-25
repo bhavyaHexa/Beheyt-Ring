@@ -89,3 +89,14 @@ export interface SingleModelProps {
     diamondEnvMap: THREE.Texture | null;
     size: { width: number; height: number };
 }
+
+export interface AlignmentResult {
+    localBox: THREE.Box3;
+    localCenter: THREE.Vector3;
+    localSize: THREE.Vector3;
+    rotatedCenterOffset: THREE.Vector3;
+    minY?: number;
+    maxY?: number;
+    rotatedBox?: THREE.Box3;
+}
+

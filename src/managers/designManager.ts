@@ -1,6 +1,7 @@
 import { makeAutoObservable } from "mobx";
 import { RootStore } from "./stateManager";
 import { DesignSelection, ColorType, FinishType } from "../types";
+import { getTextureValue, getNormalMapValue } from "../utils/textureHelpers";
 
 export class DesignManagerStore {
     selectedCollection: string = "briljant";
@@ -10,6 +11,7 @@ export class DesignManagerStore {
     selectedFinish: FinishType = "polished";
     showDiamond: boolean = true;
     currentView: 'home' | 'engrave' = 'home';
+    modelMinY: number = 0;
     normalIntensity: number = 1.0;
 
 
@@ -194,6 +196,10 @@ export class DesignManagerStore {
         this.normalIntensity = value;
     }
 
+    setModelMinY(value: number) {
+        this.modelMinY = value;
+    }
+
     get activeNormalMaps() {
         const ringsData = this.rootStore.design3DManager.ringsData;
         if (!ringsData) return [];
@@ -210,45 +216,6 @@ export class DesignManagerStore {
         const texturesAny = variationData.textures as any;
         if (!texturesAny) return [];
 
-        // Helper to retrieve normal map texture URL by checking both keys and values
-        const getTextureValue = (texturesObj: any, searchKeys: string[]): string | undefined => {
-            if (!texturesObj) return undefined;
-            for (const key of searchKeys) {
-                if (texturesObj[key]) return texturesObj[key];
-            }
-            const searchKeysLower = searchKeys.map(k => k.toLowerCase());
-            for (const key of Object.keys(texturesObj)) {
-                if (searchKeysLower.includes(key.toLowerCase())) {
-                    return texturesObj[key];
-                }
-            }
-            return undefined;
-        };
-
-        const getNormalMapValue = (texturesObj: any, matchTerms: string[]): string | undefined => {
-            if (!texturesObj) return undefined;
-            const matchTermsLower = matchTerms.map(t => t.toLowerCase());
-            for (const key of Object.keys(texturesObj)) {
-                const keyLower = key.toLowerCase();
-                for (const term of matchTermsLower) {
-                    if (keyLower.includes(term)) {
-                        return texturesObj[key];
-                    }
-                }
-            }
-            for (const key of Object.keys(texturesObj)) {
-                const val = texturesObj[key];
-                if (typeof val === 'string') {
-                    const valLower = val.toLowerCase();
-                    for (const term of matchTermsLower) {
-                        if (valLower.includes(term)) {
-                            return val;
-                        }
-                    }
-                }
-            }
-            return undefined;
-        };
 
         const normalBaseUrl = getTextureValue(texturesAny, [
             'normalBase',

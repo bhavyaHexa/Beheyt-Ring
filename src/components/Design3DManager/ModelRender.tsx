@@ -9,6 +9,8 @@ import EngraveModelViewer from '../engrave/EngraveModelViewer';
 import EngraveModelRender from '../engrave/EngraveModelRender';
 import { rootStore } from '../../managers/stateManager';
 
+import GroundedModel from '../GroundedModel';
+
 const ModelRender = observer(() => {
     const { designManager } = rootStore;
     const cameraControlsRef = useRef<any>(null);
@@ -39,17 +41,11 @@ const ModelRender = observer(() => {
                             environmentIntensity={0.7}
                             environmentRotation={[0, 3.63, 0]}
                         />
-                        <Center>
+                    
+                        <GroundedModel>
                             <Model3DContent />
                             {designManager.currentView === 'engrave' && <EngraveModelRender />}
-                        </Center>
-                        <ContactShadows
-                            position={[0, -1, 0]}
-                            opacity={0.5}
-                            scale={4}
-                            blur={4.5}
-                            far={4}
-                        />
+                        </GroundedModel>    
                         <CameraControls
                             ref={cameraControlsRef}
                             makeDefault
