@@ -11,10 +11,12 @@
     "deploy": "vercel --prod"
   },
   "dependencies": {
+    "@react-spring/three": "^10.1.0",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.6.1",
     "@react-three/postprocessing": "^3.0.4",
     "@tailwindcss/vite": "^4.3.0",
+    "gsap": "^3.15.0",
     "leva": "^0.10.1",
     "lucide-react": "^1.13.0",
     "mobx": "^6.15.3",

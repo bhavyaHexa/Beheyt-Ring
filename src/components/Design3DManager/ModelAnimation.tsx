@@ -1,6 +1,6 @@
-import { useRef, useEffect } from 'react';
+import { useEffect, useRef } from 'react';
+import gsap from 'gsap';
 import * as THREE from 'three';
-import { useFrame } from '@react-three/fiber';
 import { observer } from 'mobx-react-lite';
 import { rootStore } from '../../managers/stateManager';
 
@@ -11,56 +11,107 @@ interface ModelAnimationProps {
 export const ModelAnimation = observer(({
   loadedObject,
 }: ModelAnimationProps) => {
-  const animationProgressRef = useRef(0);
-
-  // Target rotation angles (matching alignment parameters)
-  const targetX = -Math.PI / 4;
-  const targetY = -Math.PI / 10;
-  const targetZ = Math.PI / 3;
+  const { designManager } = rootStore;
+  const currentView = designManager.currentView; // Track view changes via MobX observer
+  const tlRef = useRef<gsap.core.Timeline | null>(null);
 
   useEffect(() => {
-    // Reset animation progress
-    animationProgressRef.current = 0;
+    // Final showcase rotation (Home View)
+    const homeRotation = {
+      x: -Math.PI / 4,
+      y: -Math.PI / 10,
+      z: Math.PI / 3,
+    };
 
-    // Start with a full 360-degree rotation offset around Y-axis for spin effect (opposite direction)
-    loadedObject.rotation.set(0, 0, 0);
-    loadedObject.updateMatrixWorld(true);
-  }, [loadedObject]);
+    // Engrave view target rotation
+    const engraveRotation = {
+      x: homeRotation.x - 6.28,
+      y: homeRotation.y - 1.23,
+      z: homeRotation.z + 1.31,
+    };
 
-  // Reset animation progress when returning to home view from engrave view
-  useEffect(() => {
-    if (rootStore.designManager.currentView !== 'engrave') {
-      animationProgressRef.current = 0;
-    }
-  }, [rootStore.designManager.currentView]);
-
-  useFrame((_, delta) => {
-    // If in engrave mode, let the engraving rotation take over
-    if (rootStore.designManager.currentView === 'engrave') {
-      return;
+    // Kill any active animations before starting a new one
+    if (tlRef.current) {
+      tlRef.current.kill();
     }
 
-    if (animationProgressRef.current >= 1) {
-      // Ensure it stays at target rotation
-      loadedObject.rotation.set(targetX, targetY, targetZ);
+    if (currentView === 'engrave') {
+      // Set the engrave rotation, position, and scale instantly
+      loadedObject.rotation.set(engraveRotation.x, engraveRotation.y, engraveRotation.z);
+      loadedObject.position.set(0, 0, 0);
+      loadedObject.scale.set(1, 1, 1);
       loadedObject.updateMatrixWorld(true);
-      return;
-    }
-
-    // Increment progress (animates over ~2s with multiplier 0.5)
-    animationProgressRef.current += delta * 0.5;
-
-    if (animationProgressRef.current >= 1) {
-      animationProgressRef.current = 1;
-      loadedObject.rotation.set(targetX, targetY, targetZ);
     } else {
-      // Use smoothstep for a natural deceleration curve
-      const t = THREE.MathUtils.smoothstep(animationProgressRef.current, 0, 1);
-      const currentY = targetY + Math.PI * 2 * (1 - t);
-      loadedObject.rotation.set(targetX, currentY, targetZ);
+      const tl = gsap.timeline();
+      tlRef.current = tl;
+
+      // Check if this is the initial mount/load of the model
+      const isInitial = loadedObject.userData.isInitialLoaded === undefined;
+      
+      if (isInitial) {
+        loadedObject.userData.isInitialLoaded = true;
+
+        // Set initial entry state
+        loadedObject.rotation.set(0.2, -0.8, 0);
+        loadedObject.position.set(0, -0.3, 0);
+        loadedObject.scale.set(0.92, 0.92, 0.92);
+
+        // Entry showcase animation: Rotate, rise, and scale up
+        tl.to(loadedObject.rotation, {
+          x: homeRotation.x,
+          y: homeRotation.y,
+          z: homeRotation.z,
+          duration: 1.8,
+          ease: 'power3.out',
+        }, 0);
+
+        tl.to(loadedObject.position, {
+          y: 0,
+          duration: 1.5,
+          ease: 'power2.out',
+        }, 0);
+
+        tl.to(loadedObject.scale, {
+          x: 1,
+          y: 1,
+          z: 1,
+          duration: 1.5,
+          ease: 'power2.out',
+        }, 0);
+      } else {
+        // Smoothly transition back to the home showcase position and rotation
+        tl.to(loadedObject.rotation, {
+          x: homeRotation.x,
+          y: homeRotation.y,
+          z: homeRotation.z,
+          duration: 1.5,
+          ease: 'power2.out',
+        }, 0);
+
+        tl.to(loadedObject.position, {
+          x: 0,
+          y: 0,
+          z: 0,
+          duration: 1.5,
+          ease: 'power2.out',
+        }, 0);
+
+        tl.to(loadedObject.scale, {
+          x: 1,
+          y: 1,
+          z: 1,
+          duration: 1.5,
+          ease: 'power2.out',
+        }, 0);
+      }
     }
-    loadedObject.updateMatrixWorld(true);
-  });
+
+    return () => {
+      if (tlRef.current) {
+        tlRef.current.kill();
+      }
+    };
+  }, [loadedObject, currentView]);
 
   return null;
 });

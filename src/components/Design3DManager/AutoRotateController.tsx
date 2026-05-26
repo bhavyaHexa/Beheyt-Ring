@@ -1,7 +1,9 @@
 import React, { useRef, useEffect } from 'react';
-import { useFrame, useThree } from '@react-three/fiber';
+import { useThree } from '@react-three/fiber';
 import { observer } from 'mobx-react-lite';
 import * as THREE from 'three';
+import gsap from 'gsap';
+
 import { rootStore } from '../../managers/stateManager';
 
 interface AutoRotateControllerProps {
@@ -10,33 +12,40 @@ interface AutoRotateControllerProps {
 
 export const AutoRotateController = observer(({ children }: AutoRotateControllerProps) => {
     const { designManager } = rootStore;
+
     const groupRef = useRef<THREE.Group>(null);
+
     const { gl } = useThree();
+
     const isInteractingRef = useRef(false);
     const interactionTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+    const rotationTweenRef = useRef<gsap.core.Tween | null>(null);
 
+    // Handle user interaction
     useEffect(() => {
         const canvas = gl.domElement;
 
         const handleInteractionStart = () => {
             isInteractingRef.current = true;
+
+            rotationTweenRef.current?.pause();
+
             if (interactionTimeoutRef.current) {
                 clearTimeout(interactionTimeoutRef.current);
             }
         };
 
         const handleInteractionEnd = () => {
-            // Add a small delay (e.g. 1.5s) before resuming rotation after user finishes dragging
             if (interactionTimeoutRef.current) {
                 clearTimeout(interactionTimeoutRef.current);
             }
+
             interactionTimeoutRef.current = setTimeout(() => {
                 isInteractingRef.current = false;
             }, 3000);
         };
 
-        // Listen to pointer events on the canvas
         canvas.addEventListener('pointerdown', handleInteractionStart);
         canvas.addEventListener('pointerup', handleInteractionEnd);
         canvas.addEventListener('pointerleave', handleInteractionEnd);
@@ -49,36 +58,54 @@ export const AutoRotateController = observer(({ children }: AutoRotateController
             canvas.removeEventListener('pointerleave', handleInteractionEnd);
             canvas.removeEventListener('touchstart', handleInteractionStart);
             canvas.removeEventListener('touchend', handleInteractionEnd);
+
             if (interactionTimeoutRef.current) {
                 clearTimeout(interactionTimeoutRef.current);
             }
+
+            rotationTweenRef.current?.kill();
         };
     }, [gl]);
 
-    useFrame((_, delta) => {
+    // Handle auto rotation
+    useEffect(() => {
         if (!groupRef.current) return;
+
+        const group = groupRef.current;
 
         const isEngraveView = designManager.currentView === 'engrave';
 
-        if (designManager.autoRotate && !isInteractingRef.current && !isEngraveView) {
-            // Standard auto rotation speed
-            const speed = designManager.autoRotateSpeed;
-            groupRef.current.rotation.y += speed * delta;
+        rotationTweenRef.current?.kill();
+
+        // Auto Rotate
+        if (
+            designManager.autoRotate &&
+            !isInteractingRef.current &&
+            !isEngraveView
+        ) {
+            rotationTweenRef.current = gsap.to(group.rotation, {
+                y: `+=${Math.PI * 2}`,
+                duration: 20 / designManager.autoRotateSpeed,
+                ease: 'none',
+                repeat: -1,
+            });
         } else {
-            // Damp back to 0 rotation if auto-rotate is disabled, user is interacting, or we are in engrave view
-            // Wait: we only damp back to 0 if NOT interacting (otherwise user's orbit controls drag gets resisted by the lerp)
-            // AND we only do it if autoRotate is off or if it is engrave view (so we align text to camera).
-            // Let's refine this condition:
-            if (!isInteractingRef.current && (!designManager.autoRotate || isEngraveView)) {
-                if (groupRef.current.rotation.y !== 0) {
-                    groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, 0, 0.1);
-                    if (Math.abs(groupRef.current.rotation.y) < 0.001) {
-                        groupRef.current.rotation.y = 0;
-                    }
-                }
-            }
+            // Smooth reset to front
+            rotationTweenRef.current = gsap.to(group.rotation, {
+                y: 0,
+                duration: 1,
+                ease: 'power2.out',
+            });
         }
-    });
+
+        return () => {
+            rotationTweenRef.current?.kill();
+        };
+    }, [
+        designManager.autoRotate,
+        designManager.autoRotateSpeed,
+        designManager.currentView,
+    ]);
 
     return (
         <group ref={groupRef}>

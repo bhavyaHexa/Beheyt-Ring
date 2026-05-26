@@ -31,13 +31,13 @@ const ModelRender = observer(() => {
                             environmentIntensity={0.7}
                             environmentRotation={[0, 3.63, 0]}
                         />
-                    
+
                         <DynamicContactShadows>
-                            <AutoRotateController>
-                                <Model3DContent />
-                                {designManager.currentView === 'engrave' && <EngraveModelRender />}
-                            </AutoRotateController>
-                        </DynamicContactShadows>    
+                            {/* <AutoRotateController> */}
+                            <Model3DContent />
+                            {designManager.currentView === 'engrave' && <EngraveModelRender />}
+                            {/* </AutoRotateController> */}
+                        </DynamicContactShadows>
                         <CanvasCamera />
                     </Suspense>
                 </Canvas>

@@ -17,34 +17,9 @@ const EngraveModelRender = observer(function EngraveModelRender() {
     const { nodes, scene } = useGLTF(url);
     console.log(nodes);
 
-    const { rotX, rotY, rotZ, textOffsetX } = useControls('Engrave Controls', {
-        rotX: { value: 0, min: -Math.PI * 2, max: Math.PI * 2, step: 0.01 },
-        rotY: { value: Math.PI, min: -Math.PI * 2, max: Math.PI * 2, step: 0.01 },
-        rotZ: { value: 0, min: -Math.PI * 2, max: Math.PI * 2, step: 0.01 },
+    const { textOffsetX } = useControls('Engrave Controls', {
         textOffsetX: { value: 0, min: -1024, max: 1024, step: 1 },
     });
-
-    const originalRotationRef = useRef<THREE.Euler | null>(null);
-    const lastSceneRef = useRef<THREE.Object3D | null>(null);
-
-    useEffect(() => {
-        if (!scene) return;
-
-        if (!originalRotationRef.current || lastSceneRef.current !== scene) {
-            originalRotationRef.current = scene.rotation.clone();
-            lastSceneRef.current = scene;
-        }
-
-        scene.rotation.x = originalRotationRef.current.x - 6.28;
-        scene.rotation.y = originalRotationRef.current.y - 1.23;
-        scene.rotation.z = originalRotationRef.current.z + 1.31;
-
-        return () => {
-            if (scene && originalRotationRef.current) {
-                scene.rotation.copy(originalRotationRef.current);
-            }
-        };
-    }, [scene, rotX, rotY, rotZ]);
 
     // 1. Generate maps and apply Wrapping/Repeat settings immediately
     const { normalTexture, aoTexture, hCanvas } = useMemo(() => {
