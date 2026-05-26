@@ -9,7 +9,7 @@ import EngraveModelViewer from '../engrave/EngraveModelViewer';
 import EngraveModelRender from '../engrave/EngraveModelRender';
 import { rootStore } from '../../managers/stateManager';
 
-import GroundedModel from '../GroundedModel';
+import DynamicContactShadows from '../DynamicContactShadows';
 import AutoRotateController from './AutoRotateController';
 import CanvasCamera from './CanvasCamera';
 
@@ -32,12 +32,12 @@ const ModelRender = observer(() => {
                             environmentRotation={[0, 3.63, 0]}
                         />
                     
-                        <GroundedModel>
+                        <DynamicContactShadows>
                             <AutoRotateController>
                                 <Model3DContent />
                                 {designManager.currentView === 'engrave' && <EngraveModelRender />}
                             </AutoRotateController>
-                        </GroundedModel>    
+                        </DynamicContactShadows>    
                         <CanvasCamera />
                     </Suspense>
                 </Canvas>

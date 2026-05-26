@@ -8,7 +8,7 @@ interface Props {
     children: React.ReactNode;
 }
 
-const GroundedModel = observer(({ children }: Props) => {
+export const DynamicContactShadows = observer(({ children }: Props) => {
     const groupRef = useRef<THREE.Group>(null);
     const { designManager } = rootStore;
     const minY = designManager.modelMinY;
@@ -30,4 +30,4 @@ const GroundedModel = observer(({ children }: Props) => {
     );
 });
 
-export default GroundedModel;
+export default DynamicContactShadows;
