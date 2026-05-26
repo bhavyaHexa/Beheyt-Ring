@@ -287,12 +287,12 @@ export const SingleModel = observer(({
         scene.traverse((node: THREE.Object3D) => {
             if (node instanceof THREE.Mesh) {
                 const mesh = node;
-                
+
                 // Cache original normal map and scale on first traversal
                 if (mesh.userData.originalNormalMap === undefined) {
                     mesh.userData.originalNormalMap = (mesh.material as any)?.normalMap || null;
-                    mesh.userData.originalNormalScale = (mesh.material as any)?.normalScale 
-                        ? (mesh.material as any).normalScale.clone() 
+                    mesh.userData.originalNormalScale = (mesh.material as any)?.normalScale
+                        ? (mesh.material as any).normalScale.clone()
                         : null;
                 }
                 const originalNormalMap = mesh.userData.originalNormalMap;
@@ -360,7 +360,7 @@ export const SingleModel = observer(({
                         }
                     }
                 }
-                else if (mesh.name.includes("Custom") || mesh.name === "Gold" || mesh.name === "Base_Metal" ||  mesh.name === "Base_metal"|| mesh.name.includes("Base")) {
+                else if (mesh.name.includes("Custom") || mesh.name === "Gold" || mesh.name === "Base_Metal" || mesh.name === "Base_metal" || mesh.name.includes("Base")) {
                     mesh.material = targetBaseMaterial;
                     if (hasNormalBase) {
                         targetBaseMaterial.normalMap = normalBaseTexture;

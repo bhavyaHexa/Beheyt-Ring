@@ -29,7 +29,7 @@ const EngraveModelRender = observer(function EngraveModelRender() {
 
     useEffect(() => {
         if (!scene) return;
-        
+
         if (!originalRotationRef.current || lastSceneRef.current !== scene) {
             originalRotationRef.current = scene.rotation.clone();
             lastSceneRef.current = scene;
@@ -125,7 +125,7 @@ const EngraveModelRender = observer(function EngraveModelRender() {
         btn.style.cursor = 'pointer';
         btn.style.zIndex = '999999';
         btn.style.boxShadow = '0 4px 6px rgba(0,0,0,0.3)';
-        
+
         btn.onclick = () => {
             import('../../utils/uvUtils').then(({ downloadUVLayout }) => {
                 downloadUVLayout(ringMesh.geometry, 2048, 'engraving-uv-map.png', hCanvas);
