@@ -2,16 +2,14 @@ import React from 'react';
 import { CameraControls } from '@react-three/drei';
 
 interface CameraControllerProps {
-    minDistance: number;
     cameraRef: React.RefObject<CameraControls | null>;
 }
 
-export const CameraController = ({ minDistance, cameraRef }: CameraControllerProps) => {
+export const CameraController = ({ cameraRef }: CameraControllerProps) => {
     return (
         <CameraControls
             ref={cameraRef}
             makeDefault
-            minDistance={minDistance}
             maxDistance={10}
             smoothTime={0.25}
             draggingSmoothTime={0.1}
