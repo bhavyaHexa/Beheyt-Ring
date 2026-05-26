@@ -7,7 +7,6 @@ import { useControls } from 'leva';
 
 // Extracted Subcomponents
 import { SingleModel } from './SingleModel';
-import ModelErrorBoundary from '../ModelErrorBoundary';
 
 const Model3DContent = observer(() => {
     const { size } = useThree();
@@ -47,14 +46,13 @@ const Model3DContent = observer(() => {
     return (
         <group>
             {variations.map((v) => (
-                <ModelErrorBoundary key={`${collection}-${modelId}-${v}`} name={`${collection}-${modelId}-${v}`}>
                     <SingleModel
+                        key={`${collection}-${modelId}-${v}`}
                         variation={v}
                         diamondEnvMap={diamondEnvMap}
                         size={size}
                         normalIntensity={designManager.normalIntensity}
                     />
-                </ModelErrorBoundary>
             ))}
         </group>
     );
