@@ -1,20 +1,16 @@
-import React, { useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
-import type { AlignmentResult } from '../types';
-import { BoundingBox } from './BoundingBox';
 import { observer } from 'mobx-react-lite';
-import { rootStore } from '../managers/stateManager';
+import { rootStore } from '../../managers/stateManager';
 
-interface AnimatedModelProps {
+interface ModelAnimationProps {
   loadedObject: THREE.Object3D;
-  boundsData: AlignmentResult;
 }
 
-export const AnimatedModel = observer(({
+export const ModelAnimation = observer(({
   loadedObject,
-  boundsData,
-}: AnimatedModelProps) => {
+}: ModelAnimationProps) => {
   const animationProgressRef = useRef(0);
 
   // Target rotation angles (matching alignment parameters)
@@ -66,17 +62,7 @@ export const AnimatedModel = observer(({
     loadedObject.updateMatrixWorld(true);
   });
 
-  return (
-    <group>
-      {/* Render the model itself */}
-      <primitive object={loadedObject} />
-
-      {/* Render the bounding box statically as a sibling */}
-      <BoundingBox
-        boundsData={boundsData}
-        loadedObject={loadedObject}
-      />
-    </group>
-  );
+  return null;
 });
-export default AnimatedModel;
+
+export default ModelAnimation;

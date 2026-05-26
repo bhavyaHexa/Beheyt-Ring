@@ -14,7 +14,7 @@ import { getTextureValue, getNormalMapValue } from '../../utils/textureHelpers';
 
 // Materials and Sub-components
 import MeshRefractionMaterialWebGL from '../../material/MeshRefractionMaterial.js';
-import AnimatedModel from '../AnimatedModel';
+import ModelAnimation from './ModelAnimation';
 import { MaterialLerpController } from './MaterialLerpController';
 
 export const SingleModel = observer(({
@@ -417,7 +417,8 @@ export const SingleModel = observer(({
         <group visible={isVisible}>
             {scene && boundsData && (
                 <>
-                    <AnimatedModel loadedObject={scene} boundsData={boundsData} />
+                    <primitive object={scene} />
+                    <ModelAnimation loadedObject={scene} />
                     <MaterialLerpController
                         goldMaterial={goldMaterialRef.current}
                         silverMaterial={silverMaterialRef.current}
