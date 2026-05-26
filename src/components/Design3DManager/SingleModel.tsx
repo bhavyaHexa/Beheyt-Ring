@@ -3,18 +3,19 @@ import { useGLTF } from '@react-three/drei';
 import { observer } from 'mobx-react-lite';
 import { rootStore } from '../../managers/stateManager';
 import * as THREE from "three";
-import { useFrame, useLoader } from '@react-three/fiber';
+import { useLoader } from '@react-three/fiber';
 import { MeshBVH } from 'three-mesh-bvh';
 import { SingleModelProps } from '../../types';
 import { alignModelToOrigin } from '../../utils/alignment';
 
 // Custom loaders and helpers
 import { SafeTextureLoader } from '../../utils/safeTextureLoader';
-import { getTextureValue, getNormalMapValue, getValueIgnoreCaseAndSymbols } from '../../utils/textureHelpers';
+import { getTextureValue, getNormalMapValue } from '../../utils/textureHelpers';
 
 // Materials and Sub-components
 import MeshRefractionMaterialWebGL from '../../material/MeshRefractionMaterial.js';
 import AnimatedModel from '../AnimatedModel';
+import { MaterialLerpController } from './MaterialLerpController';
 
 export const SingleModel = observer(({
     variation,
@@ -153,96 +154,6 @@ export const SingleModel = observer(({
     // Load the GLTF for this variation
     const { scene } = useGLTF(url);
 
-    // --- START: LERP ANIMATION CHANGES ---
-
-    // Resolve custom color fields from JSON configuration if present
-    const baseMetalColorVal = getValueIgnoreCaseAndSymbols(variationData, ["Base_Metal_Color", "baseMetalColor", "Base Metal Color", "base_metal_color"]);
-    const finishingMetalColorVal = getValueIgnoreCaseAndSymbols(variationData, ["finishing_metal_color", "finishingMetalColor", "finishing metal color", "finshing metal color", "finshing_metal_color", "finshingMetalColor"]);
-    const engravingMeshColorVal = getValueIgnoreCaseAndSymbols(variationData, [
-        "engraving_mesh_color", "engravingMeshColor", "engraving mesh color", 
-        "engrave_mesh_color", "engraveMeshColor", "engrave mesh color",
-        "engraving_metal_color", "engravingMetalColor", "engraving metal color",
-        "engrave_metal_color", "engraveMetalColor", "engrave metal color"
-    ]);
-    const colorChangeVal = getValueIgnoreCaseAndSymbols(variationData, ["colorChange", "color_change", "colorChangeMesh", "color change"]);
-
-    // Stable refs to the target colors and roughness
-    const targetBaseColor = useRef(new THREE.Color());
-    const targetFinishingColor = useRef(new THREE.Color());
-    const targetEngravingColor = useRef(new THREE.Color());
-    const targetRoughness = useRef(roughness);
-    const prevModelVariation = useRef({ modelId: '', variation: '' });
-
-    // Update target values and snap initial colors when switching variation/model to prevent flashes
-    useEffect(() => {
-        const isModel174 = modelId === "174";
-        const hasConfig = !!(baseMetalColorVal || finishingMetalColorVal || engravingMeshColorVal || colorChangeVal);
-
-        const resolveColor = (colorName: string | undefined, defaultHex: string): string => {
-            if (!colorName) return defaultHex;
-            const cleanName = colorName.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
-            const map = rootStore.designManager.colorMap;
-            
-            let mappedName = cleanName;
-            if (cleanName === "rosegold" || cleanName === "rose") {
-                mappedName = "rose gold";
-            } else if (cleanName === "gold") {
-                mappedName = "gold";
-            } else if (cleanName === "silver") {
-                mappedName = "silver";
-            }
-
-            if (map[mappedName]) return map[mappedName];
-            return colorName;
-        };
-
-        if (hasConfig) {
-            const changeMesh = (colorChangeVal || "").trim().toLowerCase().replace(/[^a-z0-9]/g, '');
-
-            if (changeMesh === "basemetal" || changeMesh === "base" || changeMesh === "gold" || changeMesh === "both") {
-                targetBaseColor.current.set(colorHex);
-            } else {
-                targetBaseColor.current.set(resolveColor(baseMetalColorVal, "#ffc35c"));
-            }
-
-            if (changeMesh === "finishingmetal" || changeMesh === "finishing" || changeMesh === "finshing" || changeMesh === "finshingmetal" || changeMesh === "silver" || changeMesh === "both") {
-                targetFinishingColor.current.set(colorHex);
-            } else {
-                targetFinishingColor.current.set(resolveColor(finishingMetalColorVal, "#f6f5f5"));
-            }
-
-            if (changeMesh === "engravingmesh" || changeMesh === "engravingmetal" || changeMesh === "engraving" || changeMesh === "engrave" || changeMesh === "basemetal" || changeMesh === "base" || changeMesh === "gold" || changeMesh === "both") {
-                targetEngravingColor.current.set(colorHex);
-            } else {
-                targetEngravingColor.current.set(resolveColor(engravingMeshColorVal, "#ffc35c"));
-            }
-        } else {
-            if (isModel174) {
-                targetBaseColor.current.set("#f6f5f5");
-                targetFinishingColor.current.set(colorHex);
-                targetEngravingColor.current.set("#f6f5f5");
-            } else {
-                targetBaseColor.current.set(colorHex);
-                targetFinishingColor.current.set("#f6f5f5");
-                targetEngravingColor.current.set(colorHex);
-            }
-        }
-        targetRoughness.current = roughness;
-
-        // If the model or variation changed, snap colors immediately to prevent a visible slow transition on load
-        const isNewModelOrVariation = prevModelVariation.current.modelId !== modelId || prevModelVariation.current.variation !== variation;
-        if (isNewModelOrVariation) {
-            const targetGoldColor = isModel174 ? targetFinishingColor.current : targetBaseColor.current;
-            const targetSilverColor = isModel174 ? targetBaseColor.current : targetFinishingColor.current;
-
-            goldMaterialRef.current.color.copy(targetGoldColor);
-            silverMaterialRef.current.color.copy(targetSilverColor);
-            engravingMaterialRef.current.color.copy(targetEngravingColor.current);
-
-            // Update tracking ref
-            prevModelVariation.current = { modelId, variation };
-        }
-    }, [colorHex, roughness, baseMetalColorVal, finishingMetalColorVal, engravingMeshColorVal, colorChangeVal, modelId, variation]);
 
     // Create materials ONCE and hold them in refs
     const goldMaterialRef = useRef(
@@ -365,73 +276,6 @@ export const SingleModel = observer(({
         }
     }, [scene, isVisible, modelId, variation]);
 
-    // Lerp material properties toward target values every frame
-    useFrame((_, delta) => {
-        const factor = 1 - Math.pow(0.01, delta); // ~0.3s smooth transition
-
-        // Target Clearcoat based on finish
-        const targetClearcoat = finish === "polished" ? 1.0 : 0.0;
-
-        const isModel174 = modelId === "174";
-        const targetGoldColor = isModel174 ? targetFinishingColor.current : targetBaseColor.current;
-        const targetSilverColor = isModel174 ? targetBaseColor.current : targetFinishingColor.current;
-
-        // Update Gold Material
-        goldMaterialRef.current.color.lerp(targetGoldColor, factor);
-        goldMaterialRef.current.roughness = THREE.MathUtils.lerp(
-            goldMaterialRef.current.roughness,
-            targetRoughness.current,
-            factor
-        );
-        goldMaterialRef.current.clearcoat = THREE.MathUtils.lerp(
-            goldMaterialRef.current.clearcoat,
-            targetClearcoat,
-            factor
-        );
-        goldMaterialRef.current.clearcoatRoughness = THREE.MathUtils.lerp(
-            goldMaterialRef.current.clearcoatRoughness,
-            0.1,
-            factor
-        );
-
-        // Update Silver Material
-        silverMaterialRef.current.color.lerp(targetSilverColor, factor);
-        silverMaterialRef.current.roughness = THREE.MathUtils.lerp(
-            silverMaterialRef.current.roughness,
-            targetRoughness.current,
-            factor
-        );
-        silverMaterialRef.current.clearcoat = THREE.MathUtils.lerp(
-            silverMaterialRef.current.clearcoat,
-            targetClearcoat,
-            factor
-        );
-        silverMaterialRef.current.clearcoatRoughness = THREE.MathUtils.lerp(
-            silverMaterialRef.current.clearcoatRoughness,
-            0.1,
-            factor
-        );
-
-        // Update Engraving Material
-        engravingMaterialRef.current.color.lerp(targetEngravingColor.current, factor);
-        engravingMaterialRef.current.roughness = THREE.MathUtils.lerp(
-            engravingMaterialRef.current.roughness,
-            targetRoughness.current,
-            factor
-        );
-        engravingMaterialRef.current.clearcoat = THREE.MathUtils.lerp(
-            engravingMaterialRef.current.clearcoat,
-            targetClearcoat,
-            factor
-        );
-        engravingMaterialRef.current.clearcoatRoughness = THREE.MathUtils.lerp(
-            engravingMaterialRef.current.clearcoatRoughness,
-            0.1,
-            factor
-        );
-    });
-
-    // --- END: LERP ANIMATION CHANGES ---
 
     // Mesh Processing Logic
     useMemo(() => {
@@ -572,7 +416,20 @@ export const SingleModel = observer(({
     return (
         <group visible={isVisible}>
             {scene && boundsData && (
-                <AnimatedModel loadedObject={scene} boundsData={boundsData} />
+                <>
+                    <AnimatedModel loadedObject={scene} boundsData={boundsData} />
+                    <MaterialLerpController
+                        goldMaterial={goldMaterialRef.current}
+                        silverMaterial={silverMaterialRef.current}
+                        engravingMaterial={engravingMaterialRef.current}
+                        variationData={variationData}
+                        roughness={roughness}
+                        colorHex={colorHex}
+                        modelId={modelId}
+                        variation={variation}
+                        finish={finish}
+                    />
+                </>
             )}
         </group>
     );

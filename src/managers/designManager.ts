@@ -13,6 +13,9 @@ export class DesignManagerStore {
     currentView: 'home' | 'engrave' = 'home';
     modelMinY: number = 0;
     normalIntensity: number = 1.0;
+    autoRotate: boolean = true;
+    autoRotateSpeed: number = 0.5;
+
 
 
     colorMap: Record<string, string> = {
@@ -199,6 +202,15 @@ export class DesignManagerStore {
     setModelMinY(value: number) {
         this.modelMinY = value;
     }
+
+    setAutoRotate(value: boolean) {
+        this.autoRotate = value;
+    }
+
+    setAutoRotateSpeed(value: number) {
+        this.autoRotateSpeed = value;
+    }
+
 
     get activeNormalMaps() {
         const ringsData = this.rootStore.design3DManager.ringsData;

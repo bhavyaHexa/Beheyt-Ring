@@ -10,6 +10,8 @@ import EngraveModelRender from '../engrave/EngraveModelRender';
 import { rootStore } from '../../managers/stateManager';
 
 import GroundedModel from '../GroundedModel';
+import AutoRotateController from './AutoRotateController';
+
 
 const ModelRender = observer(() => {
     const { designManager } = rootStore;
@@ -43,8 +45,10 @@ const ModelRender = observer(() => {
                         />
                     
                         <GroundedModel>
-                            <Model3DContent />
-                            {designManager.currentView === 'engrave' && <EngraveModelRender />}
+                            <AutoRotateController>
+                                <Model3DContent />
+                                {designManager.currentView === 'engrave' && <EngraveModelRender />}
+                            </AutoRotateController>
                         </GroundedModel>    
                         <CameraControls
                             ref={cameraControlsRef}
