@@ -40,7 +40,7 @@ export const CanvasCamera = observer(() => {
         if (designManager.currentView === 'engrave') {
             // Allow closer zoom first, then transition camera instantly
             controls.minDistance = 1;
-            controls.setLookAt(3.5, 3.0, 0, -0.5, -0.5, 0, false);
+            controls.setLookAt(-3.5, 3.0, 0, 0.5, -0.5, 0, false);
         } else {
             // transition back to home first, then restore minDistance to prevent snapping
             controls.setLookAt(0, 0, 8, 0, 0, 0, true).then(() => {
