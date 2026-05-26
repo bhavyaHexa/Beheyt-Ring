@@ -25,16 +25,18 @@ const EngraveModelRender = observer(function EngraveModelRender() {
     });
 
     const originalRotationRef = useRef<THREE.Euler | null>(null);
+    const lastSceneRef = useRef<THREE.Object3D | null>(null);
 
     useEffect(() => {
         if (!scene) return;
         
-        if (!originalRotationRef.current) {
+        if (!originalRotationRef.current || lastSceneRef.current !== scene) {
             originalRotationRef.current = scene.rotation.clone();
+            lastSceneRef.current = scene;
         }
 
-        scene.rotation.x = originalRotationRef.current.x -6.28;
-        scene.rotation.y = originalRotationRef.current.y -1.23;
+        scene.rotation.x = originalRotationRef.current.x - 6.28;
+        scene.rotation.y = originalRotationRef.current.y - 1.23;
         scene.rotation.z = originalRotationRef.current.z + 1.31;
 
         return () => {

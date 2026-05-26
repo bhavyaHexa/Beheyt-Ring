@@ -3,16 +3,18 @@ import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import type { AlignmentResult } from '../types';
 import { BoundingBox } from './BoundingBox';
+import { observer } from 'mobx-react-lite';
+import { rootStore } from '../managers/stateManager';
 
 interface AnimatedModelProps {
   loadedObject: THREE.Object3D;
   boundsData: AlignmentResult;
 }
 
-export const AnimatedModel: React.FC<AnimatedModelProps> = ({
+export const AnimatedModel = observer(({
   loadedObject,
   boundsData,
-}) => {
+}: AnimatedModelProps) => {
   const animationProgressRef = useRef(0);
 
   // Target rotation angles (matching alignment parameters)
@@ -29,7 +31,19 @@ export const AnimatedModel: React.FC<AnimatedModelProps> = ({
     loadedObject.updateMatrixWorld(true);
   }, [loadedObject]);
 
+  // Reset animation progress when returning to home view from engrave view
+  useEffect(() => {
+    if (rootStore.designManager.currentView !== 'engrave') {
+      animationProgressRef.current = 0;
+    }
+  }, [rootStore.designManager.currentView]);
+
   useFrame((_, delta) => {
+    // If in engrave mode, let the engraving rotation take over
+    if (rootStore.designManager.currentView === 'engrave') {
+      return;
+    }
+
     if (animationProgressRef.current >= 1) {
       // Ensure it stays at target rotation
       loadedObject.rotation.set(targetX, targetY, targetZ);
@@ -64,5 +78,5 @@ export const AnimatedModel: React.FC<AnimatedModelProps> = ({
       />
     </group>
   );
-};
+});
 export default AnimatedModel;
