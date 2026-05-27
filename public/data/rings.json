@@ -29,9 +29,10 @@
                     "engraving mesh color": "silver",
                     "colorChange": "Finishing_Metal",
                     "textures": {
+                        "aoGold": "/BehytRings/Artisanal/174/3.5mm/Base_Metal_AO.webp",
                         "aoSilver": "/BehytRings/Artisanal/174/3.5mm/Finishing_Metal_AO.webp",
-                        "roughness": "/BehytRings/Artisanal/174/3.5mm/Roughness_Map.jpg",
-                        "normalFinishing": "/BehytRings/Artisanal/174/3.5mm/Finishing_Metal_Normal.webp"
+                        "aoEngrave": "/BehytRings/Artisanal/174/3.5mm/Engraving_Mesh_AO.webp",
+                        "normalFinishing": "/BehytRings/Artisanal/174/3.5mm/Finsihing_Metal_Normal.webp"
                     }
                 },
                 "4.0mm": {

@@ -47,7 +47,6 @@ export const MaterialLerpController: React.FC<MaterialLerpControllerProps> = ({
 
     // Update target values and snap initial colors when switching variation/model to prevent flashes
     useEffect(() => {
-        const isModel174 = modelId === "174";
         const hasConfig = !!(baseMetalColorVal || finishingMetalColorVal || engravingMeshColorVal || colorChangeVal);
 
         const resolveColor = (colorName: string | undefined, defaultHex: string): string => {
@@ -89,23 +88,17 @@ export const MaterialLerpController: React.FC<MaterialLerpControllerProps> = ({
                 targetEngravingColor.current.set(resolveColor(engravingMeshColorVal, "#ffc35c"));
             }
         } else {
-            if (isModel174) {
-                targetBaseColor.current.set("#f6f5f5");
-                targetFinishingColor.current.set(colorHex);
-                targetEngravingColor.current.set("#f6f5f5");
-            } else {
-                targetBaseColor.current.set(colorHex);
-                targetFinishingColor.current.set("#f6f5f5");
-                targetEngravingColor.current.set(colorHex);
-            }
+            targetBaseColor.current.set(colorHex);
+            targetFinishingColor.current.set("#f6f5f5");
+            targetEngravingColor.current.set(colorHex);
         }
         targetRoughness.current = roughness;
 
         // If the model or variation changed, snap colors immediately to prevent a visible slow transition on load
         const isNewModelOrVariation = prevModelVariation.current.modelId !== modelId || prevModelVariation.current.variation !== variation;
         if (isNewModelOrVariation) {
-            const targetGoldColor = isModel174 ? targetFinishingColor.current : targetBaseColor.current;
-            const targetSilverColor = isModel174 ? targetBaseColor.current : targetFinishingColor.current;
+            const targetGoldColor = targetBaseColor.current;
+            const targetSilverColor = targetFinishingColor.current;
 
             goldMaterial.color.copy(targetGoldColor);
             silverMaterial.color.copy(targetSilverColor);
@@ -135,9 +128,8 @@ export const MaterialLerpController: React.FC<MaterialLerpControllerProps> = ({
         // Target Clearcoat based on finish
         const targetClearcoat = finish === "polished" ? 1.0 : 0.0;
 
-        const isModel174 = modelId === "174";
-        const targetGoldColor = isModel174 ? targetFinishingColor.current : targetBaseColor.current;
-        const targetSilverColor = isModel174 ? targetBaseColor.current : targetFinishingColor.current;
+        const targetGoldColor = targetBaseColor.current;
+        const targetSilverColor = targetFinishingColor.current;
 
         // Update Gold Material
         goldMaterial.color.lerp(targetGoldColor, factor);

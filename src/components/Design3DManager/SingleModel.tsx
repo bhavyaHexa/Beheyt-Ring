@@ -251,9 +251,8 @@ export const SingleModel = observer(({
 
     // Update normalScale when Leva controls change
     useEffect(() => {
-        const isModel174 = modelId === "174";
-        const targetBaseMaterial = isModel174 ? silverMaterialRef.current : goldMaterialRef.current;
-        const targetFinishingMaterial = isModel174 ? goldMaterialRef.current : silverMaterialRef.current;
+        const targetBaseMaterial = goldMaterialRef.current;
+        const targetFinishingMaterial = silverMaterialRef.current;
 
         if (hasNormalBase) {
             targetBaseMaterial.normalScale.set(normalIntensity, normalIntensity);
@@ -261,17 +260,17 @@ export const SingleModel = observer(({
         if (hasNormalFinishing) {
             targetFinishingMaterial.normalScale.set(normalIntensity, normalIntensity);
         }
-    }, [normalIntensity, hasNormalBase, hasNormalFinishing, modelId]);
+    }, [normalIntensity, hasNormalBase, hasNormalFinishing]);
 
-    // Log the model's position/location coordinates (x, y, z) in the console
-    useEffect(() => {
-        if (isVisible && scene) {
-            const box = new THREE.Box3().setFromObject(scene);
-            const center = new THREE.Vector3();
-            box.getCenter(center);
-            console.log(`Model Location: x=${center.x}, y=${center.y}, z=${center.z}`);
-        }
-    }, [scene, isVisible, modelId, variation]);
+    // // Log the model's position/location coordinates (x, y, z) in the console
+    // useEffect(() => {
+    //     if (isVisible && scene) {
+    //         const box = new THREE.Box3().setFromObject(scene);
+    //         const center = new THREE.Vector3();
+    //         box.getCenter(center);
+    //         console.log(`Model Location: x=${center.x}, y=${center.y}, z=${center.z}`);
+    //     }
+    // }, [scene, isVisible, modelId, variation]);
 
 
     // Mesh Processing Logic
@@ -295,9 +294,8 @@ export const SingleModel = observer(({
                 const originalNormalMap = mesh.userData.originalNormalMap;
                 const originalNormalScale = mesh.userData.originalNormalScale;
 
-                const isModel174 = modelId === "174";
-                const targetFinishingMaterial = isModel174 ? goldMaterialRef.current : silverMaterialRef.current;
-                const targetBaseMaterial = isModel174 ? silverMaterialRef.current : goldMaterialRef.current;
+                const targetFinishingMaterial = silverMaterialRef.current;
+                const targetBaseMaterial = goldMaterialRef.current;
 
                 // Handle Visibility based on showDiamond
                 if (mesh.name === "Silver_Metal") {
