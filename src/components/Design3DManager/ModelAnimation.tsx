@@ -25,9 +25,9 @@ export const ModelAnimation = observer(({
 
     // Engrave view target rotation
     const engraveRotation = {
-      x: homeRotation.x - 6.28,
-      y: homeRotation.y - 1.23,
-      z: homeRotation.z + 1.31,
+      x: homeRotation.x - 8.42,
+      y: homeRotation.y + 6.67,
+      z: homeRotation.z - 1.05,
     };
 
     // Kill any active animations before starting a new one
@@ -47,7 +47,7 @@ export const ModelAnimation = observer(({
 
       // Check if this is the initial mount/load of the model
       const isInitial = loadedObject.userData.isInitialLoaded === undefined;
-      
+
       if (isInitial) {
         loadedObject.userData.isInitialLoaded = true;
 

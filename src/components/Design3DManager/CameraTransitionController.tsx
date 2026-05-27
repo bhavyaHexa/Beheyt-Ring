@@ -21,7 +21,7 @@ export const CameraTransitionController = observer(({ controls }: CameraTransiti
             controls.smoothTime = 0.8;
 
             // Transition camera smoothly to the engrave view
-            controls.setLookAt(-3.5, 3.0, 0, 0.5, -0.5, 0, true).then(() => {
+            controls.setLookAt(0, 2.5, -5.5, 0, 0, 0, true).then(() => {
                 // Restore default smoothTime for manual control once transition completes
                 controls.smoothTime = 0.25;
             });
@@ -30,7 +30,7 @@ export const CameraTransitionController = observer(({ controls }: CameraTransiti
             controls.smoothTime = 0.8;
 
             // Transition back to home view smoothly
-            controls.setLookAt(0, 0, 12, 0, 0, 0, true).then(() => {
+            controls.setLookAt(0, 0, 10, 0, 0, 0, true).then(() => {
                 // Restore default smoothTime for manual control once transition completes
                 controls.smoothTime = 0.25;
 
