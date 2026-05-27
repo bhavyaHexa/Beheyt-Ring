@@ -2,12 +2,11 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { useThree } from '@react-three/fiber';
 import { observer } from 'mobx-react-lite';
 import * as THREE from 'three';
-import { rootStore } from '../../managers/stateManager';
 import CameraController from './CameraController';
+import CameraTransitionController from './CameraTransitionController';
 import { CameraControls } from '@react-three/drei';
 
 export const CanvasCamera = observer(() => {
-    const { designManager } = rootStore;
     const { camera } = useThree();
 
     // State to trigger re-renders when the camera controls are loaded
@@ -23,7 +22,7 @@ export const CanvasCamera = observer(() => {
         }
     }), [controls]);
 
-    // Apply default camera settings (position and fov)`
+    // Apply default camera settings (position and fov)
     useEffect(() => {
         if (camera) {
             if ('fov' in camera) {
@@ -33,26 +32,11 @@ export const CanvasCamera = observer(() => {
         }
     }, [camera]);
 
-    // Handle transition between home view and engrave view
-    useEffect(() => {
-        if (!controls) return;
-
-        if (designManager.currentView === 'engrave') {
-            // Allow closer zoom first, then transition camera instantly
-            controls.minDistance = 1;
-            controls.setLookAt(-3.5, 3.0, 0, 0.5, -0.5, 0, false);
-        } else {
-            // transition back to home first, then restore minDistance to prevent snapping
-            controls.setLookAt(0, 0, 8, 0, 0, 0, true).then(() => {
-                if (designManager.currentView === 'home') {
-                    controls.minDistance = 5;
-                }
-            });
-        }
-    }, [designManager.currentView, controls]);
-
     return (
-        <CameraController cameraRef={cameraControlsRef} />
+        <>
+            <CameraController cameraRef={cameraControlsRef} />
+            <CameraTransitionController controls={controls} />
+        </>
     );
 });
 
