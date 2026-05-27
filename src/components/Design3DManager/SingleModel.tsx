@@ -41,11 +41,8 @@ export const SingleModel = observer(({
     const formattedCollection = collection.charAt(0).toUpperCase() + collection.slice(1);
     const formattedVariation = variation.replace(/\s+/g, '');
 
-    const fallbackTextureUrl = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
-    const texturesAny = variationData?.textures as any;
-
     // Resolve AO map for Gold (Base Metal)
-    const aoGoldUrl = getTextureValue(texturesAny, [
+    const aoGoldUrl = getTextureValue(variationData?.textures, [
         'aoGold',
         'Base_metal_AO',
         'Base_Metal_AO',
@@ -61,7 +58,7 @@ export const SingleModel = observer(({
     const hasAoGold = !!aoGoldUrl;
 
     // Resolve AO map for Silver (Finishing Metal)
-    const aoSilverUrl = getTextureValue(texturesAny, [
+    const aoSilverUrl = getTextureValue(variationData?.textures, [
         'aoSilver',
         'Finishing_Metal_Ao',
         'Finishing_Metal_AO',
@@ -78,7 +75,7 @@ export const SingleModel = observer(({
     const hasAoSilver = !!aoSilverUrl;
 
     // Resolve AO map for Engraving Mesh
-    const aoEngravingUrl = getTextureValue(texturesAny, [
+    const aoEngravingUrl = getTextureValue(variationData?.textures, [
         'aoEngraving',
         'aoEngrave',
         'aoEngravingMesh',
@@ -93,7 +90,7 @@ export const SingleModel = observer(({
     const hasAoEngraving = !!aoEngravingUrl;
 
     // Resolve normal map for Base Metal (Gold)
-    const normalBaseUrl = getTextureValue(texturesAny, [
+    const normalBaseUrl = getTextureValue(variationData?.textures, [
         'normalBase',
         'Base_Metal_Normal',
         'Base_metal_Normal',
@@ -101,11 +98,11 @@ export const SingleModel = observer(({
         'Base_Metal_Normal.webp',
         'Base_metal_Normal.webp',
         'base_metal_normal.webp'
-    ]) || getNormalMapValue(texturesAny, ['Base_Metal_Normal', 'base_metal_normal']);
+    ]) || getNormalMapValue(variationData?.textures, ['Base_Metal_Normal', 'base_metal_normal']);
     const hasNormalBase = !!normalBaseUrl;
 
     // Resolve normal map for Finishing Metal (Silver)
-    const normalFinishingUrl = getTextureValue(texturesAny, [
+    const normalFinishingUrl = getTextureValue(variationData?.textures, [
         'normalFinishing',
         'Finishing_Metal_Normal',
         'Finishing_metal_Normal',
@@ -113,14 +110,14 @@ export const SingleModel = observer(({
         'Finishing_Metal_Normal.webp',
         'Finishing_metal_Normal.webp',
         'finishing_metal_normal.webp'
-    ]) || getNormalMapValue(texturesAny, ['Finishing_Metal_Normal', 'finishing_metal_normal']);
+    ]) || getNormalMapValue(variationData?.textures, ['Finishing_Metal_Normal', 'finishing_metal_normal']);
     const hasNormalFinishing = !!normalFinishingUrl;
 
-    const aoMapUrlGold = hasAoGold && aoGoldUrl ? aoGoldUrl : fallbackTextureUrl;
-    const aoMapUrlSilver = hasAoSilver && aoSilverUrl ? aoSilverUrl : fallbackTextureUrl;
-    const aoMapUrlEngraving = hasAoEngraving && aoEngravingUrl ? aoEngravingUrl : fallbackTextureUrl;
-    const normalBaseMapUrl = hasNormalBase && normalBaseUrl ? normalBaseUrl : fallbackTextureUrl;
-    const normalFinishingMapUrl = hasNormalFinishing && normalFinishingUrl ? normalFinishingUrl : fallbackTextureUrl;
+    const aoMapUrlGold = hasAoGold && aoGoldUrl ? aoGoldUrl : "";
+    const aoMapUrlSilver = hasAoSilver && aoSilverUrl ? aoSilverUrl : "";
+    const aoMapUrlEngraving = hasAoEngraving && aoEngravingUrl ? aoEngravingUrl : "";
+    const normalBaseMapUrl = hasNormalBase && normalBaseUrl ? normalBaseUrl : "";
+    const normalFinishingMapUrl = hasNormalFinishing && normalFinishingUrl ? normalFinishingUrl : "";
 
     const roughnessMapUrl = (variationData?.textures?.roughness && !variationData.textures.roughness.endsWith('roughness.jpg'))
         ? variationData.textures.roughness
