@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import * as THREE from 'three';
 import { observer } from 'mobx-react-lite';
 import { ContactShadows } from '@react-three/drei';
-import { rootStore } from '../managers/stateManager';
+import { rootStore } from '../../managers/stateManager';
 
 interface Props {
     children: React.ReactNode;

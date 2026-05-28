@@ -9,7 +9,7 @@ import EngraveModelViewer from '../engrave/EngraveModelViewer';
 import EngraveModelRender from '../engrave/EngraveModelRender';
 import { rootStore } from '../../managers/stateManager';
 
-import DynamicContactShadows from '../DynamicContactShadows';
+import DynamicContactShadows from './DynamicContactShadows';
 import AutoRotateController from './AutoRotateController';
 import CanvasCamera from './CanvasCamera';
 
