@@ -13,19 +13,23 @@ export const DynamicContactShadows = observer(({ children }: Props) => {
     const { designManager } = rootStore;
     const minY = designManager.modelMinY;
 
+    const view = designManager.currentView
+    console.log(view)
+
     return (
         <>
             <group ref={groupRef}>
                 {children}
             </group>
-
-            <ContactShadows
-                position={[0, minY - 0.02, 0]}
-                opacity={0.45}
-                scale={4}
-                blur={2.5}
-                far={3}
-            />
+            {view === "home" && (
+                <ContactShadows
+                    position={[0, minY - 0.02, 0]}
+                    opacity={0.45}
+                    scale={4}
+                    blur={2.5}
+                    far={3}
+                />
+            )}
         </>
     );
 });
