@@ -15,7 +15,7 @@ export const CameraTransitionController = observer(({ controls }: CameraTransiti
 
         if (designManager.currentView === 'engrave') {
             // Adjust minDistance to allow close zoom
-            controls.minDistance = 5;
+            controls.minDistance = 0;
 
             // Set transition smoothTime to be slightly slower/cinematic
             controls.smoothTime = 0.8;

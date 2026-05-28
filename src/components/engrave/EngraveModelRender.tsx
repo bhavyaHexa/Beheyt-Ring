@@ -7,6 +7,7 @@ import { generateTextHeightMap, convertHeightToNormalMap } from '../../utils/nor
 import { useGLTF } from '@react-three/drei';
 import { rootStore } from '../../managers/stateManager';
 import { useControls } from 'leva';
+import BBoxEngrave from './BBoxEngrave';
 
 const EngraveModelRender = observer(function EngraveModelRender() {
 
@@ -26,7 +27,7 @@ const EngraveModelRender = observer(function EngraveModelRender() {
         const hCanvas = generateTextHeightMap({
             text: engraveManager.engraving || 'Empty',
             mode: 'engrave',
-            blur: 0.01,
+            blur: 0,
             offsetY: 0,
             offsetX: textOffsetX
         });
@@ -136,9 +137,9 @@ const EngraveModelRender = observer(function EngraveModelRender() {
 
         // Apply engraving specific maps
         engravedMaterial.normalMap = normalTexture;
-        engravedMaterial.normalScale = new THREE.Vector2(-1, -1); // Try (1, 1) if the engraving looks inverted
+        engravedMaterial.normalScale = new THREE.Vector2(-5, 5); // Try (1, 1) if the engraving looks inverted
         engravedMaterial.aoMap = aoTexture;
-        engravedMaterial.aoMapIntensity = 1;
+        engravedMaterial.aoMapIntensity = 1.0;
 
         engravedMaterial.needsUpdate = true;
 
@@ -154,7 +155,7 @@ const EngraveModelRender = observer(function EngraveModelRender() {
         };
     }, [ringMesh, normalTexture, aoTexture]);
 
-    return null;
+    return <BBoxEngrave textOffsetX={textOffsetX} />;
 });
 
 export default EngraveModelRender;
