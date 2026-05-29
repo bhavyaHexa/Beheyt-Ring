@@ -5,6 +5,9 @@ export class EngraveManager {
     ambientIntensity = 0.5;
     engraving = '';
     shouldDownloadUV = false;
+    shouldDownloadUVOrange = false;
+    shouldDownloadNormal = false;
+    shouldDownloadHeight = false;
 
     constructor() {
         makeAutoObservable(this);
@@ -22,8 +25,23 @@ export class EngraveManager {
         this.shouldDownloadUV = true;
     }
 
-    resetUVDownload() {
+    triggerUVOrangeDownload() {
+        this.shouldDownloadUVOrange = true;
+    }
+
+    triggerNormalDownload() {
+        this.shouldDownloadNormal = true;
+    }
+
+    triggerHeightDownload() {
+        this.shouldDownloadHeight = true;
+    }
+
+    resetAllDownloads() {
         this.shouldDownloadUV = false;
+        this.shouldDownloadUVOrange = false;
+        this.shouldDownloadNormal = false;
+        this.shouldDownloadHeight = false;
     }
 }
 

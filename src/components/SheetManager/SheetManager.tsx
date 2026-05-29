@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { rootStore } from '../../managers/stateManager';
+import { engraveManager } from '../../managers/engraveManager';
 
 const SheetManager = observer(() => {
     const { designManager, sheetManager } = rootStore;
@@ -8,6 +9,19 @@ const SheetManager = observer(() => {
 
     const activeMaps = designManager.activeNormalMaps;
     const hasActiveMaps = activeMaps.length > 0;
+
+    const handleDownloadRender = () => {
+        const canvas = document.querySelector('canvas');
+        if (canvas) {
+            const dataURL = canvas.toDataURL('image/png');
+            const link = document.createElement('a');
+            link.href = dataURL;
+            link.download = "my-engraving.png";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    };
 
     const handleSaveToSheet = () => {
         if (!hasActiveMaps) return;
@@ -143,6 +157,53 @@ const SheetManager = observer(() => {
                                 <p className="text-[0.8rem] text-black/50 m-0 italic bg-white/30 p-3 rounded-lg border border-dashed border-black/10 text-center">
                                     No normal maps are configured for the active ring model variation.
                                 </p>
+                            )}
+                        </div>
+
+                        {/* Engraving Exports */}
+                        <div className="bg-black/5 p-4 rounded-[1rem] border border-black/5 flex flex-col gap-3">
+                            <h3 className="text-[0.75rem] uppercase tracking-[0.08em] text-black/50 mb-1 font-bold">
+                                Engraving Exports
+                            </h3>
+                            {designManager.currentView !== 'engrave' ? (
+                                <div className="text-[0.8rem] text-black/50 italic bg-white/30 p-3 rounded-lg border border-dashed border-black/10 text-center">
+                                    Switch to "Name Engrave" view to configure and download engraving maps.
+                                </div>
+                            ) : (
+                                <div className="flex flex-col gap-2">
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <button
+                                            onClick={() => engraveManager.triggerUVDownload()}
+                                            className="p-2.5 bg-black/5 hover:bg-black/10 text-black border border-black/10 rounded-lg text-[0.75rem] font-bold cursor-pointer transition-all flex items-center justify-center gap-1.5"
+                                        >
+                                            🗺️ UV Layout
+                                        </button>
+                                        <button
+                                            onClick={() => engraveManager.triggerUVOrangeDownload()}
+                                            className="p-2.5 bg-amber-500 hover:bg-amber-600 text-white border-none rounded-lg text-[0.75rem] font-bold cursor-pointer transition-all flex items-center justify-center gap-1.5 shadow-[0_2px_6px_rgba(245,158,11,0.2)]"
+                                        >
+                                            🍊 UV (Orange)
+                                        </button>
+                                        <button
+                                            onClick={() => engraveManager.triggerNormalDownload()}
+                                            className="p-2.5 bg-black/5 hover:bg-black/10 text-black border border-black/10 rounded-lg text-[0.75rem] font-bold cursor-pointer transition-all flex items-center justify-center gap-1.5"
+                                        >
+                                            🌀 Normal Map
+                                        </button>
+                                        <button
+                                            onClick={() => engraveManager.triggerHeightDownload()}
+                                            className="p-2.5 bg-black/5 hover:bg-black/10 text-black border border-black/10 rounded-lg text-[0.75rem] font-bold cursor-pointer transition-all flex items-center justify-center gap-1.5"
+                                        >
+                                            📈 Height Map
+                                        </button>
+                                    </div>
+                                    <button
+                                        onClick={handleDownloadRender}
+                                        className="w-full p-2.5 bg-black hover:bg-black/85 text-white border-none rounded-lg text-[0.75rem] font-bold cursor-pointer transition-all flex items-center justify-center gap-1.5 shadow-sm"
+                                    >
+                                        📷 Download Render
+                                    </button>
+                                </div>
                             )}
                         </div>
 

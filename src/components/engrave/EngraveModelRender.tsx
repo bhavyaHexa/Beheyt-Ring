@@ -85,39 +85,50 @@ const EngraveModelRender = observer(function EngraveModelRender() {
                 new Float32BufferAttribute(ringMesh.geometry.attributes.uv.array, 2)
             );
         }
+    }, [ringMesh]);
 
-        // Create a floating UI button to download the UV map
-        const btn = document.createElement('button');
-        btn.innerText = '📥 Download UV Map (Orange)';
-        btn.style.position = 'fixed';
-        btn.style.bottom = '20px';
-        btn.style.right = '20px';
-        btn.style.padding = '12px 20px';
-        btn.style.backgroundColor = '#FFA500';
-        btn.style.color = 'black';
-        btn.style.fontWeight = 'bold';
-        btn.style.border = '2px solid white';
-        btn.style.borderRadius = '8px';
-        btn.style.cursor = 'pointer';
-        btn.style.zIndex = '999999';
-        btn.style.boxShadow = '0 4px 6px rgba(0,0,0,0.3)';
+    // Handle map downloads triggered from the store/UI
+    useEffect(() => {
+        if (!ringMesh || !ringMesh.geometry) return;
 
-        btn.onclick = () => {
+        if (engraveManager.shouldDownloadUV) {
             import('../../utils/uvUtils').then(({ downloadUVLayout }) => {
-                downloadUVLayout(ringMesh.geometry, 2048, 'engraving-uv-map.png', hCanvas);
-                btn.innerText = '✅ Downloaded!';
-                setTimeout(() => { btn.innerText = '📥 Download UV Map (Orange)'; }, 2000);
+                downloadUVLayout(ringMesh.geometry, 2048, 'engraving-uv-layout.png', null);
+                engraveManager.resetAllDownloads();
             });
-        };
+        }
 
-        document.body.appendChild(btn);
+        if (engraveManager.shouldDownloadUVOrange) {
+            import('../../utils/uvUtils').then(({ downloadUVLayout }) => {
+                downloadUVLayout(ringMesh.geometry, 2048, 'engraving-uv-map-orange.png', hCanvas);
+                engraveManager.resetAllDownloads();
+            });
+        }
 
-        return () => {
-            if (btn.parentNode) {
-                btn.parentNode.removeChild(btn);
-            }
-        };
-    }, [nodes, scene, ringMesh, hCanvas]); // Add nodes as dependency so it runs when GLTF loads
+        if (engraveManager.shouldDownloadNormal) {
+            import('../../utils/normalUtils').then(({ convertHeightToNormalMap }) => {
+                import('../../utils/downloadCanvas').then(({ downloadCanvas }) => {
+                    const nCanvas = convertHeightToNormalMap(hCanvas, 2.0);
+                    downloadCanvas(nCanvas, 'engraving-normal-map.png');
+                    engraveManager.resetAllDownloads();
+                });
+            });
+        }
+
+        if (engraveManager.shouldDownloadHeight) {
+            import('../../utils/downloadCanvas').then(({ downloadCanvas }) => {
+                downloadCanvas(hCanvas, 'engraving-height-map.png');
+                engraveManager.resetAllDownloads();
+            });
+        }
+    }, [
+        ringMesh, 
+        hCanvas, 
+        engraveManager.shouldDownloadUV, 
+        engraveManager.shouldDownloadUVOrange, 
+        engraveManager.shouldDownloadNormal, 
+        engraveManager.shouldDownloadHeight
+    ]);
 
     const originalMaterialRef = useRef<THREE.Material | THREE.Material[] | null>(null);
 
