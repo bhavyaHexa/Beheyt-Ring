@@ -172,13 +172,15 @@ const DesignManager = observer(() => {
 
 
             <div className="mt-8 flex flex-col gap-3">
-                <button
-                    onClick={() => designManager.setCurrentView('engrave')}
-                    className="w-full p-4 bg-black text-white rounded-[1rem] font-bold text-[0.9rem] hover:bg-black/80 transition-all duration-200 shadow-[0_4px_15px_rgba(0,0,0,0.1)] flex items-center justify-center gap-2 group"
-                >
-                    Name Engrave
-                    <span className="group-hover:translate-x-1 transition-transform">→</span>
-                </button>
+                {designManager.currentRoute === '/normal' && (
+                    <button
+                        onClick={() => designManager.setCurrentView('engrave')}
+                        className="w-full p-4 bg-black text-white rounded-[1rem] font-bold text-[0.9rem] hover:bg-black/80 transition-all duration-200 shadow-[0_4px_15px_rgba(0,0,0,0.1)] flex items-center justify-center gap-2 group"
+                    >
+                        Name Engrave
+                        <span className="group-hover:translate-x-1 transition-transform">→</span>
+                    </button>
+                )}
 
                 {designManager.currentRoute === '/normal' && (
                     <button

@@ -122,11 +122,11 @@ const EngraveModelRender = observer(function EngraveModelRender() {
             });
         }
     }, [
-        ringMesh, 
-        hCanvas, 
-        engraveManager.shouldDownloadUV, 
-        engraveManager.shouldDownloadUVOrange, 
-        engraveManager.shouldDownloadNormal, 
+        ringMesh,
+        hCanvas,
+        engraveManager.shouldDownloadUV,
+        engraveManager.shouldDownloadUVOrange,
+        engraveManager.shouldDownloadNormal,
         engraveManager.shouldDownloadHeight
     ]);
 
