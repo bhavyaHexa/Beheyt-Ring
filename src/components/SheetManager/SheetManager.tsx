@@ -65,9 +65,9 @@ const SheetManager = observer(() => {
                             </div>
                         </div>
                         <button
-                            onClick={() => setIsCollapsed(true)}
+                            onClick={() => designManager.navigateTo('/')}
                             className="w-8 h-8 rounded-full border border-black/10 bg-transparent hover:bg-black/5 flex items-center justify-center cursor-pointer transition-colors text-black/60 font-semibold"
-                            title="Collapse panel"
+                            title="Close spreadsheet"
                         >
                             ✕
                         </button>

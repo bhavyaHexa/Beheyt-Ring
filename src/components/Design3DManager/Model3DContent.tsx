@@ -8,6 +8,19 @@ import { useControls } from 'leva';
 // Extracted Subcomponents
 import { SingleModel } from './SingleModel';
 
+const NormalLevaControls = observer(() => {
+    const { designManager } = rootStore;
+    const { normalIntensity } = useControls('Normal Map Controls', {
+        normalIntensity: { value: designManager.normalIntensity, min: -5.0, max: 5.0, step: 0.05 },
+    });
+
+    useEffect(() => {
+        designManager.setNormalIntensity(normalIntensity);
+    }, [normalIntensity, designManager]);
+
+    return null;
+});
+
 const Model3DContent = observer(() => {
     const { size } = useThree();
     const { design3DManager, designManager } = rootStore;
@@ -23,16 +36,6 @@ const Model3DContent = observer(() => {
     // const diamondEnvMap = useEnvironment({ files: '/08.hdr' });
     // Let's use '/08.hdr'. Wait, is there any reason to change it? No, keep it as was in original.
 
-    // Leva controls to scale the normals properly
-    const { normalIntensity } = useControls('Normal Map Controls', {
-        normalIntensity: { value: 1.0, min: -5.0, max: 5.0, step: 0.05 },
-    });
-
-    // Keep MobX store in sync with Leva controls
-    useEffect(() => {
-        designManager.setNormalIntensity(normalIntensity);
-    }, [normalIntensity, designManager]);
-
     // Define the variations dynamically based on the active model in ringsData
     const variations = useMemo(() => {
         if (!design3DManager.ringsData) return [];
@@ -45,6 +48,7 @@ const Model3DContent = observer(() => {
 
     return (
         <group>
+            {designManager.currentRoute === '/normal' && <NormalLevaControls />}
             {variations.map((v) => (
                     <SingleModel
                         key={`${collection}-${modelId}-${v}`}

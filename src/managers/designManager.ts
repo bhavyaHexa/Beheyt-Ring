@@ -11,6 +11,7 @@ export class DesignManagerStore {
     selectedFinish: FinishType = "polished";
     showDiamond: boolean = true;
     currentView: 'home' | 'engrave' = 'home';
+    currentRoute: string = window.location.pathname;
     modelMinY: number = 0;
     normalIntensity: number = 1.0;
     autoRotate: boolean = true;
@@ -113,6 +114,15 @@ export class DesignManagerStore {
 
     setCurrentView(view: 'home' | 'engrave') {
         this.currentView = view;
+    }
+
+    setCurrentRoute(route: string) {
+        this.currentRoute = route;
+    }
+
+    navigateTo(path: string) {
+        window.history.pushState(null, '', path);
+        this.setCurrentRoute(path);
     }
 
     get selection(): DesignSelection {
