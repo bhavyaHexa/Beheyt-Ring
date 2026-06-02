@@ -604,6 +604,46 @@
                     }
                 }
             },
+            "364": {
+                "4.0mm": {
+                    "modelUrl": "/BehytRings/Contemporian/364/4.0mm/364_4.0mm.glb",
+                    "Base_Metal_Color": "gold",
+                    "engraving mesh color": "gold",
+                    "Finishing_Metal_Color": "gold",
+                    "colorChange": "both",
+                    "textures": {
+                        "aoGold": "/BehytRings/Contemporian/364/4.0mm/Base_Metal_AO.webp",
+                        "aoSilver": "/BehytRings/Contemporian/364/4.0mm/Finishing_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Contemporian/364/4.0mm/Engraving_Metal_AO.webp"
+                    }
+                }
+            },
+            "380": {
+                "4.0mm": {
+                    "modelUrl": "/BehytRings/Contemporian/380/4.0mm/380_4.0mm.glb",
+                    "Base_Metal_Color": "gold",
+                    "engraving mesh color": "gold",
+                    "colorChange": "Base_Metal",
+                    "textures": {
+                        "aoGold": "/BehytRings/Contemporian/380/4.0mm/Base_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Contemporian/380/4.0mm/Engraving_Metal_AO.webp"
+                    }
+                }
+            },
+            "392": {
+                "4.0mm": {
+                    "modelUrl": "/BehytRings/Contemporian/392/4.0mm/392_4.0mm.glb",
+                    "Base_Metal_Color": "silver",
+                    "engraving mesh color": "silver",
+                    "Finishing_Metal_Color": "rose gold",
+                    "colorChange": "Finishing_Metal",
+                    "textures": {
+                        "aoGold": "/BehytRings/Contemporian/392/4.0mm/Base_Metal_AO.webp",
+                        "aoSilver": "/BehytRings/Contemporian/392/4.0mm/Finishing_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Contemporian/392/4.0mm/Engraving_Metal_AO.webp"
+                    }
+                }
+            },
             "476": {
                 "4.0mm": {
                     "modelUrl": "/BehytRings/Contemporian/476/4.0mm/476_4.0mm.glb",
@@ -651,6 +691,20 @@
                     "textures": {
                         "aoGold": "/BehytRings/Contemporian/363/4.0mm/Base_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Contemporian/363/4.0mm/Engraving_Metal_AO.webp"
+                    }
+                }
+            },
+            "393": {
+                "4.0mm": {
+                    "modelUrl": "/BehytRings/Contemporian/393/4.0mm/393_4.0mm.glb",
+                    "Base_Metal_Color": "silver",
+                    "engraving mesh color": "silver",
+                    "Finishing_Metal_Color": "silver",
+                    "colorChange": "both",
+                    "textures": {
+                        "aoGold": "/BehytRings/Contemporian/393/4.0mm/Base_Metal_AO.webp",
+                        "aoSilver": "/BehytRings/Contemporian/393/4.0mm/Finishing_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Contemporian/393/4.0mm/Engraving_Metal_AO.webp"
                     }
                 }
             },
