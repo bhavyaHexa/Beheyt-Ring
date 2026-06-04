@@ -74,7 +74,7 @@ export class DesignManagerStore {
                     this.selectedModelId = modelIds[0];
                 }
                 const variations = Object.keys(ringsData.rings[collection][this.selectedModelId] || {});
-                if (variations.length > 0 && !variations.includes(this.selectedVariation)) {
+                if (variations.length > 0) {
                     this.selectedVariation = variations[0];
                 }
             }
@@ -88,7 +88,7 @@ export class DesignManagerStore {
         const collection = this.selectedCollection;
         if (ringsData && ringsData.rings[collection] && ringsData.rings[collection][id]) {
             const variations = Object.keys(ringsData.rings[collection][id]);
-            if (variations.length > 0 && !variations.includes(this.selectedVariation)) {
+            if (variations.length > 0) {
                 this.selectedVariation = variations[0];
             }
         }

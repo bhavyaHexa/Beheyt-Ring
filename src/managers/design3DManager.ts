@@ -37,7 +37,7 @@ export class Design3DManagerStore {
                             dm.selectedModelId = modelIds[0];
                         }
                         const variations = Object.keys(data.rings[dm.selectedCollection][dm.selectedModelId] || {});
-                        if (variations.length > 0 && !variations.includes(dm.selectedVariation)) {
+                        if (variations.length > 0) {
                             dm.selectedVariation = variations[0];
                         }
                     }
