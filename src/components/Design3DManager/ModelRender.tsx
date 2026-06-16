@@ -31,7 +31,7 @@ const ModelRender = observer(() => {
           <color attach="background" args={["#f8f7f2"]} />
           <Suspense fallback={<Loader />}>
             <Environment
-              files={"/env/08_1.exr"}
+              files={"/env/08.exr"}
               environmentIntensity={0.7}
               environmentRotation={[0, 3.63, 0]}
             />

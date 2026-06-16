@@ -53,6 +53,7 @@ const fragmentShader = /* glsl */ `
   uniform sampler2D tDiffuse;
   uniform vec2      resolution;
   uniform sampler2D envMap;
+  uniform float     uEnvMapIntensity;
 
   uniform vec3  uColor;
   uniform float uIOR;
@@ -92,7 +93,7 @@ const fragmentShader = /* glsl */ `
   }
 
   vec3 sampleEnv(vec3 dir) {
-    return texture(envMap, equirectUV(dir)).rgb;
+    return texture(envMap, equirectUV(dir)).rgb * uEnvMapIntensity;
   }
 
   vec3 sampleScreen(vec2 uv) {
@@ -250,6 +251,7 @@ export default class MeshRefractionMaterialWebGL extends THREE.ShaderMaterial {
         highlightTolerance = 1.0,
         attenuationColor = 0xffffff,
         attenuationDistance = 1.0,
+        envMapIntensity = 1.0,
     }) {
         const bvhUniform = new MeshBVHUniformStruct();
         bvhUniform.updateFrom(bvh);
@@ -263,6 +265,7 @@ export default class MeshRefractionMaterialWebGL extends THREE.ShaderMaterial {
                 tDiffuse: { value: backgroundTexture },
                 resolution: { value: resolution },
                 envMap: { value: envMap },
+                uEnvMapIntensity: { value: envMapIntensity },
                 uColor: { value: new THREE.Color(color) },
                 uIOR: { value: ior },
                 uAberration: { value: aberrationStrength },
@@ -308,6 +311,9 @@ export default class MeshRefractionMaterialWebGL extends THREE.ShaderMaterial {
 
     get attenuationDistance() { return this.uniforms.uAttenuationDistance.value; }
     set attenuationDistance(v) { this.uniforms.uAttenuationDistance.value = v; }
+
+    get envMapIntensity() { return this.uniforms.uEnvMapIntensity.value; }
+    set envMapIntensity(v) { this.uniforms.uEnvMapIntensity.value = v; }
 
     setResolution(width, height) {
         this.uniforms.resolution.value.set(width, height);

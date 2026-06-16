@@ -59,6 +59,7 @@ export type MeshRefractionMaterialProps = {
     highlightTolerance?: number;
     attenuationColor?: string | number | THREE.Color;
     attenuationDistance?: number;
+    envMapIntensity?: number;
 };
 
 export default function RefractionMaterial({
@@ -77,6 +78,7 @@ export default function RefractionMaterial({
     highlightTolerance = 0.01,
     attenuationColor = '#ffffff',
     attenuationDistance = 1.0,
+    envMapIntensity = 1.0,
 }: MeshRefractionMaterialProps) {
     const { size } = useThree();
     const backgroundTexture = useContext(BackgroundTextureContext);
@@ -109,9 +111,10 @@ export default function RefractionMaterial({
             highlightTolerance,
             attenuationColor,
             attenuationDistance,
+            envMapIntensity,
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [geometry, finalEnvMap, ior, bounces, aberrationStrength, fresnel, reflectivity, blur]);
+    }, [geometry, finalEnvMap, ior, bounces, aberrationStrength, fresnel, reflectivity, blur, envMapIntensity]);
 
     // Keep resolution in sync
     useEffect(() => {
@@ -133,6 +136,7 @@ export default function RefractionMaterial({
     useEffect(() => { if (material) material.highlightTolerance = highlightTolerance; }, [highlightTolerance, material]);
     // useEffect(() => { if (material) material.attenuationColor = attenuationColor; }, [attenuationColor, material]);
     useEffect(() => { if (material) material.attenuationDistance = attenuationDistance; }, [attenuationDistance, material]);
+    useEffect(() => { if (material) material.envMapIntensity = envMapIntensity; }, [envMapIntensity, material]);
 
     if (!material) return null;
 

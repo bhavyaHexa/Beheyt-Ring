@@ -152,7 +152,7 @@ export const SingleModel = observer(
       ]);
     const hasNormalFinishing = !!normalFinishingUrl;
 
-     const aoMapUrlGold = hasAoGold && aoGoldUrl ? aoGoldUrl : "";
+    const aoMapUrlGold = hasAoGold && aoGoldUrl ? aoGoldUrl : "";
     const aoMapUrlSilver = hasAoSilver && aoSilverUrl ? aoSilverUrl : "";
     const aoMapUrlEngraving =
       hasAoEngraving && aoEngravingUrl ? aoEngravingUrl : "";
@@ -227,13 +227,20 @@ export const SingleModel = observer(
         color: colorHex,
         metalness: 1,
         roughness: roughness,
-        aoMap: (!showDiamond && hasAoNoDiamond) ? aoTextureNoDiamond : (hasAoGold ? aoTextureGold : null),
-        aoMapIntensity: ((!showDiamond && hasAoNoDiamond) || hasAoGold) ? 1.0 : 0.0,
+        aoMap:
+          !showDiamond && hasAoNoDiamond
+            ? aoTextureNoDiamond
+            : hasAoGold
+              ? aoTextureGold
+              : null,
+        aoMapIntensity:
+          (!showDiamond && hasAoNoDiamond) || hasAoGold ? 1.0 : 0.0,
         roughnessMap: roughnessTexture,
         clearcoat: finish === "polished" ? 1.0 : 0.0,
         normalScale: new THREE.Vector2(normalIntensity, normalIntensity),
         normalMap: hasNormalBase ? normalBaseTexture : null,
-        alphaMap: (!showDiamond && hasAoNoDiamond) ? aoTextureNoDiamond : aoTextureGold,
+        alphaMap:
+          !showDiamond && hasAoNoDiamond ? aoTextureNoDiamond : aoTextureGold,
       }),
     );
 
@@ -268,7 +275,12 @@ export const SingleModel = observer(
     // Keep textures in sync if they change (e.g. modelId/variation swap)
     useEffect(() => {
       // Update Gold Material
-      const targetAoMap = (!showDiamond && hasAoNoDiamond) ? aoTextureNoDiamond : (hasAoGold ? aoTextureGold : null);
+      const targetAoMap =
+        !showDiamond && hasAoNoDiamond
+          ? aoTextureNoDiamond
+          : hasAoGold
+            ? aoTextureGold
+            : null;
       goldMaterialRef.current.aoMap = targetAoMap;
       goldMaterialRef.current.aoMapIntensity = targetAoMap ? 1.0 : 0.0;
       goldMaterialRef.current.roughnessMap = roughnessTexture;
@@ -456,6 +468,7 @@ export const SingleModel = observer(
                 ior: 2.4,
                 bounces: 3,
                 aberrationStrength: 0.0005,
+                envMapIntensity: 0.4,
               });
             }
           } else if (
@@ -505,7 +518,10 @@ export const SingleModel = observer(
             mesh.name === "Finishing_Metal" ||
             mesh.name.includes("Finishing")
           ) {
-            if (collection?.toLowerCase() === "contemporian" && modelId === "386") {
+            if (
+              collection?.toLowerCase() === "contemporian" &&
+              modelId === "386"
+            ) {
               mesh.visible = showDiamond;
             } else {
               mesh.visible = true;

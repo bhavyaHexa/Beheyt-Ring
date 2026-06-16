@@ -19,6 +19,7 @@ export interface MeshRefractionMaterialParameters {
     highlightTolerance?: number;
     attenuationColor?: string | number | THREE.Color;
     attenuationDistance?: number;
+    envMapIntensity?: number;
 }
 
 export default class MeshRefractionMaterialWebGL extends THREE.ShaderMaterial {
@@ -30,6 +31,7 @@ export default class MeshRefractionMaterialWebGL extends THREE.ShaderMaterial {
     highlightTolerance: number;
     attenuationColor: THREE.Color;
     attenuationDistance: number;
+    envMapIntensity: number;
     setResolution(width: number, height: number): void;
     setBackgroundTexture(tex: THREE.Texture): void;
 }
