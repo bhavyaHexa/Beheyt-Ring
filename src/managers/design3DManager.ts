@@ -23,7 +23,12 @@ export class Design3DManagerStore {
                 const dm = this.rootStore.designManager;
                 const collections = Object.keys(data.rings || {});
                 if (collections.length > 0) {
-                    if (!collections.includes(dm.selectedCollection)) {
+                    const matchedCollection = collections.find(
+                        c => c.toLowerCase() === dm.selectedCollection.toLowerCase()
+                    );
+                    if (matchedCollection) {
+                        dm.selectedCollection = matchedCollection;
+                    } else {
                         dm.selectedCollection = collections[0];
                     }
                     if (dm.selectedCollection.toLowerCase() === "artisanal") {
@@ -31,18 +36,21 @@ export class Design3DManagerStore {
                     } else {
                         dm.showDiamond = true;
                     }
-                    const modelIds = Object.keys(data.rings[dm.selectedCollection] || {});
+                    const modelIds = Object.keys(data.rings[dm.selectedCollection] || {}).filter(key => key !== "collectionID" && key !== "id");
                     if (modelIds.length > 0) {
                         if (!modelIds.includes(dm.selectedModelId)) {
                             dm.selectedModelId = modelIds[0];
                         }
-                        const variations = Object.keys(data.rings[dm.selectedCollection][dm.selectedModelId] || {});
+                        const variations = Object.keys(data.rings[dm.selectedCollection][dm.selectedModelId] || {}).filter(key => key !== "collectionID" && key !== "id");
                         if (variations.length > 0) {
-                            dm.selectedVariation = variations[0];
+                            if (!variations.includes(dm.selectedVariation)) {
+                                dm.selectedVariation = variations[0];
+                            }
                         }
                     }
                 }
                 dm.updateDefaultColorForActiveModel();
+                dm.updateUrlParams();
             });
         } catch (error) {
             console.error("Failed to load rings data:", error);

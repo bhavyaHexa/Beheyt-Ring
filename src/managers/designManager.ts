@@ -4,7 +4,7 @@ import { DesignSelection, ColorType, FinishType } from "../types";
 import { getTextureValue, getNormalMapValue } from "../utils/textureHelpers";
 
 export class DesignManagerStore {
-    selectedCollection: string = "briljant";
+    selectedCollection: string = "Briljant";
     selectedModelId: string = "546";
     selectedVariation: string = "4.5mm";
     selectedColor: ColorType = "gold";
@@ -54,9 +54,99 @@ export class DesignManagerStore {
 
     rootStore: RootStore;
 
+    collectionIdMap: Record<string, string> = {
+        "1": "Briljant",
+        "2": "Artisanal",
+        "3": "Perle",
+        "4": "Vintage",
+        "5": "Silver Heart",
+        "6": "Classic",
+        "7": "Romance",
+        "8": "Contemporian",
+        "9": "Tweekleurig"
+    };
+
+    getCollectionId(collectionName: string): string {
+        const entry = Object.entries(this.collectionIdMap).find(
+            ([_, name]) => name.toLowerCase() === collectionName.toLowerCase()
+        );
+        return entry ? entry[0] : collectionName;
+    }
+
+    getCollectionNameFromIdOrName(idOrName: string): string {
+        if (this.collectionIdMap[idOrName]) {
+            return this.collectionIdMap[idOrName];
+        }
+        const nameMatch = Object.values(this.collectionIdMap).find(
+            name => name.toLowerCase() === idOrName.toLowerCase()
+        );
+        return nameMatch || idOrName;
+    }
+
     constructor(rootStore: RootStore) {
-        makeAutoObservable(this, { rootStore: false });
         this.rootStore = rootStore;
+        this.loadFromUrlParams();
+        makeAutoObservable(this, { rootStore: false });
+    }
+
+    loadFromUrlParams() {
+        const params = new URLSearchParams(window.location.search);
+        const colParam = params.get("collection");
+        const modelParam = params.get("modelId") || params.get("model");
+        const variationParam = params.get("variation") || params.get("width");
+        const colorParam = params.get("color");
+        const finishParam = params.get("finish");
+        const diamondParam = params.get("diamond");
+
+        if (colParam) {
+            this.selectedCollection = this.getCollectionNameFromIdOrName(colParam);
+        }
+        
+        let isNormalFromParam = false;
+        if (modelParam) {
+            const parts = modelParam.split('/');
+            this.selectedModelId = parts[0];
+            if (parts[1]) {
+                const routePart = parts[1].toLowerCase();
+                if (routePart.startsWith("norm") || routePart.startsWith("norn")) {
+                    isNormalFromParam = true;
+                }
+            }
+        }
+        
+        if (isNormalFromParam || window.location.pathname === "/normal") {
+            this.currentRoute = "/normal";
+        } else {
+            this.currentRoute = "/";
+        }
+
+        if (variationParam) this.selectedVariation = variationParam;
+        if (colorParam) this.selectedColor = colorParam as ColorType;
+        if (finishParam) this.selectedFinish = finishParam as FinishType;
+        if (diamondParam !== null) this.showDiamond = diamondParam === "true";
+    }
+
+    updateUrlParams() {
+        const params = new URLSearchParams(window.location.search);
+        const colId = this.getCollectionId(this.selectedCollection);
+        params.set("collection", colId);
+        
+        let modelParamValue = this.selectedModelId;
+        if (this.currentRoute === "/normal") {
+            modelParamValue += "/normal";
+        }
+        params.set("modelId", modelParamValue);
+
+        // Remove the extra parameters
+        params.delete("variation");
+        params.delete("width");
+        params.delete("color");
+        params.delete("finish");
+        params.delete("diamond");
+        params.delete("model");
+
+        const newRelativePathQuery = window.location.pathname + '?' + params.toString();
+        window.history.replaceState(null, '', newRelativePathQuery);
     }
 
     setCollection(collection: string) {
@@ -68,7 +158,7 @@ export class DesignManagerStore {
         }
         const ringsData = this.rootStore.design3DManager.ringsData;
         if (ringsData && ringsData.rings[collection]) {
-            const modelIds = Object.keys(ringsData.rings[collection]);
+            const modelIds = Object.keys(ringsData.rings[collection]).filter(key => key !== "collectionID" && key !== "id");
             if (modelIds.length > 0) {
                 if (!modelIds.includes(this.selectedModelId)) {
                     this.selectedModelId = modelIds[0];
@@ -80,6 +170,7 @@ export class DesignManagerStore {
             }
         }
         this.updateDefaultColorForActiveModel();
+        this.updateUrlParams();
     }
 
     setModelId(id: string) {
@@ -93,23 +184,28 @@ export class DesignManagerStore {
             }
         }
         this.updateDefaultColorForActiveModel();
+        this.updateUrlParams();
     }
 
     setVariation(variation: string) {
         this.selectedVariation = variation;
         this.updateDefaultColorForActiveModel();
+        this.updateUrlParams();
     }
 
     setColor(color: ColorType) {
         this.selectedColor = color;
+        this.updateUrlParams();
     }
 
     setFinish(finish: FinishType) {
         this.selectedFinish = finish;
+        this.updateUrlParams();
     }
 
     setDiamond(show: boolean) {
         this.showDiamond = show;
+        this.updateUrlParams();
     }
 
     setCurrentView(view: 'home' | 'engrave') {
@@ -121,8 +217,28 @@ export class DesignManagerStore {
     }
 
     navigateTo(path: string) {
-        window.history.pushState(null, '', path);
         this.setCurrentRoute(path);
+        
+        const params = new URLSearchParams(window.location.search);
+        const colId = this.getCollectionId(this.selectedCollection);
+        params.set("collection", colId);
+
+        let modelParamValue = this.selectedModelId;
+        if (path === "/normal") {
+            modelParamValue += "/normal";
+        }
+        params.set("modelId", modelParamValue);
+
+        // Remove the extra parameters
+        params.delete("variation");
+        params.delete("width");
+        params.delete("color");
+        params.delete("finish");
+        params.delete("diamond");
+        params.delete("model");
+
+        const newRelativePathQuery = path + '?' + params.toString();
+        window.history.pushState(null, '', newRelativePathQuery);
     }
 
     get selection(): DesignSelection {
@@ -166,10 +282,13 @@ export class DesignManagerStore {
 
         if (!colorChangeVal) return;
 
-        const changeMesh = normalize(colorChangeVal);
+        const parts = colorChangeVal.split(',').map((s: string) => normalize(s));
         let defaultColorName = "";
 
-        if (changeMesh === "basemetal" || changeMesh === "base" || changeMesh === "gold") {
+        const hasBase = parts.some((p: string) => p === "basemetal" || p === "base" || p === "gold" || p === "both");
+        const hasFinishing = parts.some((p: string) => p === "finishingmetal" || p === "finishing" || p === "finshing" || p === "finshingmetal" || p === "silver" || p === "both");
+
+        if (hasBase) {
             // Find Base Metal Color key
             for (const key of Object.keys(variationData)) {
                 if (normalize(key) === "basemetalcolor") {
@@ -177,19 +296,11 @@ export class DesignManagerStore {
                     break;
                 }
             }
-        } else if (changeMesh === "finishingmetal" || changeMesh === "finishing" || changeMesh === "finshing" || changeMesh === "finshingmetal" || changeMesh === "silver") {
+        } else if (hasFinishing) {
             // Find Finishing Metal Color key
             for (const key of Object.keys(variationData)) {
                 const normKey = normalize(key);
                 if (normKey === "finishingmetalcolor" || normKey === "finshingmetalcolor") {
-                    defaultColorName = variationData[key];
-                    break;
-                }
-            }
-        } else if (changeMesh === "both") {
-            // Find either Base Metal Color or Finishing Metal Color
-            for (const key of Object.keys(variationData)) {
-                if (normalize(key) === "basemetalcolor") {
                     defaultColorName = variationData[key];
                     break;
                 }

@@ -68,21 +68,25 @@ export const MaterialLerpController: React.FC<MaterialLerpControllerProps> = ({
         };
 
         if (hasConfig) {
-            const changeMesh = (colorChangeVal || "").trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+            const parts = (colorChangeVal || "").split(',').map((s: string) => s.trim().toLowerCase().replace(/[^a-z0-9]/g, ''));
 
-            if (changeMesh === "basemetal" || changeMesh === "base" || changeMesh === "gold" || changeMesh === "both") {
+            const hasBase = parts.some((p: string) => p === "basemetal" || p === "base" || p === "gold" || p === "both");
+            const hasFinishing = parts.some((p: string) => p === "finishingmetal" || p === "finishing" || p === "finshing" || p === "finshingmetal" || p === "silver" || p === "both");
+            const hasEngraving = parts.some((p: string) => p === "engravingmesh" || p === "engravingmetal" || p === "engraving" || p === "engrave" || p === "basemetal" || p === "base" || p === "gold" || p === "both");
+
+            if (hasBase) {
                 targetBaseColor.current.set(colorHex);
             } else {
                 targetBaseColor.current.set(resolveColor(baseMetalColorVal, "#ffc35c"));
             }
 
-            if (changeMesh === "finishingmetal" || changeMesh === "finishing" || changeMesh === "finshing" || changeMesh === "finshingmetal" || changeMesh === "silver" || changeMesh === "both") {
+            if (hasFinishing) {
                 targetFinishingColor.current.set(colorHex);
             } else {
                 targetFinishingColor.current.set(resolveColor(finishingMetalColorVal, "#f6f5f5"));
             }
 
-            if (changeMesh === "engravingmesh" || changeMesh === "engravingmetal" || changeMesh === "engraving" || changeMesh === "engrave" || changeMesh === "basemetal" || changeMesh === "base" || changeMesh === "gold" || changeMesh === "both") {
+            if (hasEngraving) {
                 targetEngravingColor.current.set(colorHex);
             } else {
                 targetEngravingColor.current.set(resolveColor(engravingMeshColorVal, "#ffc35c"));

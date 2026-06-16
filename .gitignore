@@ -23,3 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 .vercel
+
+# Large env files
+public/env/01_1.hdr
+public/env/01_export.hdr

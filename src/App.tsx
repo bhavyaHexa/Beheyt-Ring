@@ -11,6 +11,7 @@ const App = observer(() => {
     useEffect(() => {
         const handleLocationChange = () => {
             designManager.setCurrentRoute(window.location.pathname);
+            designManager.loadFromUrlParams();
         };
         window.addEventListener("popstate", handleLocationChange);
         return () => {

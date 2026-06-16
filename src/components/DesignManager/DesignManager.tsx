@@ -11,10 +11,10 @@ const DesignManager = observer(() => {
     const ringsData = design3DManager.ringsData;
     const collections = ringsData ? Object.keys(ringsData.rings) : [];
     const modelIds = (ringsData && designManager.selectedCollection) 
-        ? Object.keys(ringsData.rings[designManager.selectedCollection] || {}) 
+        ? Object.keys(ringsData.rings[designManager.selectedCollection] || {}).filter(key => key !== 'collectionID' && key !== 'id') 
         : [];
     const variations = (ringsData && designManager.selectedCollection && designManager.selectedModelId) 
-        ? Object.keys(ringsData.rings[designManager.selectedCollection]?.[designManager.selectedModelId] || {}) 
+        ? Object.keys(ringsData.rings[designManager.selectedCollection]?.[designManager.selectedModelId] || {}).filter(key => key !== 'collectionID' && key !== 'id') 
         : [];
 
     const colors: ColorType[] = ['gold', 'silver', 'rose gold'];
