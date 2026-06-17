@@ -10,13 +10,52 @@ import { SingleModel } from './SingleModel';
 
 const NormalLevaControls = observer(() => {
     const { designManager } = rootStore;
-    const { normalIntensity } = useControls('Normal Map Controls', {
+    const currentHex = designManager.colorMap[designManager.selectedColor.toLowerCase()] || '#ffffff';
+
+    const [{ normalIntensity, ringColor, customColor }, set] = useControls('Normal Map Controls', () => ({
         normalIntensity: { value: designManager.normalIntensity, min: -5.0, max: 5.0, step: 0.05 },
-    });
+        ringColor: {
+            options: {
+                'Yellow Gold': 'gold',
+                'White Gold / Silver': 'silver',
+                'Rose Gold': 'rose gold'
+            },
+            value: designManager.selectedColor,
+        },
+        customColor: {
+            label: 'Color Edit',
+            value: currentHex,
+        }
+    }));
 
     useEffect(() => {
         designManager.setNormalIntensity(normalIntensity);
     }, [normalIntensity, designManager]);
+
+    useEffect(() => {
+        if (ringColor) {
+            designManager.setColor(ringColor as any);
+        }
+    }, [ringColor, designManager]);
+
+    useEffect(() => {
+        if (customColor) {
+            const activeColorKey = designManager.selectedColor.toLowerCase();
+            if (designManager.colorMap[activeColorKey] !== customColor) {
+                designManager.colorMap[activeColorKey] = customColor;
+            }
+        }
+    }, [customColor, designManager]);
+
+    // Update Leva control value when store changes from outside
+    useEffect(() => {
+        const activeColorKey = designManager.selectedColor.toLowerCase();
+        const hex = designManager.colorMap[activeColorKey] || '#ffffff';
+        set({ 
+            ringColor: designManager.selectedColor,
+            customColor: hex
+        });
+    }, [designManager.selectedColor, set]);
 
     return null;
 });

@@ -22,9 +22,15 @@ export const BackgroundTextureProvider: React.FC<{ children: React.ReactNode }> 
             }
         });
 
+        // Set background to solid white temporarily so diamonds refract a bright white environment
+        const initialBg = scene.background;
+        scene.background = new THREE.Color('#ffffff');
+
         gl.setRenderTarget(bgRenderTarget);
         gl.render(scene, camera);
         gl.setRenderTarget(null);
+
+        scene.background = initialBg;
 
         // Show diamonds and update their materials with the new background texture
         diamonds.forEach((obj) => {

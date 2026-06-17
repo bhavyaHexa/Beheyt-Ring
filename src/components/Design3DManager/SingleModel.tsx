@@ -237,7 +237,7 @@ export const SingleModel = observer(
           (!showDiamond && hasAoNoDiamond) || hasAoGold ? 1.0 : 0.0,
         roughnessMap: roughnessTexture,
         clearcoat: finish === "polished" ? 1.0 : 0.0,
-        normalScale: new THREE.Vector2(normalIntensity, normalIntensity),
+        normalScale: new THREE.Vector2(0, 0),
         normalMap: hasNormalBase ? normalBaseTexture : null,
         alphaMap:
           !showDiamond && hasAoNoDiamond ? aoTextureNoDiamond : aoTextureGold,
@@ -254,7 +254,7 @@ export const SingleModel = observer(
         roughnessMap: roughnessTexture,
         clearcoat: finish === "polished" ? 1.0 : 0.0,
         clearcoatRoughness: 0.1,
-        normalScale: new THREE.Vector2(normalIntensity, normalIntensity),
+        normalScale: new THREE.Vector2(0, 0),
         normalMap: hasNormalFinishing ? normalFinishingTexture : null,
       }),
     );
@@ -353,15 +353,12 @@ export const SingleModel = observer(
       const targetFinishingMaterial = silverMaterialRef.current;
 
       if (hasNormalBase) {
-        targetBaseMaterial.normalScale.set(normalIntensity, normalIntensity);
+        targetBaseMaterial.normalScale.set(1.0, 1.0);
       }
       if (hasNormalFinishing) {
-        targetFinishingMaterial.normalScale.set(
-          normalIntensity,
-          normalIntensity,
-        );
+        targetFinishingMaterial.normalScale.set(1.0, 1.0);
       }
-    }, [normalIntensity, hasNormalBase, hasNormalFinishing]);
+    }, [hasNormalBase, hasNormalFinishing]);
 
     // // Log the model's position/location coordinates (x, y, z) in the console
     // useEffect(() => {
@@ -393,6 +390,9 @@ export const SingleModel = observer(
       scene.traverse((node: THREE.Object3D) => {
         if (node instanceof THREE.Mesh) {
           const mesh = node;
+          if (mesh.geometry) {
+            mesh.geometry.computeVertexNormals();
+          }
 
           // Cache original normal map and scale on first traversal
           if (mesh.userData.originalNormalMap === undefined) {
@@ -415,10 +415,7 @@ export const SingleModel = observer(
             mesh.material = targetFinishingMaterial;
             if (hasNormalFinishing) {
               targetFinishingMaterial.normalMap = normalFinishingTexture;
-              targetFinishingMaterial.normalScale.set(
-                normalIntensity,
-                normalIntensity,
-              );
+              targetFinishingMaterial.normalScale.set(1.0, 1.0);
             } else if (originalNormalMap) {
               targetFinishingMaterial.normalMap = originalNormalMap;
               if (originalNormalScale) {
@@ -431,10 +428,7 @@ export const SingleModel = observer(
             mesh.material = targetFinishingMaterial;
             if (hasNormalFinishing) {
               targetFinishingMaterial.normalMap = normalFinishingTexture;
-              targetFinishingMaterial.normalScale.set(
-                normalIntensity,
-                normalIntensity,
-              );
+              targetFinishingMaterial.normalScale.set(1.0, 1.0);
             } else if (originalNormalMap) {
               targetFinishingMaterial.normalMap = originalNormalMap;
               if (originalNormalScale) {
@@ -467,8 +461,10 @@ export const SingleModel = observer(
                 resolution: new THREE.Vector2(size.width, size.height),
                 ior: 2.4,
                 bounces: 3,
-                aberrationStrength: 0.0005,
-                envMapIntensity: 0.4,
+                aberrationStrength: 0.005,
+                envMapIntensity: 0.3,
+                reflectivity: 0,
+                fresnel: 0.3,
               });
             }
           } else if (
@@ -504,10 +500,7 @@ export const SingleModel = observer(
             mesh.material = targetBaseMaterial;
             if (hasNormalBase) {
               targetBaseMaterial.normalMap = normalBaseTexture;
-              targetBaseMaterial.normalScale.set(
-                normalIntensity,
-                normalIntensity,
-              );
+              targetBaseMaterial.normalScale.set(1.0, 1.0);
             } else if (originalNormalMap) {
               targetBaseMaterial.normalMap = originalNormalMap;
               if (originalNormalScale) {
@@ -529,10 +522,7 @@ export const SingleModel = observer(
             mesh.material = targetFinishingMaterial;
             if (hasNormalFinishing) {
               targetFinishingMaterial.normalMap = normalFinishingTexture;
-              targetFinishingMaterial.normalScale.set(
-                normalIntensity,
-                normalIntensity,
-              );
+              targetFinishingMaterial.normalScale.set(1.0, 1.0);
             } else if (originalNormalMap) {
               targetFinishingMaterial.normalMap = originalNormalMap;
               if (originalNormalScale) {

@@ -77,7 +77,7 @@ export const MaterialLerpController: React.FC<MaterialLerpControllerProps> = ({
             if (hasBase) {
                 targetBaseColor.current.set(colorHex);
             } else {
-                targetBaseColor.current.set(resolveColor(baseMetalColorVal, "#ffc35c"));
+                targetBaseColor.current.set(resolveColor(baseMetalColorVal, "#ffba43"));
             }
 
             if (hasFinishing) {
@@ -89,7 +89,7 @@ export const MaterialLerpController: React.FC<MaterialLerpControllerProps> = ({
             if (hasEngraving) {
                 targetEngravingColor.current.set(colorHex);
             } else {
-                targetEngravingColor.current.set(resolveColor(engravingMeshColorVal, "#ffc35c"));
+                targetEngravingColor.current.set(resolveColor(engravingMeshColorVal, "#ffba43"));
             }
         } else {
             targetBaseColor.current.set(colorHex);

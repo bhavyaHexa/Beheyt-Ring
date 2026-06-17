@@ -1,4 +1,4 @@
 # Vercel Ignore File
 # Ignore large HDR files that exceed Vercel's 100MB file size limit
-public/env/01_1.hdr
-public/env/01_export.hdr
+01_1.hdr
+01_export.hdr
