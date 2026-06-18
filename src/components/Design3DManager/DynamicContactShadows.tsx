@@ -14,7 +14,9 @@ export const DynamicContactShadows = observer(({ children }: Props) => {
   const groupRef = useRef<THREE.Group>(null);
   const shadowRef = useRef<THREE.Group>(null);
   const { designManager } = rootStore;
-  const minY = designManager.modelMinY;
+  
+  const isTestingRoute = designManager.currentRoute === "/testing";
+  const minY = isTestingRoute ? designManager.testingMinY : designManager.modelMinY;
 
   const view = designManager.currentView;
   console.log(view);
@@ -50,7 +52,7 @@ export const DynamicContactShadows = observer(({ children }: Props) => {
   return (
     <>
       <group ref={groupRef}>{children}</group>
-      {view === "home" && (
+      {(view === "home" || isTestingRoute) && (
         <group ref={shadowRef}>
           <ContactShadows
             position={[0, minY - 0.02, 0]}

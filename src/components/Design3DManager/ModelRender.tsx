@@ -5,6 +5,7 @@ import { observer } from "mobx-react-lite";
 import * as THREE from "three";
 
 import Model3DContent from "./Model3DContent";
+import TestingModelContent from "./TestingModelContent";
 import Loader from "../Loader/Loader";
 import EngraveModelViewer from "../engrave/EngraveModelViewer";
 import EngraveModelRender from "../engrave/EngraveModelRender";
@@ -18,8 +19,9 @@ import AutoRotateController from "./AutoRotateController";
 const ModelRender = observer(() => {
   const { designManager } = rootStore;
 
-  // We want the 3D viewport to be visible in both 'home' and 'engrave' views
+  // We want the 3D viewport to be visible in 'home', 'engrave' and 'testing' views
   const isVisible =
+    designManager.currentRoute === "/testing" ||
     designManager.currentView === "home" ||
     designManager.currentView === "engrave";
 
@@ -74,9 +76,15 @@ const ModelRender = observer(() => {
 
             <DynamicContactShadows>
               <AutoRotateController>
-                <Model3DContent />
-                {designManager.currentView === "engrave" && (
-                  <EngraveModelRender />
+                {designManager.currentRoute === "/testing" ? (
+                  <TestingModelContent />
+                ) : (
+                  <>
+                    <Model3DContent />
+                    {designManager.currentView === "engrave" && (
+                      <EngraveModelRender />
+                    )}
+                  </>
                 )}
               </AutoRotateController>
             </DynamicContactShadows>

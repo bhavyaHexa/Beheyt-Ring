@@ -18,6 +18,13 @@ export class DesignManagerStore {
   autoRotateSpeed: number = 0.5;
   useAntiAliasing: boolean = true;
 
+  // Sandbox testing route states
+  testingGlbUrl: string | null = null;
+  testingGlbName: string | null = null;
+  testingScale: number = 1.0;
+  testingAutoScale: boolean = true;
+  testingMinY: number = 0;
+
   colorMap: Record<string, string> = {
     gold: "#ffba43",
     silver: "#f6f5f5",
@@ -154,6 +161,7 @@ export class DesignManagerStore {
     }
 
     let isNormalFromParam = false;
+    let isTestingFromParam = false;
     if (modelParam) {
       const parts = modelParam.split("/");
       this.selectedModelId = parts[0];
@@ -161,11 +169,15 @@ export class DesignManagerStore {
         const routePart = parts[1].toLowerCase();
         if (routePart.startsWith("norm") || routePart.startsWith("norn")) {
           isNormalFromParam = true;
+        } else if (routePart.startsWith("test")) {
+          isTestingFromParam = true;
         }
       }
     }
 
-    if (isNormalFromParam || window.location.pathname === "/normal") {
+    if (isTestingFromParam || window.location.pathname === "/testing") {
+      this.currentRoute = "/testing";
+    } else if (isNormalFromParam || window.location.pathname === "/normal") {
       this.currentRoute = "/normal";
     } else {
       this.currentRoute = "/";
@@ -185,6 +197,8 @@ export class DesignManagerStore {
     let modelParamValue = this.selectedModelId;
     if (this.currentRoute === "/normal") {
       modelParamValue += "/normal";
+    } else if (this.currentRoute === "/testing") {
+      modelParamValue += "/testing";
     }
     params.set("modelId", modelParamValue);
 
@@ -274,6 +288,23 @@ export class DesignManagerStore {
     this.currentRoute = route;
   }
 
+  setTestingGlb(url: string | null, name: string | null) {
+    this.testingGlbUrl = url;
+    this.testingGlbName = name;
+  }
+
+  setTestingScale(value: number) {
+    this.testingScale = value;
+  }
+
+  setTestingAutoScale(value: boolean) {
+    this.testingAutoScale = value;
+  }
+
+  setTestingMinY(value: number) {
+    this.testingMinY = value;
+  }
+
   navigateTo(path: string) {
     this.setCurrentRoute(path);
 
@@ -284,6 +315,8 @@ export class DesignManagerStore {
     let modelParamValue = this.selectedModelId;
     if (path === "/normal") {
       modelParamValue += "/normal";
+    } else if (path === "/testing") {
+      modelParamValue += "/testing";
     }
     params.set("modelId", modelParamValue);
 
@@ -295,7 +328,8 @@ export class DesignManagerStore {
     params.delete("diamond");
     params.delete("model");
 
-    const newRelativePathQuery = path + "?" + params.toString();
+    const basePath = path === "/testing" || path === "/normal" ? "/" : path;
+    const newRelativePathQuery = basePath + "?" + params.toString();
     window.history.pushState(null, "", newRelativePathQuery);
   }
 
