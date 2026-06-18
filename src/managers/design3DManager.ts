@@ -31,11 +31,6 @@ export class Design3DManagerStore {
                     } else {
                         dm.selectedCollection = collections[0];
                     }
-                    if (dm.selectedCollection.toLowerCase() === "artisanal") {
-                        dm.showDiamond = false;
-                    } else {
-                        dm.showDiamond = true;
-                    }
                     const modelIds = Object.keys(data.rings[dm.selectedCollection] || {}).filter(key => key !== "collectionID" && key !== "id");
                     if (modelIds.length > 0) {
                         if (!modelIds.includes(dm.selectedModelId)) {
@@ -49,6 +44,7 @@ export class Design3DManagerStore {
                         }
                     }
                 }
+                dm.syncDiamondState(true);
                 dm.updateDefaultColorForActiveModel();
                 dm.updateUrlParams();
             });

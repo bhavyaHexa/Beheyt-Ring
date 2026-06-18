@@ -19,7 +19,8 @@
                         "aoGold": "/BehytRings/Briljant/546/4.5mm/Gold_Metal_AO.webp",
                         "aoSilver": "/BehytRings/Briljant/546/4.5mm/Silver_Metal_AO.webp",
                         "roughness": "/BehytRings/Briljant/546/4.5mm/Roughness_Map.jpg"
-                    }
+                    },
+                    "isDiamond": true
                 },
                 "5.0mm": {
                     "modelUrl": "/BehytRings/Briljant/546/5.0mm/546_5.0mm.glb",
@@ -27,7 +28,8 @@
                         "aoGold": "/BehytRings/Briljant/546/5.0mm/Gold_Metal_AO.webp",
                         "aoSilver": "/BehytRings/Briljant/546/5.0mm/Silver_Metal_AO.webp",
                         "roughness": "/BehytRings/Briljant/546/5.0mm/Roughness_Map.jpg"
-                    }
+                    },
+                    "isDiamond": true
                 }
             }
         },
@@ -43,7 +45,8 @@
                         "aoGold": "/BehytRings/Artisanal/174/3.5mm/Base_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Artisanal/174/3.5mm/Engraving_Mesh_AO.webp",
                         "normalFinishing": "/BehytRings/Artisanal/174/3.5mm/Finishing_Metal_Normal.webp"
-                    }
+                    },
+                    "isDiamond": false
                 },
                 "4.0mm": {
                     "modelUrl": "/BehytRings/Artisanal/174/4.0mm/174_4.0mm.glb",
@@ -56,7 +59,135 @@
                         "aoSilver": "/BehytRings/Artisanal/174/4.0mm/Silver_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Artisanal/174/4.0mm/Engraving_Mesh_AO.webp",
                         "normalFinishing": "/BehytRings/Artisanal/174/4.0mm/Finsihing_Metal_Normal.webp"
-                    }
+                    },
+                    "isDiamond": false
+                }
+            },
+            "468": {
+                "3.5mm": {
+                    "modelUrl": "/BehytRings/Artisanal/468/3.5mm/468_3.5mm.glb",
+                    "Base_Metal_Color": "silver",
+                    "finshing metal color": "gold",
+                    "engraving mesh color": "silver",
+                    "colorChange": "Finishing_Metal",
+                    "textures": {
+                        "aoGold": "/BehytRings/Artisanal/468/3.5mm/Base_Metal_AO.webp",
+                        "aoSilver": "/BehytRings/Artisanal/468/3.5mm/Finishing_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Artisanal/468/3.5mm/Engraving_Mesh_AO.webp",
+                        "normalFinishing": "/BehytRings/Artisanal/468/3.5mm/Finishing_Metal_Normal.webp"
+                    },
+                    "isDiamond": false
+                }
+            },
+            "469": {
+                "3.5mm": {
+                    "modelUrl": "/BehytRings/Artisanal/469/3.5mm/469_3.5mm.glb",
+                    "Base_Metal_Color": "gold",
+                    "finshing metal color": "silver",
+                    "engraving mesh color": "gold",
+                    "colorChange": "Base_Metal",
+                    "textures": {
+                        "aoGold": "/BehytRings/Artisanal/469/3.5mm/Base_Metal_AO.webp",
+                        "aoSilver": "/BehytRings/Artisanal/469/3.5mm/Finishing_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Artisanal/469/3.5mm/Engraving_Mesh_AO.webp",
+                        "normalBase": "/BehytRings/Artisanal/469/3.5mm/Base_Metal_Normal.webp"
+                    },
+                    "isDiamond": false
+                }
+            },
+            "470": {
+                "4.0mm": {
+                    "modelUrl": "/BehytRings/Artisanal/470/4.0mm/470_4.0mm.glb",
+                    "Base_Metal_Color": "gold",
+                    "finshing metal color": "gold",
+                    "engraving mesh color": "gold",
+                    "colorChange": "Base_Metal",
+                    "textures": {
+                        "aoGold": "/BehytRings/Artisanal/470/4.0mm/Base_Metal_AO.webp",
+                        "roughness": "/BehytRings/Artisanal/470/4.0mm/Roughness_Map.jpg",
+                        "aoEngrave": "/BehytRings/Artisanal/470/4.0mm/Engraving_Mesh_AO.webp",
+                        "normalBase": "/BehytRings/Artisanal/470/4.0mm/Base_Metal_Normal.webp"
+                    },
+                    "isDiamond": false
+                }
+            },
+            "471": {
+                "3.5mm": {
+                    "modelUrl": "/BehytRings/Artisanal/471/3.5mm/471_3.5mm.glb",
+                    "Base_Metal_Color": "gold",
+                    "finshing metal color": "gold",
+                    "engraving mesh color": "gold",
+                    "colorChange": "both",
+                    "textures": {
+                        "aoGold": "/BehytRings/Artisanal/471/3.5mm/Base_Metal_AO.webp",
+                        "aoSilver": "/BehytRings/Artisanal/471/3.5mm/Finishing_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Artisanal/471/3.5mm/Engraving_Mesh_AO.webp",
+                        "normalFinishing": "/BehytRings/Artisanal/471/3.5mm/Finishing_Metal_Normal.webp"
+                    },
+                    "isDiamond": false
+                }
+            },
+            "472": {
+                "3.5mm": {
+                    "modelUrl": "/BehytRings/Artisanal/472/3.5mm/472_3.5mm.glb",
+                    "Base_Metal_Color": "silver",
+                    "finshing metal color": "rose gold",
+                    "engraving mesh color": "silver",
+                    "colorChange": "Finishing_Metal",
+                    "textures": {
+                        "aoGold": "/BehytRings/Artisanal/472/3.5mm/Base_Metal_AO.webp",
+                        "aoSilver": "/BehytRings/Artisanal/472/3.5mm/Finishing_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Artisanal/472/3.5mm/Engraving_Mesh_AO.webp",
+                        "normalBase": "/BehytRings/Artisanal/472/3.5mm/Base_Metal_Normal.webp"
+                    },
+                    "isDiamond": false
+                }
+            },
+            "493": {
+                "3.5mm": {
+                    "modelUrl": "/BehytRings/Artisanal/493/3.5mm/493_3.5mm.glb",
+                    "Base_Metal_Color": "gold",
+                    "finshing metal color": "silver",
+                    "engraving mesh color": "gold",
+                    "colorChange": "Base_Metal",
+                    "textures": {
+                        "aoGold": "/BehytRings/Artisanal/493/3.5mm/Base_Metal_AO.webp",
+                        "aoSilver": "/BehytRings/Artisanal/493/3.5mm/Finishing_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Artisanal/493/3.5mm/Engraving_Mesh_AO.webp",
+                        "normalBase": "/BehytRings/Artisanal/493/3.5mm/Base_Metal_Normal.webp"
+                    },
+                    "isDiamond": false
+                }
+            },
+            "524": {
+                "3.5mm": {
+                    "modelUrl": "/BehytRings/Artisanal/524/3.5mm/524_3.5mm.glb",
+                    "Base_Metal_Color": "gold",
+                    "finshing metal color": "silver",
+                    "engraving mesh color": "gold",
+                    "colorChange": "Base_Metal",
+                    "textures": {
+                        "aoSilver": "/BehytRings/Artisanal/524/3.5mm/Finishing_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Artisanal/524/3.5mm/Engraving_Mesh_AO.webp",
+                        "normalFinishing": "/BehytRings/Artisanal/524/3.5mm/Finishing_Metal_Normal.webp"
+                    },
+                    "isDiamond": false
+                }
+            },
+            "525": {
+                "3.5mm": {
+                    "modelUrl": "/BehytRings/Artisanal/525/3.5mm/525_3.5mm.glb",
+                    "Base_Metal_Color": "silver",
+                    "finshing metal color": "gold",
+                    "engraving mesh color": "silver",
+                    "colorChange": "Finishing_Metal",
+                    "textures": {
+                        "aoGold": "/BehytRings/Artisanal/525/3.5mm/Base_Metal_AO.webp",
+                        "aoSilver": "/BehytRings/Artisanal/525/3.5mm/Finishing_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Artisanal/525/3.5mm/Engraving_Mesh_AO.webp",
+                        "normalFinishing": "/BehytRings/Artisanal/525/3.5mm/Finishing_Metal_Normal.webp"
+                    },
+                    "isDiamond": false
                 }
             },
             "526": {
@@ -72,111 +203,8 @@
                         "roughness": "/BehytRings/Artisanal/526/4.0mm/Roughness_Map.jpg",
                         "aoEngrave": "/BehytRings/Artisanal/526/4.0mm/Engraving_Mesh_AO.webp",
                         "normalBase": "/BehytRings/Artisanal/526/4.0mm/Base_Metal_Normal.webp"
-                    }
-                }
-            },
-            "470": {
-                "4.0mm": {
-                    "modelUrl": "/BehytRings/Artisanal/470/4.0mm/470_4.0mm.glb",
-                    "Base_Metal_Color": "gold",
-                    "finshing metal color": "gold",
-                    "engraving mesh color": "gold",
-                    "colorChange": "Base_Metal",
-                    "textures": {
-                        "aoGold": "/BehytRings/Artisanal/470/4.0mm/Base_Metal_AO.webp",
-                        "roughness": "/BehytRings/Artisanal/470/4.0mm/Roughness_Map.jpg",
-                        "aoEngrave": "/BehytRings/Artisanal/470/4.0mm/Engraving_Mesh_AO.webp",
-                        "normalBase": "/BehytRings/Artisanal/470/4.0mm/Base_Metal_Normal.webp"
-                    }
-                }
-            },
-            "468": {
-                "3.5mm": {
-                    "modelUrl": "/BehytRings/Artisanal/468/3.5mm/468_3.5mm.glb",
-                    "Base_Metal_Color": "silver",
-                    "finshing metal color": "gold",
-                    "engraving mesh color": "silver",
-                    "colorChange": "Finishing_Metal",
-                    "textures": {
-                        "aoGold": "/BehytRings/Artisanal/468/3.5mm/Base_Metal_AO.webp",
-                        "aoSilver": "/BehytRings/Artisanal/468/3.5mm/Finishing_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Artisanal/468/3.5mm/Engraving_Mesh_AO.webp",
-                        "normalFinishing": "/BehytRings/Artisanal/468/3.5mm/Finishing_Metal_Normal.webp"
-                    }
-                }
-            },
-            "469": {
-                "3.5mm": {
-                    "modelUrl": "/BehytRings/Artisanal/469/3.5mm/469_3.5mm.glb",
-                    "Base_Metal_Color": "gold",
-                    "finshing metal color": "silver",
-                    "engraving mesh color": "gold",
-                    "colorChange": "Base_Metal",
-                    "textures": {
-                        "aoGold": "/BehytRings/Artisanal/469/3.5mm/Base_Metal_AO.webp",
-                        "aoSilver": "/BehytRings/Artisanal/469/3.5mm/Finishing_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Artisanal/469/3.5mm/Engraving_Mesh_AO.webp",
-                        "normalBase": "/BehytRings/Artisanal/469/3.5mm/Base_Metal_Normal.webp"
-                    }
-                }
-            },
-            "471": {
-                "3.5mm": {
-                    "modelUrl": "/BehytRings/Artisanal/471/3.5mm/471_3.5mm.glb",
-                    "Base_Metal_Color": "gold",
-                    "finshing metal color": "gold",
-                    "engraving mesh color": "gold",
-                    "colorChange": "both",
-                    "textures": {
-                        "aoGold": "/BehytRings/Artisanal/471/3.5mm/Base_Metal_AO.webp",
-                        "aoSilver": "/BehytRings/Artisanal/471/3.5mm/Finishing_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Artisanal/471/3.5mm/Engraving_Mesh_AO.webp",
-                        "normalFinishing": "/BehytRings/Artisanal/471/3.5mm/Finishing_Metal_Normal.webp"
-                    }
-                }
-            },
-            "472": {
-                "3.5mm": {
-                    "modelUrl": "/BehytRings/Artisanal/472/3.5mm/472_3.5mm.glb",
-                    "Base_Metal_Color": "silver",
-                    "finshing metal color": "rose gold",
-                    "engraving mesh color": "silver",
-                    "colorChange": "Finishing_Metal",
-                    "textures": {
-                        "aoGold": "/BehytRings/Artisanal/472/3.5mm/Base_Metal_AO.webp",
-                        "aoSilver": "/BehytRings/Artisanal/472/3.5mm/Finishing_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Artisanal/472/3.5mm/Engraving_Mesh_AO.webp",
-                        "normalBase": "/BehytRings/Artisanal/472/3.5mm/Base_Metal_Normal.webp"
-                    }
-                }
-            },
-            "493": {
-                "3.5mm": {
-                    "modelUrl": "/BehytRings/Artisanal/493/3.5mm/493_3.5mm.glb",
-                    "Base_Metal_Color": "gold",
-                    "finshing metal color": "silver",
-                    "engraving mesh color": "gold",
-                    "colorChange": "Base_Metal",
-                    "textures": {
-                        "aoGold": "/BehytRings/Artisanal/493/3.5mm/Base_Metal_AO.webp",
-                        "aoSilver": "/BehytRings/Artisanal/493/3.5mm/Finishing_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Artisanal/493/3.5mm/Engraving_Mesh_AO.webp",
-                        "normalBase": "/BehytRings/Artisanal/493/3.5mm/Base_Metal_Normal.webp"
-                    }
-                }
-            },
-            "524": {
-                "3.5mm": {
-                    "modelUrl": "/BehytRings/Artisanal/524/3.5mm/524_3.5mm.glb",
-                    "Base_Metal_Color": "gold",
-                    "finshing metal color": "silver",
-                    "engraving mesh color": "gold",
-                    "colorChange": "Base_Metal",
-                    "textures": {
-                        "aoSilver": "/BehytRings/Artisanal/524/3.5mm/Finishing_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Artisanal/524/3.5mm/Engraving_Mesh_AO.webp",
-                        "normalFinishing": "/BehytRings/Artisanal/524/3.5mm/Finishing_Metal_Normal.webp"
-                    }
+                    },
+                    "isDiamond": false
                 }
             },
             "527": {
@@ -191,22 +219,8 @@
                         "aoSilver": "/BehytRings/Artisanal/527/3.5mm/Finishing_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Artisanal/527/3.5mm/Engraving_Mesh_AO.webp",
                         "normalBase": "/BehytRings/Artisanal/527/3.5mm/Base_Metal_Normal.webp"
-                    }
-                }
-            },
-            "525": {
-                "3.5mm": {
-                    "modelUrl": "/BehytRings/Artisanal/525/3.5mm/525_3.5mm.glb",
-                    "Base_Metal_Color": "silver",
-                    "finshing metal color": "gold",
-                    "engraving mesh color": "silver",
-                    "colorChange": "Finishing_Metal",
-                    "textures": {
-                        "aoGold": "/BehytRings/Artisanal/525/3.5mm/Base_Metal_AO.webp",
-                        "aoSilver": "/BehytRings/Artisanal/525/3.5mm/Finishing_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Artisanal/525/3.5mm/Engraving_Mesh_AO.webp",
-                        "normalFinishing": "/BehytRings/Artisanal/525/3.5mm/Finishing_Metal_Normal.webp"
-                    }
+                    },
+                    "isDiamond": false
                 }
             },
             "528": {
@@ -221,7 +235,8 @@
                         "aoSilver": "/BehytRings/Artisanal/528/3.5mm/Finishing_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Artisanal/528/3.5mm/Engraving_Mesh_AO.webp",
                         "normalBase": "/BehytRings/Artisanal/528/3.5mm/Base_Metal_Normal.webp"
-                    }
+                    },
+                    "isDiamond": false
                 }
             },
             "529": {
@@ -237,7 +252,8 @@
                         "aoEngrave": "/BehytRings/Artisanal/529/3.5mm/Engraving_Mesh_AO.webp",
                         "normalFinishing": "/BehytRings/Artisanal/529/3.5mm/Finishing_Metal_Normal.webp",
                         "normalBase": "/BehytRings/Artisanal/529/3.5mm/Base_Metal_Normal.webp"
-                    }
+                    },
+                    "isDiamond": false
                 }
             },
             "530": {
@@ -250,23 +266,12 @@
                         "aoGold": "/BehytRings/Artisanal/530/3.5mm/Base_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Artisanal/530/3.5mm/Engraving_Mesh_AO.webp",
                         "normalBase": "/BehytRings/Artisanal/530/3.5mm/Base_Metal_Normal.webp"
-                    }
+                    },
+                    "isDiamond": false
                 }
             }
         },
         "Perle": {
-            "536": {
-                "2.2mm": {
-                    "modelUrl": "/BehytRings/Perle/536/2.2mm/536_2.2mm.glb",
-                    "Base_Metal_Color": "gold",
-                    "engraving mesh color": "gold",
-                    "colorChange": "Base_Metal",
-                    "textures": {
-                        "aoGold": "/BehytRings/Perle/536/2.2mm/Base_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Perle/536/2.2mm/Engraving_Mesh_AO.webp"
-                    }
-                }
-            },
             "533": {
                 "2.2mm": {
                     "modelUrl": "/BehytRings/Perle/533/2.2mm/533_2.2mm.glb",
@@ -277,7 +282,8 @@
                         "aoGold": "/BehytRings/Perle/533/2.2mm/Base_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Perle/533/2.2mm/Engraving_Mesh_AO.webp",
                         "normalBase": "/BehytRings/Perle/533/2.2mm/Base_Metal_Normal.webp"
-                    }
+                    },
+                    "isDiamond": false
                 }
             },
             "535": {
@@ -292,7 +298,21 @@
                         "aoSilver": "/BehytRings/Perle/535/2.2mm/Finishing_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Perle/535/2.2mm/Engraving_Mesh_AO.webp",
                         "normalFinishing": "/BehytRings/Perle/535/2.2mm/Finishing_Metal_Normal.webp"
-                    }
+                    },
+                    "isDiamond": false
+                }
+            },
+            "536": {
+                "2.2mm": {
+                    "modelUrl": "/BehytRings/Perle/536/2.2mm/536_2.2mm.glb",
+                    "Base_Metal_Color": "gold",
+                    "engraving mesh color": "gold",
+                    "colorChange": "Base_Metal",
+                    "textures": {
+                        "aoGold": "/BehytRings/Perle/536/2.2mm/Base_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Perle/536/2.2mm/Engraving_Mesh_AO.webp"
+                    },
+                    "isDiamond": false
                 }
             }
         },
@@ -308,7 +328,8 @@
                         "aoGold": "/BehytRings/Vintage/44/2.0mm/Base_Metal_AO.webp",
                         "aoSilver": "/BehytRings/Vintage/44/2.0mm/Finishing_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Vintage/44/2.0mm/Engraving_Metal_AO.webp"
-                    }
+                    },
+                    "isDiamond": false
                 }
             },
             "258": {
@@ -322,7 +343,8 @@
                         "aoGold": "/BehytRings/Vintage/258/2.0mm/Base_Metal_AO.webp",
                         "aoSilver": "/BehytRings/Vintage/258/2.0mm/Finishing_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Vintage/258/2.0mm/Engraving_Metal_AO.webp"
-                    }
+                    },
+                    "isDiamond": true
                 }
             },
             "259": {
@@ -333,10 +355,11 @@
                     "engraving mesh color": "gold",
                     "colorChange": "Base_Metal",
                     "textures": {
-                        "aoGold": "/BehytRings/Vintage/259/2.0mm/Base_Metal_AO.webp",
-                        "aoSilver": "/BehytRings/Vintage/259/2.0mm/Finishing_Metal_Ao.webp",
-                        "aoEngrave": "/BehytRings/Vintage/259/2.0mm/Engraving_Metal_AO.webp"
-                    }
+                        "aoGold": "/BehytRings/Vintage/259/2.0mm/Base_Mesh_AO.webp",
+                        "aoSilver": "/BehytRings/Vintage/258/2.0mm/Finishing_Mesh_AO.webp",
+                        "aoEngrave": "/BehytRings/Vintage/259/2.0mm/Engraving_Mesh_AO.webp"
+                    },
+                    "isDiamond": false
                 }
             },
             "299": {
@@ -350,7 +373,8 @@
                         "aoGold": "/BehytRings/Vintage/299/2.0mm/Base_Metal_AO.webp",
                         "aoSilver": "/BehytRings/Vintage/299/2.0mm/Finishing_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Vintage/299/2.0mm/Engraving_Metal_AO.webp"
-                    }
+                    },
+                    "isDiamond": false
                 }
             }
         },
@@ -366,7 +390,8 @@
                         "aoGold": "/BehytRings/Silver Heart/664/2.0mm/Base_Metal_AO.webp",
                         "aoSilver": "/BehytRings/Silver Heart/664/2.0mm/Finishing_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Silver Heart/664/2.0mm/Engraving_Metal_AO.webp"
-                    }
+                    },
+                    "isDiamond": false
                 }
             }
         },
@@ -379,7 +404,8 @@
                     "colorChange": "Base_Metal",
                     "textures": {
                         "aoGold": "/BehytRings/Classic/234/2.0mm/Base_Metal_AO.webp"
-                    }
+                    },
+                    "isDiamond": false
                 }
             },
             "244": {
@@ -390,30 +416,8 @@
                     "colorChange": "Base_Metal",
                     "textures": {
                         "aoGold": "/BehytRings/Classic/244/2.0mm/Base_Metal_AO.webp"
-                    }
-                }
-            },
-            "428": {
-                "2.0mm": {
-                    "modelUrl": "/BehytRings/Classic/428/2.0mm/428_2.0mm.glb",
-                    "Base_Metal_Color": "gold",
-                    "Finishing_Metal_Color": "silver",
-                    "colorChange": "Base_Metal",
-                    "textures": {
-                        "aoGold": "/BehytRings/Classic/428/2.0mm/Base_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Classic/428/2.0mm/Engraving_Metal_AO.webp"
-                    }
-                }
-            },
-            "540": {
-                "2.0mm": {
-                    "modelUrl": "/BehytRings/Classic/540/2.0mm/540_2.0mm.glb",
-                    "Base_metal_Color": "gold",
-                    "colorChange": "Base_metal",
-                    "textures": {
-                        "aoGold": "/BehytRings/Classic/540/2.0mm/Base_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Classic/540/2.0mm/Engraving_Metal_AO.webp"
-                    }
+                    },
+                    "isDiamond": false
                 }
             },
             "271": {
@@ -425,7 +429,8 @@
                     "textures": {
                         "aoGold": "/BehytRings/Classic/271/2.0mm/Base_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Classic/271/2.0mm/Engraving_Metal_AO.webp"
-                    }
+                    },
+                    "isDiamond": false
                 }
             },
             "272": {
@@ -437,7 +442,8 @@
                     "textures": {
                         "aoGold": "/BehytRings/Classic/272/2.0mm/Base_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Classic/272/2.0mm/Engraving_Metal_AO.webp"
-                    }
+                    },
+                    "isDiamond": true
                 }
             },
             "275": {
@@ -449,7 +455,8 @@
                     "textures": {
                         "aoGold": "/BehytRings/Classic/275/2.0mm/Base_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Classic/275/2.0mm/Engraving_Metal_AO.webp"
-                    }
+                    },
+                    "isDiamond": false
                 }
             },
             "276": {
@@ -461,7 +468,8 @@
                     "textures": {
                         "aoGold": "/BehytRings/Classic/276/2.0mm/Base_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Classic/276/2.0mm/Engraving_Metal_AO.webp"
-                    }
+                    },
+                    "isDiamond": false
                 }
             },
             "404": {
@@ -473,7 +481,21 @@
                     "textures": {
                         "aoGold": "/BehytRings/Classic/404/2.0mm/Base_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Classic/404/2.0mm/Engraving_Mesh_AO.webp"
-                    }
+                    },
+                    "isDiamond": false
+                }
+            },
+            "428": {
+                "2.0mm": {
+                    "modelUrl": "/BehytRings/Classic/428/2.0mm/428_2.0mm.glb",
+                    "Base_Metal_Color": "gold",
+                    "Finishing_Metal_Color": "silver",
+                    "colorChange": "Base_Metal",
+                    "textures": {
+                        "aoGold": "/BehytRings/Classic/428/2.0mm/Base_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Classic/428/2.0mm/Engraving_Metal_AO.webp"
+                    },
+                    "isDiamond": false
                 }
             },
             "477": {
@@ -485,7 +507,8 @@
                     "textures": {
                         "aoGold": "/BehytRings/Classic/477/2.0mm/Base_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Classic/477/2.0mm/Engraving_Metal_AO.webp"
-                    }
+                    },
+                    "isDiamond": false
                 }
             },
             "478": {
@@ -497,7 +520,20 @@
                     "textures": {
                         "aoGold": "/BehytRings/Classic/478/2.0mm/Base_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Classic/478/2.0mm/Engraving_Metal_AO.webp"
-                    }
+                    },
+                    "isDiamond": false
+                }
+            },
+            "540": {
+                "2.0mm": {
+                    "modelUrl": "/BehytRings/Classic/540/2.0mm/540_2.0mm.glb",
+                    "Base_metal_Color": "gold",
+                    "colorChange": "Base_metal",
+                    "textures": {
+                        "aoGold": "/BehytRings/Classic/540/2.0mm/Base_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Classic/540/2.0mm/Engraving_Metal_AO.webp"
+                    },
+                    "isDiamond": false
                 }
             },
             "543": {
@@ -508,158 +544,16 @@
                     "Finishing_Metal_Color": "silver",
                     "colorChange": "Base_metal",
                     "textures": {
-                        "aoGold": "/BehytRings/Classic/543/2.0mm/Base_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Classic/543/2.0mm/Engraving_Metal_AO.webp",
-                        "aoSilver": "/BehytRings/Classic/543/2.0mm/Finishing_Metal_AO.webp"
-                    }
+                        "aoGold": "/BehytRings/Classic/543/2.0mm/Base_Mesh_AO.webp",
+                        "aoEngrave": "/BehytRings/Classic/543/2.0mm/Engraving_Mesh_AO.webp",
+                        "aoSilver": "/BehytRings/Classic/543/2.0mm/Finishing_Mesh_AO.webp",
+                        "aoNoDiamond": "/BehytRings/Classic/543/2.0mm/Base_Mesh_NoDiamond_AO.webp"
+                    },
+                    "isDiamond": true
                 }
             }
         },
         "Romance": {
-            "609": {
-                "2.0mm": {
-                    "modelUrl": "/BehytRings/Romance/609/2.0mm/609_2.0mm.glb",
-                    "Base_Metal_Color": "gold",
-                    "engraving mesh color": "gold",
-                    "colorChange": "Base_Metal",
-                    "textures": {
-                        "aoGold": "/BehytRings/Romance/609/2.0mm/Base_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Romance/609/2.0mm/Engraving_Mesh_AO.webp"
-                    }
-                }
-            },
-            "611": {
-                "2.0mm": {
-                    "modelUrl": "/BehytRings/Romance/611/2.0mm/611_2.0mm.glb",
-                    "Base_Metal_Color": "gold",
-                    "engraving mesh color": "gold",
-                    "colorChange": "Base_Metal",
-                    "textures": {
-                        "aoGold": "/BehytRings/Romance/611/2.0mm/Base_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Romance/611/2.0mm/Engraving_Mesh_AO.webp"
-                    }
-                }
-            },
-            "607": {
-                "2.0mm": {
-                    "modelUrl": "/BehytRings/Romance/607/2.0mm/607_2.0mm.glb",
-                    "Base_Metal_Color": "gold",
-                    "engraving mesh color": "gold",
-                    "colorChange": "Base_Metal",
-                    "textures": {
-                        "aoGold": "/BehytRings/Romance/607/2.0mm/Base_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Romance/607/2.0mm/Engraving_Mesh_AO.webp"
-                    }
-                }
-            },
-            "603": {
-                "2.0mm": {
-                    "modelUrl": "/BehytRings/Romance/603/2.0mm/603_2.0mm.glb",
-                    "Base_Metal_Color": "gold",
-                    "engraving mesh color": "gold",
-                    "colorChange": "Base_Metal",
-                    "textures": {
-                        "aoGold": "/BehytRings/Romance/603/2.0mm/Base_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Romance/603/2.0mm/Engraving_Mesh_AO.webp"
-                    }
-                }
-            },
-            "606": {
-                "2.0mm": {
-                    "modelUrl": "/BehytRings/Romance/606/2.0mm/606_2.0mm.glb",
-                    "Base_Metal_Color": "gold",
-                    "engraving mesh color": "gold",
-                    "colorChange": "Base_Metal",
-                    "textures": {
-                        "aoGold": "/BehytRings/Romance/606/2.0mm/Base_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Romance/606/2.0mm/Engraving_Mesh_AO.webp"
-                    }
-                }
-            },
-            "605": {
-                "2.0mm": {
-                    "modelUrl": "/BehytRings/Romance/605/2.0mm/605_2.0mm.glb",
-                    "Base_Metal_Color": "gold",
-                    "engraving mesh color": "gold",
-                    "colorChange": "Base_Metal",
-                    "textures": {
-                        "aoGold": "/BehytRings/Romance/605/2.0mm/Base_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Romance/605/2.0mm/Engraving_Mesh_AO.webp"
-                    }
-                }
-            },
-            "599": {
-                "2.0mm": {
-                    "modelUrl": "/BehytRings/Romance/599/2.0mm/599_2.0mm.glb",
-                    "Base_Metal_Color": "gold",
-                    "engraving mesh color": "gold",
-                    "colorChange": "Base_Metal",
-                    "textures": {
-                        "aoGold": "/BehytRings/Romance/599/2.0mm/Base_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Romance/599/2.0mm/Engraving_Mesh_AO.webp"
-                    }
-                }
-            },
-            "597": {
-                "2.0mm": {
-                    "modelUrl": "/BehytRings/Romance/597/2.0mm/597_2.0mm.glb",
-                    "Base_Metal_Color": "gold",
-                    "engraving mesh color": "gold",
-                    "colorChange": "Base_Metal",
-                    "textures": {
-                        "aoGold": "/BehytRings/Romance/597/2.0mm/Base_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Romance/597/2.0mm/Engraving_Mesh_AO.webp"
-                    }
-                }
-            },
-            "602": {
-                "2.0mm": {
-                    "modelUrl": "/BehytRings/Romance/602/2.0mm/602_2.0mm.glb",
-                    "Base_Metal_Color": "gold",
-                    "engraving mesh color": "gold",
-                    "colorChange": "Base_Metal",
-                    "textures": {
-                        "aoGold": "/BehytRings/Romance/602/2.0mm/Base_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Romance/602/2.0mm/Engraving_Mesh_AO.webp"
-                    }
-                }
-            },
-            "608": {
-                "2.0mm": {
-                    "modelUrl": "/BehytRings/Romance/608/2.0mm/608_2.0mm.glb",
-                    "Base_Metal_Color": "gold",
-                    "engraving mesh color": "gold",
-                    "colorChange": "Base_Metal",
-                    "textures": {
-                        "aoGold": "/BehytRings/Romance/608/2.0mm/Base_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Romance/608/2.0mm/Engraving_Mesh_AO.webp"
-                    }
-                }
-            },
-            "610": {
-                "2.0mm": {
-                    "modelUrl": "/BehytRings/Romance/610/2.0mm/610_2.0mm.glb",
-                    "Base_Metal_Color": "gold",
-                    "engraving mesh color": "gold",
-                    "colorChange": "Base_Metal",
-                    "textures": {
-                        "aoGold": "/BehytRings/Romance/610/2.0mm/Base_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Romance/610/2.0mm/Engraving_Mesh_AO.webp"
-                    }
-                }
-            },
-            "565": {
-                "2.0mm": {
-                    "modelUrl": "/BehytRings/Romance/565/2.0mm/565_2.0mm.glb",
-                    "Base_Metal_Color": "gold",
-                    "engraving mesh color": "gold",
-                    "colorChange": "Base_Metal",
-                    "textures": {
-                        "aoGold": "/BehytRings/Romance/565/2.0mm/Base_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Romance/565/2.0mm/Engraving_Mesh_AO.webp"
-                    }
-                }
-            },
             "560": {
                 "2.0mm": {
                     "modelUrl": "/BehytRings/Romance/560/2.0mm/560_2.0mm.glb",
@@ -669,7 +563,8 @@
                     "textures": {
                         "aoGold": "/BehytRings/Romance/560/2.0mm/Base_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Romance/560/2.0mm/Engraving_Mesh_AO.webp"
-                    }
+                    },
+                    "isDiamond": true
                 }
             },
             "561": {
@@ -681,31 +576,8 @@
                     "textures": {
                         "aoGold": "/BehytRings/Romance/561/2.0mm/Base_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Romance/561/2.0mm/Engraving_Mesh_AO.webp"
-                    }
-                }
-            },
-            "595": {
-                "2.0mm": {
-                    "modelUrl": "/BehytRings/Romance/595/2.0mm/595_2.0mm.glb",
-                    "Base_Metal_Color": "gold",
-                    "engraving mesh color": "gold",
-                    "colorChange": "Base_Metal",
-                    "textures": {
-                        "aoGold": "/BehytRings/Romance/595/2.0mm/Base_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Romance/595/2.0mm/Engraving_Mesh_AO.webp"
-                    }
-                }
-            },
-            "564": {
-                "2.0mm": {
-                    "modelUrl": "/BehytRings/Romance/564/2.0mm/564_2.0mm.glb",
-                    "Base_Metal_Color": "gold",
-                    "engraving mesh color": "gold",
-                    "colorChange": "Base_Metal",
-                    "textures": {
-                        "aoGold": "/BehytRings/Romance/564/2.0mm/Base_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Romance/564/2.0mm/Engraving_Mesh_AO.webp"
-                    }
+                    },
+                    "isDiamond": true
                 }
             },
             "563": {
@@ -717,19 +589,47 @@
                     "textures": {
                         "aoGold": "/BehytRings/Romance/563/2.0mm/Base_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Romance/563/2.0mm/Engraving_Mesh_AO.webp"
-                    }
+                    },
+                    "isDiamond": true
                 }
             },
-            "601": {
+            "564": {
                 "2.0mm": {
-                    "modelUrl": "/BehytRings/Romance/601/2.0mm/601_2.0mm.glb",
+                    "modelUrl": "/BehytRings/Romance/564/2.0mm/564_2.0mm.glb",
                     "Base_Metal_Color": "gold",
                     "engraving mesh color": "gold",
                     "colorChange": "Base_Metal",
                     "textures": {
-                        "aoGold": "/BehytRings/Romance/601/2.0mm/Base_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Romance/601/2.0mm/Engraving_Mesh_AO.webp"
-                    }
+                        "aoGold": "/BehytRings/Romance/564/2.0mm/Base_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Romance/564/2.0mm/Engraving_Mesh_AO.webp"
+                    },
+                    "isDiamond": true
+                }
+            },
+            "565": {
+                "2.0mm": {
+                    "modelUrl": "/BehytRings/Romance/565/2.0mm/565_2.0mm.glb",
+                    "Base_Metal_Color": "gold",
+                    "engraving mesh color": "gold",
+                    "colorChange": "Base_Metal",
+                    "textures": {
+                        "aoGold": "/BehytRings/Romance/565/2.0mm/Base_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Romance/565/2.0mm/Engraving_Mesh_AO.webp"
+                    },
+                    "isDiamond": true
+                }
+            },
+            "595": {
+                "2.0mm": {
+                    "modelUrl": "/BehytRings/Romance/595/2.0mm/595_2.0mm.glb",
+                    "Base_Metal_Color": "gold",
+                    "engraving mesh color": "gold",
+                    "colorChange": "Base_Metal",
+                    "textures": {
+                        "aoGold": "/BehytRings/Romance/595/2.0mm/Base_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Romance/595/2.0mm/Engraving_Mesh_AO.webp"
+                    },
+                    "isDiamond": true
                 }
             },
             "596": {
@@ -741,31 +641,21 @@
                     "textures": {
                         "aoGold": "/BehytRings/Romance/596/2.0mm/Base_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Romance/596/2.0mm/Engraving_Mesh_AO.webp"
-                    }
+                    },
+                    "isDiamond": true
                 }
             },
-            "600": {
+            "597": {
                 "2.0mm": {
-                    "modelUrl": "/BehytRings/Romance/600/2.0mm/600_2.0mm.glb",
+                    "modelUrl": "/BehytRings/Romance/597/2.0mm/597_2.0mm.glb",
                     "Base_Metal_Color": "gold",
                     "engraving mesh color": "gold",
                     "colorChange": "Base_Metal",
                     "textures": {
-                        "aoGold": "/BehytRings/Romance/600/2.0mm/Base_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Romance/600/2.0mm/Engraving_Mesh_AO.webp"
-                    }
-                }
-            },
-            "604": {
-                "2.0mm": {
-                    "modelUrl": "/BehytRings/Romance/604/2.0mm/604_2.0mm.glb",
-                    "Base_Metal_Color": "gold",
-                    "engraving mesh color": "gold",
-                    "colorChange": "Base_Metal",
-                    "textures": {
-                        "aoGold": "/BehytRings/Romance/604/2.0mm/Base_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Romance/604/2.0mm/Engraving_Mesh_AO.webp"
-                    }
+                        "aoGold": "/BehytRings/Romance/597/2.0mm/Base_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Romance/597/2.0mm/Engraving_Mesh_AO.webp"
+                    },
+                    "isDiamond": true
                 }
             },
             "598": {
@@ -777,7 +667,177 @@
                     "textures": {
                         "aoGold": "/BehytRings/Romance/598/2.0mm/Base_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Romance/598/2.0mm/Engraving_Mesh_AO.webp"
-                    }
+                    },
+                    "isDiamond": true
+                }
+            },
+            "599": {
+                "2.0mm": {
+                    "modelUrl": "/BehytRings/Romance/599/2.0mm/599_2.0mm.glb",
+                    "Base_Metal_Color": "gold",
+                    "engraving mesh color": "gold",
+                    "colorChange": "Base_Metal",
+                    "textures": {
+                        "aoGold": "/BehytRings/Romance/599/2.0mm/Base_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Romance/599/2.0mm/Engraving_Mesh_AO.webp"
+                    },
+                    "isDiamond": true
+                }
+            },
+            "600": {
+                "2.0mm": {
+                    "modelUrl": "/BehytRings/Romance/600/2.0mm/600_2.0mm.glb",
+                    "Base_Metal_Color": "gold",
+                    "engraving mesh color": "gold",
+                    "colorChange": "Base_Metal",
+                    "textures": {
+                        "aoGold": "/BehytRings/Romance/600/2.0mm/Base_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Romance/600/2.0mm/Engraving_Mesh_AO.webp"
+                    },
+                    "isDiamond": true
+                }
+            },
+            "601": {
+                "2.0mm": {
+                    "modelUrl": "/BehytRings/Romance/601/2.0mm/601_2.0mm.glb",
+                    "Base_Metal_Color": "gold",
+                    "engraving mesh color": "gold",
+                    "colorChange": "Base_Metal",
+                    "textures": {
+                        "aoGold": "/BehytRings/Romance/601/2.0mm/Base_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Romance/601/2.0mm/Engraving_Mesh_AO.webp"
+                    },
+                    "isDiamond": true
+                }
+            },
+            "602": {
+                "2.0mm": {
+                    "modelUrl": "/BehytRings/Romance/602/2.0mm/602_2.0mm.glb",
+                    "Base_Metal_Color": "gold",
+                    "engraving mesh color": "gold",
+                    "colorChange": "Base_Metal",
+                    "textures": {
+                        "aoGold": "/BehytRings/Romance/602/2.0mm/Base_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Romance/602/2.0mm/Engraving_Mesh_AO.webp"
+                    },
+                    "isDiamond": true
+                }
+            },
+            "603": {
+                "2.0mm": {
+                    "modelUrl": "/BehytRings/Romance/603/2.0mm/603_2.0mm.glb",
+                    "Base_Metal_Color": "gold",
+                    "engraving mesh color": "gold",
+                    "colorChange": "Base_Metal",
+                    "textures": {
+                        "aoGold": "/BehytRings/Romance/603/2.0mm/Base_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Romance/603/2.0mm/Engraving_Mesh_AO.webp"
+                    },
+                    "isDiamond": true
+                }
+            },
+            "604": {
+                "2.0mm": {
+                    "modelUrl": "/BehytRings/Romance/604/2.0mm/604_2.0mm.glb",
+                    "Base_Metal_Color": "gold",
+                    "engraving mesh color": "gold",
+                    "colorChange": "Base_Metal",
+                    "textures": {
+                        "aoGold": "/BehytRings/Romance/604/2.0mm/Base_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Romance/604/2.0mm/Engraving_Mesh_AO.webp"
+                    },
+                    "isDiamond": true
+                }
+            },
+            "605": {
+                "2.0mm": {
+                    "modelUrl": "/BehytRings/Romance/605/2.0mm/605_2.0mm.glb",
+                    "Base_Metal_Color": "gold",
+                    "engraving mesh color": "gold",
+                    "colorChange": "Base_Metal",
+                    "textures": {
+                        "aoGold": "/BehytRings/Romance/605/2.0mm/Base_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Romance/605/2.0mm/Engraving_Mesh_AO.webp"
+                    },
+                    "isDiamond": true
+                }
+            },
+            "606": {
+                "2.0mm": {
+                    "modelUrl": "/BehytRings/Romance/606/2.0mm/606_2.0mm.glb",
+                    "Base_Metal_Color": "gold",
+                    "engraving mesh color": "gold",
+                    "colorChange": "Base_Metal",
+                    "textures": {
+                        "aoGold": "/BehytRings/Romance/606/2.0mm/Base_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Romance/606/2.0mm/Engraving_Mesh_AO.webp"
+                    },
+                    "isDiamond": true
+                }
+            },
+            "607": {
+                "2.0mm": {
+                    "modelUrl": "/BehytRings/Romance/607/2.0mm/607_2.0mm.glb",
+                    "Base_Metal_Color": "gold",
+                    "engraving mesh color": "gold",
+                    "colorChange": "Base_Metal",
+                    "textures": {
+                        "aoGold": "/BehytRings/Romance/607/2.0mm/Base_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Romance/607/2.0mm/Engraving_Mesh_AO.webp"
+                    },
+                    "isDiamond": true
+                }
+            },
+            "608": {
+                "2.0mm": {
+                    "modelUrl": "/BehytRings/Romance/608/2.0mm/608_2.0mm.glb",
+                    "Base_Metal_Color": "gold",
+                    "engraving mesh color": "gold",
+                    "colorChange": "Base_Metal",
+                    "textures": {
+                        "aoGold": "/BehytRings/Romance/608/2.0mm/Base_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Romance/608/2.0mm/Engraving_Mesh_AO.webp"
+                    },
+                    "isDiamond": true
+                }
+            },
+            "609": {
+                "2.0mm": {
+                    "modelUrl": "/BehytRings/Romance/609/2.0mm/609_2.0mm.glb",
+                    "Base_Metal_Color": "gold",
+                    "engraving mesh color": "gold",
+                    "colorChange": "Base_Metal",
+                    "textures": {
+                        "aoGold": "/BehytRings/Romance/609/2.0mm/Base_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Romance/609/2.0mm/Engraving_Mesh_AO.webp"
+                    },
+                    "isDiamond": true
+                }
+            },
+            "610": {
+                "2.0mm": {
+                    "modelUrl": "/BehytRings/Romance/610/2.0mm/610_2.0mm.glb",
+                    "Base_Metal_Color": "gold",
+                    "engraving mesh color": "gold",
+                    "colorChange": "Base_Metal",
+                    "textures": {
+                        "aoGold": "/BehytRings/Romance/610/2.0mm/Base_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Romance/610/2.0mm/Engraving_Mesh_AO.webp"
+                    },
+                    "isDiamond": true
+                }
+            },
+            "611": {
+                "2.0mm": {
+                    "modelUrl": "/BehytRings/Romance/611/2.0mm/611_2.0mm.glb",
+                    "Base_Metal_Color": "gold",
+                    "engraving mesh color": "gold",
+                    "colorChange": "Base_Metal",
+                    "textures": {
+                        "aoGold": "/BehytRings/Romance/611/2.0mm/Base_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Romance/611/2.0mm/Engraving_Mesh_AO.webp"
+                    },
+                    "isDiamond": true
                 }
             }
         },
@@ -791,7 +851,8 @@
                     "textures": {
                         "aoGold": "/BehytRings/Contemporian/318/4.0mm/Base_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Contemporian/318/4.0mm/Engraving_Metal_AO.webp"
-                    }
+                    },
+                    "isDiamond": false
                 }
             },
             "319": {
@@ -804,7 +865,8 @@
                         "aoGold": "/BehytRings/Contemporian/319/4.0mm/Base_Metal_AO.webp",
                         "aoSilver": "/BehytRings/Contemporian/319/4.0mm/Finishing_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Contemporian/319/4.0mm/Engraving_Metal_AO.webp"
-                    }
+                    },
+                    "isDiamond": true
                 }
             },
             "340": {
@@ -816,158 +878,8 @@
                     "textures": {
                         "aoGold": "/BehytRings/Contemporian/340/4.0mm/Base_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Contemporian/340/4.0mm/Engraving_Metal_AO.webp"
-                    }
-                }
-            },
-            "423": {
-                "4.0mm": {
-                    "modelUrl": "/BehytRings/Contemporian/423/4.0mm/423_4.0mm.glb",
-                    "Base_Metal_Color": "silver",
-                    "engraving mesh color": "silver",
-                    "colorChange": "Base_Metal",
-                    "textures": {
-                        "aoGold": "/BehytRings/Contemporian/423/4.0mm/Base_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Contemporian/423/4.0mm/Engraving_Metal_AO.webp"
-                    }
-                }
-            },
-            "386": {
-                "4.0mm": {
-                    "modelUrl": "/BehytRings/Contemporian/386/4.0mm/386_4.0mm.glb",
-                    "Base_Metal_Color": "silver",
-                    "engraving mesh color": "silver",
-                    "colorChange": "Base_Metal",
-                    "textures": {
-                        "aoGold": "/BehytRings/Contemporian/386/4.0mm/Base_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Contemporian/386/4.0mm/Engraving_Metal_AO.webp",
-                        "aoSilver": "/BehytRings/Contemporian/386/4.0mm/Finishing_Metal_AO.webp",
-                        "aoNoDiamond": "/BehytRings/Contemporian/386/4.0mm/Base_Metal_NoDiamond_AO.webp"
-                    }
-                }
-            },
-            "403": {
-                "4.0mm": {
-                    "modelUrl": "/BehytRings/Contemporian/403/4.0mm/403_4.0mm.glb",
-                    "Base_Metal_Color": "silver",
-                    "engraving mesh color": "silver",
-                    "colorChange": "Base_Metal",
-                    "textures": {
-                        "aoGold": "/BehytRings/Contemporian/403/4.0mm/Base_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Contemporian/403/4.0mm/Engraving_Metal_AO.webp"
-                    }
-                }
-            },
-             "394": {
-                "4.0mm": {
-                    "modelUrl": "/BehytRings/Contemporian/394/4.0mm/394_4.0mm.glb",
-                    "Base_Metal_Color": "silver",
-                    "engraving mesh color": "silver",
-                    "colorChange": "Base_Metal",
-                    "textures": {
-                        "aoGold": "/BehytRings/Contemporian/394/4.0mm/Base_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Contemporian/394/4.0mm/Engraving_Metal_AO.webp"
-                    }
-                }
-            },
-             "381": {
-                "4.0mm": {
-                    "modelUrl": "/BehytRings/Contemporian/381/4.0mm/381_4.0mm.glb",
-                    "Base_Metal_Color": "gold",
-                    "engraving mesh color": "gold",
-                    "colorChange": "Base_Metal",
-                    "textures": {
-                        "aoGold": "/BehytRings/Contemporian/381/4.0mm/Base_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Contemporian/381/4.0mm/Engraving_Metal_AO.webp"
-                    }
-                }
-            },
-             "382": {
-                "4.0mm": {
-                    "modelUrl": "/BehytRings/Contemporian/382/4.0mm/382_4.0mm.glb",
-                    "Base_Metal_Color": "gold",
-                    "engraving mesh color": "gold",
-                    "Finishing_Metal_Color" : "gold",
-                    "colorChange": "both",
-                    "textures": {
-                        "aoGold": "/BehytRings/Contemporian/382/4.0mm/Base_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Contemporian/382/4.0mm/Engraving_Metal_AO.webp",
-                        "aoSilver": "/BehytRings/Contemporian/382/4.0mm/Finishing_Metal_AO.webp",
-                        "aoNoDiamond": "/BehytRings/Contemporian/382/4.0mm/Base_Metal_NoDiamond_AO.webp"
-                    }
-                }
-            },
-            "500": {
-                "4.0mm": {
-                    "modelUrl": "/BehytRings/Contemporian/500/4.0mm/500_4.0mm.glb",
-                    "Base_Metal_Color": "gold",
-                    "engraving mesh color": "gold",
-                    "colorChange": "Base_Metal",
-                    "textures": {
-                        "aoGold": "/BehytRings/Contemporian/500/4.0mm/Base_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Contemporian/500/4.0mm/Engraving_Metal_AO.webp"
-                    }
-                }
-            },
-             "475": {
-                "4.0mm": {
-                    "modelUrl": "/BehytRings/Contemporian/475/4.0mm/475_4.0mm.glb",
-                    "Base_Metal_Color": "gold",
-                    "engraving mesh color": "gold",
-                    "Finishing_Metal_Color" : "gold",
-                    "colorChange": "both",
-                    "textures": {
-                        "aoGold": "/BehytRings/Contemporian/475/4.0mm/Base_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Contemporian/475/4.0mm/Engraving_Metal_AO.webp",
-                        "aoSilver": "/BehytRings/Contemporian/475/4.0mm/Finishing_Metal_AO.webp"
-                    }
-                }
-            },
-             "385": {
-                "4.0mm": {
-                    "modelUrl": "/BehytRings/Contemporian/385/4.0mm/385_4.0mm.glb",
-                    "Base_Metal_Color": "silver",
-                    "engraving mesh color": "silver",
-                    "colorChange": "Base_Metal",
-                    "textures": {
-                        "aoGold": "/BehytRings/Contemporian/385/4.0mm/Base_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Contemporian/385/4.0mm/Engraving_Metal_AO.webp"
-                    }
-                }
-            },
-             "498": {
-                "4.0mm": {
-                    "modelUrl": "/BehytRings/Contemporian/498/4.0mm/498_4.0mm.glb",
-                    "Base_Metal_Color": "silver",
-                    "engraving mesh color": "silver",
-                    "colorChange": "Base_Metal",
-                    "textures": {
-                        "aoGold": "/BehytRings/Contemporian/498/4.0mm/Base_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Contemporian/498/4.0mm/Engraving_Metal_AO.webp"
-                    }
-                }
-            },
-             "496": {
-                "4.0mm": {
-                    "modelUrl": "/BehytRings/Contemporian/496/4.0mm/496_4.0mm.glb",
-                    "Base_Metal_Color": "gold",
-                    "engraving mesh color": "gold",
-                    "colorChange": "Base_Metal",
-                    "textures": {
-                        "aoGold": "/BehytRings/Contemporian/496/4.0mm/Base_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Contemporian/496/4.0mm/Engraving_Metal_AO.webp"
-                    }
-                }
-            },
-             "497": {
-                "4.0mm": {
-                    "modelUrl": "/BehytRings/Contemporian/497/4.0mm/497_4.0mm.glb",
-                    "Base_Metal_Color": "gold",
-                    "engraving mesh color": "gold",
-                    "colorChange": "Base_Metal",
-                    "textures": {
-                        "aoGold": "/BehytRings/Contemporian/497/4.0mm/Base_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Contemporian/497/4.0mm/Engraving_Metal_AO.webp"
-                    }
+                    },
+                    "isDiamond": true
                 }
             },
             "345": {
@@ -981,7 +893,8 @@
                         "aoGold": "/BehytRings/Contemporian/345/4.0mm/Base_Metal_AO.webp",
                         "aoSilver": "/BehytRings/Contemporian/345/4.0mm/Finishing_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Contemporian/345/4.0mm/Engraving_Metal_AO.webp"
-                    }
+                    },
+                    "isDiamond": false
                 }
             },
             "346": {
@@ -995,7 +908,34 @@
                         "aoGold": "/BehytRings/Contemporian/346/4.0mm/Base_Metal_AO.webp",
                         "aoSilver": "/BehytRings/Contemporian/346/4.0mm/Finishing_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Contemporian/346/4.0mm/Engraving_Metal_AO.webp"
-                    }
+                    },
+                    "isDiamond": true
+                }
+            },
+            "362": {
+                "4.0mm": {
+                    "modelUrl": "/BehytRings/Contemporian/362/4.0mm/362_4.0mm.glb",
+                    "Base_Metal_Color": "silver",
+                    "engraving mesh color": "silver",
+                    "colorChange": "Base_Metal",
+                    "textures": {
+                        "aoGold": "/BehytRings/Contemporian/362/4.0mm/Base_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Contemporian/362/4.0mm/Engraving_Metal_AO.webp"
+                    },
+                    "isDiamond": true
+                }
+            },
+            "363": {
+                "4.0mm": {
+                    "modelUrl": "/BehytRings/Contemporian/363/4.0mm/363_4.0mm.glb",
+                    "Base_Metal_Color": "silver",
+                    "engraving mesh color": "silver",
+                    "colorChange": "Base_Metal",
+                    "textures": {
+                        "aoGold": "/BehytRings/Contemporian/363/4.0mm/Base_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Contemporian/363/4.0mm/Engraving_Metal_AO.webp"
+                    },
+                    "isDiamond": false
                 }
             },
             "364": {
@@ -1009,7 +949,22 @@
                         "aoGold": "/BehytRings/Contemporian/364/4.0mm/Base_Metal_AO.webp",
                         "aoSilver": "/BehytRings/Contemporian/364/4.0mm/Finishing_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Contemporian/364/4.0mm/Engraving_Metal_AO.webp"
-                    }
+                    },
+                    "isDiamond": false
+                }
+            },
+            "379": {
+                "4.0mm": {
+                    "modelUrl": "/BehytRings/Contemporian/379/4.0mm/379_4.0mm.glb",
+                    "Base_Metal_Color": "gold",
+                    "engraving mesh color": "gold",
+                    "colorChange": "Base_Metal",
+                    "textures": {
+                        "aoGold": "/BehytRings/Contemporian/379/4.0mm/Base_Mesh_AO.webp",
+                        "aoEngrave": "/BehytRings/Contemporian/379/4.0mm/Engraving_Mesh_AO.webp",
+                        "aoNoDiamond": "/BehytRings/Contemporian/379/4.0mm/Base_Mesh_NoDiamond_AO.webp"
+                    },
+                    "isDiamond": true
                 }
             },
             "380": {
@@ -1021,7 +976,65 @@
                     "textures": {
                         "aoGold": "/BehytRings/Contemporian/380/4.0mm/Base_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Contemporian/380/4.0mm/Engraving_Metal_AO.webp"
-                    }
+                    },
+                    "isDiamond": false
+                }
+            },
+            "381": {
+                "4.0mm": {
+                    "modelUrl": "/BehytRings/Contemporian/381/4.0mm/381_4.0mm.glb",
+                    "Base_Metal_Color": "gold",
+                    "engraving mesh color": "gold",
+                    "colorChange": "Base_Metal",
+                    "textures": {
+                        "aoGold": "/BehytRings/Contemporian/381/4.0mm/Base_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Contemporian/381/4.0mm/Engraving_Metal_AO.webp"
+                    },
+                    "isDiamond": false
+                }
+            },
+            "382": {
+                "4.0mm": {
+                    "modelUrl": "/BehytRings/Contemporian/382/4.0mm/382_4.0mm.glb",
+                    "Base_Metal_Color": "gold",
+                    "engraving mesh color": "gold",
+                    "Finishing_Metal_Color": "gold",
+                    "colorChange": "both",
+                    "textures": {
+                        "aoGold": "/BehytRings/Contemporian/382/4.0mm/Base_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Contemporian/382/4.0mm/Engraving_Metal_AO.webp",
+                        "aoSilver": "/BehytRings/Contemporian/382/4.0mm/Finishing_Metal_AO.webp",
+                        "aoNoDiamond": "/BehytRings/Contemporian/382/4.0mm/Base_Metal_NoDiamond_AO.webp"
+                    },
+                    "isDiamond": true
+                }
+            },
+            "385": {
+                "4.0mm": {
+                    "modelUrl": "/BehytRings/Contemporian/385/4.0mm/385_4.0mm.glb",
+                    "Base_Metal_Color": "silver",
+                    "engraving mesh color": "silver",
+                    "colorChange": "Base_Metal",
+                    "textures": {
+                        "aoGold": "/BehytRings/Contemporian/385/4.0mm/Base_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Contemporian/385/4.0mm/Engraving_Metal_AO.webp"
+                    },
+                    "isDiamond": false
+                }
+            },
+            "386": {
+                "4.0mm": {
+                    "modelUrl": "/BehytRings/Contemporian/386/4.0mm/386_4.0mm.glb",
+                    "Base_Metal_Color": "silver",
+                    "engraving mesh color": "silver",
+                    "colorChange": "Base_Metal",
+                    "textures": {
+                        "aoGold": "/BehytRings/Contemporian/386/4.0mm/Base_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Contemporian/386/4.0mm/Engraving_Metal_AO.webp",
+                        "aoSilver": "/BehytRings/Contemporian/386/4.0mm/Finishing_Metal_AO.webp",
+                        "aoNoDiamond": "/BehytRings/Contemporian/386/4.0mm/Base_Metal_NoDiamond_AO.webp"
+                    },
+                    "isDiamond": true
                 }
             },
             "392": {
@@ -1035,7 +1048,78 @@
                         "aoGold": "/BehytRings/Contemporian/392/4.0mm/Base_Metal_AO.webp",
                         "aoSilver": "/BehytRings/Contemporian/392/4.0mm/Finishing_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Contemporian/392/4.0mm/Engraving_Metal_AO.webp"
-                    }
+                    },
+                    "isDiamond": false
+                }
+            },
+            "393": {
+                "4.0mm": {
+                    "modelUrl": "/BehytRings/Contemporian/393/4.0mm/393_4.0mm.glb",
+                    "Base_Metal_Color": "silver",
+                    "engraving mesh color": "silver",
+                    "Finishing_Metal_Color": "silver",
+                    "colorChange": "both",
+                    "textures": {
+                        "aoGold": "/BehytRings/Contemporian/393/4.0mm/Base_Mesh_AO.webp",
+                        "aoSilver": "/BehytRings/Contemporian/393/4.0mm/Finishing_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Contemporian/393/4.0mm/Engraving_Metal_AO.webp",
+                        "aoNoDiamond": "/BehytRings/Contemporian/393/4.0mm/Base_Mesh_NoDiamond_AO.webp"
+                    },
+                    "isDiamond": true
+                }
+            },
+            "394": {
+                "4.0mm": {
+                    "modelUrl": "/BehytRings/Contemporian/394/4.0mm/394_4.0mm.glb",
+                    "Base_Metal_Color": "silver",
+                    "engraving mesh color": "silver",
+                    "colorChange": "Base_Metal",
+                    "textures": {
+                        "aoGold": "/BehytRings/Contemporian/394/4.0mm/Base_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Contemporian/394/4.0mm/Engraving_Metal_AO.webp"
+                    },
+                    "isDiamond": false
+                }
+            },
+            "403": {
+                "4.0mm": {
+                    "modelUrl": "/BehytRings/Contemporian/403/4.0mm/403_4.0mm.glb",
+                    "Base_Metal_Color": "silver",
+                    "engraving mesh color": "silver",
+                    "colorChange": "Base_Metal",
+                    "textures": {
+                        "aoGold": "/BehytRings/Contemporian/403/4.0mm/Base_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Contemporian/403/4.0mm/Engraving_Metal_AO.webp"
+                    },
+                    "isDiamond": false
+                }
+            },
+            "423": {
+                "4.0mm": {
+                    "modelUrl": "/BehytRings/Contemporian/423/4.0mm/423_4.0mm.glb",
+                    "Base_Metal_Color": "silver",
+                    "engraving mesh color": "silver",
+                    "colorChange": "Base_Metal",
+                    "textures": {
+                        "aoGold": "/BehytRings/Contemporian/423/4.0mm/Base_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Contemporian/423/4.0mm/Engraving_Metal_AO.webp"
+                    },
+                    "isDiamond": false
+                }
+            },
+            "475": {
+                "4.0mm": {
+                    "modelUrl": "/BehytRings/Contemporian/475/4.0mm/475_4.0mm.glb",
+                    "Base_Metal_Color": "gold",
+                    "engraving mesh color": "gold",
+                    "Finishing_Metal_Color": "gold",
+                    "colorChange": "both",
+                    "textures": {
+                        "aoGold": "/BehytRings/Contemporian/475/4.0mm/Base_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Contemporian/475/4.0mm/Engraving_Metal_AO.webp",
+                        "aoSilver": "/BehytRings/Contemporian/475/4.0mm/Finishing_Metal_AO.webp"
+                    },
+                    "isDiamond": false
                 }
             },
             "476": {
@@ -1049,57 +1133,47 @@
                         "aoGold": "/BehytRings/Contemporian/476/4.0mm/Base_Metal_AO.webp",
                         "aoSilver": "/BehytRings/Contemporian/476/4.0mm/Finishing_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Contemporian/476/4.0mm/Engraving_Metal_AO.webp"
-                    }
+                    },
+                    "isDiamond": false
                 }
             },
-            "362": {
+            "496": {
                 "4.0mm": {
-                    "modelUrl": "/BehytRings/Contemporian/362/4.0mm/362_4.0mm.glb",
-                    "Base_Metal_Color": "silver",
-                    "engraving mesh color": "silver",
-                    "colorChange": "Base_Metal",
-                    "textures": {
-                        "aoGold": "/BehytRings/Contemporian/362/4.0mm/Base_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Contemporian/362/4.0mm/Engraving_Metal_AO.webp"
-                    }
-                }
-            },
-            "379": {
-                "4.0mm": {
-                    "modelUrl": "/BehytRings/Contemporian/379/4.0mm/379_4.0mm.glb",
+                    "modelUrl": "/BehytRings/Contemporian/496/4.0mm/496_4.0mm.glb",
                     "Base_Metal_Color": "gold",
                     "engraving mesh color": "gold",
                     "colorChange": "Base_Metal",
                     "textures": {
-                        "aoGold": "/BehytRings/Contemporian/379/4.0mm/Base_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Contemporian/379/4.0mm/Engraving_Metal_AO.webp"
-                    }
+                        "aoGold": "/BehytRings/Contemporian/496/4.0mm/Base_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Contemporian/496/4.0mm/Engraving_Metal_AO.webp"
+                    },
+                    "isDiamond": false
                 }
             },
-            "363": {
+            "497": {
                 "4.0mm": {
-                    "modelUrl": "/BehytRings/Contemporian/363/4.0mm/363_4.0mm.glb",
+                    "modelUrl": "/BehytRings/Contemporian/497/4.0mm/497_4.0mm.glb",
+                    "Base_Metal_Color": "gold",
+                    "engraving mesh color": "gold",
+                    "colorChange": "Base_Metal",
+                    "textures": {
+                        "aoGold": "/BehytRings/Contemporian/497/4.0mm/Base_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Contemporian/497/4.0mm/Engraving_Metal_AO.webp"
+                    },
+                    "isDiamond": false
+                }
+            },
+            "498": {
+                "4.0mm": {
+                    "modelUrl": "/BehytRings/Contemporian/498/4.0mm/498_4.0mm.glb",
                     "Base_Metal_Color": "silver",
                     "engraving mesh color": "silver",
                     "colorChange": "Base_Metal",
                     "textures": {
-                        "aoGold": "/BehytRings/Contemporian/363/4.0mm/Base_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Contemporian/363/4.0mm/Engraving_Metal_AO.webp"
-                    }
-                }
-            },
-            "393": {
-                "4.0mm": {
-                    "modelUrl": "/BehytRings/Contemporian/393/4.0mm/393_4.0mm.glb",
-                    "Base_Metal_Color": "silver",
-                    "engraving mesh color": "silver",
-                    "Finishing_Metal_Color": "silver",
-                    "colorChange": "both",
-                    "textures": {
-                        "aoGold": "/BehytRings/Contemporian/393/4.0mm/Base_Metal_AO.webp",
-                        "aoSilver": "/BehytRings/Contemporian/393/4.0mm/Finishing_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Contemporian/393/4.0mm/Engraving_Metal_AO.webp"
-                    }
+                        "aoGold": "/BehytRings/Contemporian/498/4.0mm/Base_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Contemporian/498/4.0mm/Engraving_Metal_AO.webp"
+                    },
+                    "isDiamond": false
                 }
             },
             "499": {
@@ -1111,210 +1185,236 @@
                     "textures": {
                         "aoGold": "/BehytRings/Contemporian/499/4.0mm/Base_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Contemporian/499/4.0mm/Engraving_Metal_AO.webp"
-                    }
+                    },
+                    "isDiamond": false
+                }
+            },
+            "500": {
+                "4.0mm": {
+                    "modelUrl": "/BehytRings/Contemporian/500/4.0mm/500_4.0mm.glb",
+                    "Base_Metal_Color": "gold",
+                    "engraving mesh color": "gold",
+                    "colorChange": "Base_Metal",
+                    "textures": {
+                        "aoGold": "/BehytRings/Contemporian/500/4.0mm/Base_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Contemporian/500/4.0mm/Engraving_Metal_AO.webp"
+                    },
+                    "isDiamond": false
                 }
             }
         },
         "Tweekleurig": {
-            "219" : {
-                 "2.0mm": {
+            "219": {
+                "2.0mm": {
                     "modelUrl": "/BehytRings/Tweekleurig/219/2.0mm/219_2.0mm.glb",
                     "Base_Metal_Color": "gold",
                     "engraving mesh color": "gold",
-                    "Finishing_Metal_Color" : "silver",
+                    "Finishing_Metal_Color": "silver",
                     "colorChange": "Base_Metal",
                     "textures": {
                         "aoGold": "/BehytRings/Tweekleurig/219/2.0mm/Base_Metal_AO.webp",
-                        "aoSilver" : "/BehytRings/Tweekleurig/219/2.0mm/Finishing_Metal_AO.webp",
+                        "aoSilver": "/BehytRings/Tweekleurig/219/2.0mm/Finishing_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Tweekleurig/219/2.0mm/Engraving_Metal_AO.webp"
-                    }
+                    },
+                    "isDiamond": false
                 }
             },
-            "221" : {
-                 "2.0mm": {
+            "221": {
+                "2.0mm": {
                     "modelUrl": "/BehytRings/Tweekleurig/221/2.0mm/221_2.0mm.glb",
                     "Base_Metal_Color": "silver",
                     "engraving mesh color": "silver",
-                    "Finishing_Metal_Color" : "gold",
+                    "Finishing_Metal_Color": "gold",
                     "colorChange": "Finishing_Metal",
                     "textures": {
                         "aoGold": "/BehytRings/Tweekleurig/221/2.0mm/Base_Metal_AO.webp",
-                        "aoSilver" : "/BehytRings/Tweekleurig/221/2.0mm/Finishing_Metal_AO.webp",
+                        "aoSilver": "/BehytRings/Tweekleurig/221/2.0mm/Finishing_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Tweekleurig/221/2.0mm/Engraving_Metal_AO.webp"
-                    }
+                    },
+                    "isDiamond": false
                 }
             },
-            "267" : {
-                 "2.0mm": {
+            "267": {
+                "2.0mm": {
                     "modelUrl": "/BehytRings/Tweekleurig/267/2.0mm/267_2.0mm.glb",
                     "Base_Metal_Color": "gold",
                     "engraving mesh color": "gold",
-                    "Finishing_Metal_Color" : "silver",
+                    "Finishing_Metal_Color": "silver",
                     "colorChange": "Base_Metal",
                     "textures": {
                         "aoGold": "/BehytRings/Tweekleurig/267/2.0mm/Base_Metal_AO.webp",
-                        "aoSilver" : "/BehytRings/Tweekleurig/267/2.0mm/Finishing_Metal_AO.webp",
+                        "aoSilver": "/BehytRings/Tweekleurig/267/2.0mm/Finishing_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Tweekleurig/267/2.0mm/Engraving_Metal_AO.webp"
-                    }
+                    },
+                    "isDiamond": false
                 }
             },
-            "391" : {
-                 "2.0mm": {
+            "391": {
+                "2.0mm": {
                     "modelUrl": "/BehytRings/Tweekleurig/391/2.0mm/391_2.0mm.glb",
                     "Base_Metal_Color": "silver",
                     "engraving mesh color": "silver",
-                    "Finishing_Metal_Color" : "gold",
+                    "Finishing_Metal_Color": "gold",
                     "colorChange": "Finishing_Metal",
                     "textures": {
                         "aoGold": "/BehytRings/Tweekleurig/391/2.0mm/Base_Metal_AO.webp",
-                        "aoSilver" : "/BehytRings/Tweekleurig/391/2.0mm/Finishing_Metal_AO.webp",
+                        "aoSilver": "/BehytRings/Tweekleurig/391/2.0mm/Finishing_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Tweekleurig/391/2.0mm/Engraving_Metal_AO.webp"
-                    }
+                    },
+                    "isDiamond": false
                 }
             },
-            "473" : {
-                 "2.0mm": {
+            "473": {
+                "2.0mm": {
                     "modelUrl": "/BehytRings/Tweekleurig/473/2.0mm/473_2.0mm.glb",
                     "Base_Metal_Color": "silver",
                     "engraving mesh color": "silver",
-                    "Finishing_Metal_Color" : "rose gold",
+                    "Finishing_Metal_Color": "rose gold",
                     "colorChange": "Finishing_Metal ",
                     "textures": {
                         "aoGold": "/BehytRings/Tweekleurig/473/2.0mm/Base_Metal_AO.webp",
-                        "aoSilver" : "/BehytRings/Tweekleurig/473/2.0mm/Finishing_Metal_AO.webp",
+                        "aoSilver": "/BehytRings/Tweekleurig/473/2.0mm/Finishing_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Tweekleurig/473/2.0mm/Engraving_Metal_AO.webp"
-                    }
+                    },
+                    "isDiamond": false
                 }
             },
-            "474" : {
-                 "2.0mm": {
+            "474": {
+                "2.0mm": {
                     "modelUrl": "/BehytRings/Tweekleurig/474/2.0mm/474_2.0mm.glb",
                     "Base_Metal_Color": "rose gold",
                     "engraving mesh color": "rose gold",
-                    "Finishing_Metal_Color" : "silver",
+                    "Finishing_Metal_Color": "silver",
                     "colorChange": "Base_Metal",
                     "textures": {
                         "aoGold": "/BehytRings/Tweekleurig/474/2.0mm/Base_Metal_AO.webp",
-                        "aoSilver" : "/BehytRings/Tweekleurig/474/2.0mm/Finishing_Metal_AO.webp",
+                        "aoSilver": "/BehytRings/Tweekleurig/474/2.0mm/Finishing_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Tweekleurig/474/2.0mm/Engraving_Metal_AO.webp"
-                    }
+                    },
+                    "isDiamond": false
                 }
             },
-            "494" : {
-                 "2.0mm": {
+            "494": {
+                "2.0mm": {
                     "modelUrl": "/BehytRings/Tweekleurig/494/2.0mm/494_2.0mm.glb",
                     "Base_Metal_Color": "gold",
                     "engraving mesh color": "gold",
-                    "Finishing_Metal_Color" : "silver",
+                    "Finishing_Metal_Color": "silver",
                     "colorChange": "Finishing_Metal",
                     "textures": {
                         "aoGold": "/BehytRings/Tweekleurig/494/2.0mm/Base_Metal_AO.webp",
-                        "aoSilver" : "/BehytRings/Tweekleurig/494/2.0mm/Finishing_Metal_AO.webp",
+                        "aoSilver": "/BehytRings/Tweekleurig/494/2.0mm/Finishing_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Tweekleurig/494/2.0mm/Engraving_Metal_AO.webp"
-                    }
+                    },
+                    "isDiamond": false
                 }
             },
-               "495" : {
-                 "2.0mm": {
+            "495": {
+                "2.0mm": {
                     "modelUrl": "/BehytRings/Tweekleurig/495/2.0mm/495_2.0mm.glb",
                     "Base_Metal_Color": "silver",
                     "engraving mesh color": "silver",
-                    "Finishing_Metal_Color" : "gold",
+                    "Finishing_Metal_Color": "gold",
                     "colorChange": "Finishing_Metal",
                     "textures": {
                         "aoGold": "/BehytRings/Tweekleurig/495/2.0mm/Base_Metal_AO.webp",
-                        "aoSilver" : "/BehytRings/Tweekleurig/495/2.0mm/Finishing_Metal_AO.webp",
+                        "aoSilver": "/BehytRings/Tweekleurig/495/2.0mm/Finishing_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Tweekleurig/495/2.0mm/Engraving_Metal_AO.webp"
-                    }
+                    },
+                    "isDiamond": false
                 }
             },
-            "612" : {
-                 "2.0mm": {
+            "612": {
+                "2.0mm": {
                     "modelUrl": "/BehytRings/Tweekleurig/612/2.0mm/612_2.0mm.glb",
                     "Base_Metal_Color": "gold",
                     "engraving mesh color": "gold",
-                    "Finishing_Metal_Color" : "silver",
+                    "Finishing_Metal_Color": "silver",
                     "colorChange": "Base_Metal",
                     "textures": {
                         "aoGold": "/BehytRings/Tweekleurig/612/2.0mm/Base_Metal_AO.webp",
-                        "aoSilver" : "/BehytRings/Tweekleurig/612/2.0mm/Finishing_Metal_AO.webp",
+                        "aoSilver": "/BehytRings/Tweekleurig/612/2.0mm/Finishing_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Tweekleurig/612/2.0mm/Engraving_Metal_AO.webp"
-                    }
+                    },
+                    "isDiamond": false
                 }
             },
-            "613" : {
-                 "2.0mm": {
+            "613": {
+                "2.0mm": {
                     "modelUrl": "/BehytRings/Tweekleurig/613/2.0mm/613_2.0mm.glb",
                     "Base_Metal_Color": "silver",
                     "engraving mesh color": "silver",
-                    "Finishing_Metal_Color" : "silver",
+                    "Finishing_Metal_Color": "silver",
                     "colorChange": "Finishing_Metal",
                     "textures": {
                         "aoGold": "/BehytRings/Tweekleurig/613/2.0mm/Base_Metal_AO.webp",
-                        "aoSilver" : "/BehytRings/Tweekleurig/613/2.0mm/Finishing_Metal_Ao.webp",
+                        "aoSilver": "/BehytRings/Tweekleurig/613/2.0mm/Finishing_Metal_Ao.webp",
                         "aoEngrave": "/BehytRings/Tweekleurig/613/2.0mm/Engraving_Metal_AO.webp"
-                    }
+                    },
+                    "isDiamond": false
                 }
             },
-            "614" : {
-                 "2.0mm": {
+            "614": {
+                "2.0mm": {
                     "modelUrl": "/BehytRings/Tweekleurig/614/2.0mm/614_2.0mm.glb",
                     "Base_Metal_Color": "silver",
                     "engraving mesh color": "silver",
-                    "Finishing_Metal_Color" : "silver",
+                    "Finishing_Metal_Color": "silver",
                     "colorChange": "Finishing_Metal ",
                     "textures": {
                         "aoGold": "/BehytRings/Tweekleurig/614/2.0mm/Base_Metal_AO.webp",
-                        "aoSilver" : "/BehytRings/Tweekleurig/614/2.0mm/Finishing_Metal_AO.webp",
+                        "aoSilver": "/BehytRings/Tweekleurig/614/2.0mm/Finishing_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Tweekleurig/614/2.0mm/Engraving_Metal_AO.webp"
-                    }
+                    },
+                    "isDiamond": false
                 }
             },
-            "616" : {
-                 "2.0mm": {
+            "616": {
+                "2.0mm": {
                     "modelUrl": "/BehytRings/Tweekleurig/616/2.0mm/616_2.0mm.glb",
                     "Base_Metal_Color": "silver",
                     "engraving mesh color": "gold",
-                    "Finishing_Metal_Color" : "gold",
+                    "Finishing_Metal_Color": "gold",
                     "colorChange": "Finishing_Metal , Engraving_Metal",
                     "textures": {
                         "aoGold": "/BehytRings/Tweekleurig/616/2.0mm/Base_Metal_AO.webp",
-                        "aoSilver" : "/BehytRings/Tweekleurig/616/2.0mm/Finishing_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Tweekleurig/616/2.0mm/Engraving_Metal_AO.webp"
-                    }
+                        "aoSilver": "/BehytRings/Tweekleurig/616/2.0mm/Finishing_Metal_AO.webp",
+                        "aoEngrave": "/BehytRings/Tweekleurig/616/2.0mm/Engraving_Mesh_AO.webp"
+                    },
+                    "isDiamond": false
                 }
             },
-            "617" : {
-                 "2.0mm": {
+            "617": {
+                "2.0mm": {
                     "modelUrl": "/BehytRings/Tweekleurig/617/2.0mm/617_2.0mm.glb",
-                     "Base_Metal_Color": "silver",
+                    "Base_Metal_Color": "silver",
                     "engraving mesh color": "gold",
-                    "Finishing_Metal_Color" : "gold",
+                    "Finishing_Metal_Color": "gold",
                     "colorChange": "Finishing_Metal , Engraving_Metal",
                     "textures": {
                         "aoGold": "/BehytRings/Tweekleurig/617/2.0mm/Base_Metal_AO.webp",
-                        "aoSilver" : "/BehytRings/Tweekleurig/617/2.0mm/Finishing_Metal_AO.webp",
+                        "aoSilver": "/BehytRings/Tweekleurig/617/2.0mm/Finishing_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Tweekleurig/617/2.0mm/Engraving_Metal_AO.webp",
                         "aoNoDiamond": "/BehytRings/Tweekleurig/617/2.0mm/Base_Metal_NoDiamond.webp"
-                    }
+                    },
+                    "isDiamond": true
                 }
             },
-            "618" : {
-                 "2.0mm": {
+            "618": {
+                "2.0mm": {
                     "modelUrl": "/BehytRings/Tweekleurig/618/2.0mm/618_2.0mm.glb",
                     "Base_Metal_Color": "silver",
                     "engraving mesh color": "gold",
-                    "Finishing_Metal_Color" : "gold",
+                    "Finishing_Metal_Color": "gold",
                     "colorChange": "Finishing_Metal , Engraving_Metal",
                     "textures": {
                         "aoGold": "/BehytRings/Tweekleurig/618/2.0mm/Base_Metal_AO.webp",
-                        "aoSilver" : "/BehytRings/Tweekleurig/618/2.0mm/Finishing_Metal_AO.webp",
+                        "aoSilver": "/BehytRings/Tweekleurig/618/2.0mm/Finishing_Metal_AO.webp",
                         "aoEngrave": "/BehytRings/Tweekleurig/618/2.0mm/Engraving_Metal_AO.webp"
-                    }
+                    },
+                    "isDiamond": false
                 }
             }
         }
     }
 }
-
-

@@ -1,5 +1,5 @@
-import React, { Suspense } from "react";
-import { Canvas } from "@react-three/fiber";
+import React, { Suspense, useRef } from "react";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Environment } from "@react-three/drei";
 import { observer } from "mobx-react-lite";
 import * as THREE from "three";
@@ -12,7 +12,8 @@ import { rootStore } from "../../managers/stateManager";
 
 import DynamicContactShadows from "./DynamicContactShadows";
 import CanvasCamera from "./CanvasCamera";
-import AntiAliasing from "./AntiAliasing";
+import { AntiAliasing } from "./AntiAliasing";
+import AutoRotateController from "./AutoRotateController";
 
 const ModelRender = observer(() => {
   const { designManager } = rootStore;
@@ -35,6 +36,26 @@ const ModelRender = observer(() => {
             antialias: false,
             alpha: true,
           }}
+          onCreated={({ gl }) => {
+            gl.setClearColor(0x000000, 0);
+
+            // Monkey-patch gl.render to intercept the shadow camera rendering pass
+            const originalRender = gl.render.bind(gl);
+            gl.render = (scene, camera) => {
+              if (camera && camera.name === "ContactShadowsCamera") {
+                const originalClearColor = new THREE.Color();
+                gl.getClearColor(originalClearColor);
+                const originalClearAlpha = gl.getClearAlpha();
+
+                // Clear the shadow map background to transparent black (0, 0, 0, 0)
+                gl.setClearColor(0x000000, 0.0);
+                originalRender(scene, camera);
+                gl.setClearColor(originalClearColor, originalClearAlpha);
+              } else {
+                originalRender(scene, camera);
+              }
+            };
+          }}
         >
           <Suspense fallback={<Loader />}>
             <Environment
@@ -52,15 +73,15 @@ const ModelRender = observer(() => {
             </mesh> */}
 
             <DynamicContactShadows>
-              {/* <AutoRotateController> */}
-              <Model3DContent />
-              {designManager.currentView === "engrave" && (
-                <EngraveModelRender />
-              )}
-              {/* </AutoRotateController> */}
+              <AutoRotateController>
+                <Model3DContent />
+                {designManager.currentView === "engrave" && (
+                  <EngraveModelRender />
+                )}
+              </AutoRotateController>
             </DynamicContactShadows>
             <CanvasCamera />
-            <AntiAliasing samples={32} />
+            <AntiAliasing />
           </Suspense>
         </Canvas>
       </div>

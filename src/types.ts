@@ -55,6 +55,7 @@ export interface VariationData {
     colorChange?: string;
     color_change?: string;
     ColorChange?: string;
+    isDiamond?: boolean;
     [key: string]: any;
 }
 

@@ -15,6 +15,7 @@ export const CameraController = ({ cameraRef }: CameraControllerProps) => {
             draggingSmoothTime={0.1}
             dollySpeed={0.5}
             truckSpeed={0} // Keep model centered by disabling panning
+            maxPolarAngle={Math.PI / 2}
         />
     );
 };

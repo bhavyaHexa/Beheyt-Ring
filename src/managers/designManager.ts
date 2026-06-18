@@ -18,8 +18,6 @@ export class DesignManagerStore {
   autoRotateSpeed: number = 0.5;
   useAntiAliasing: boolean = true;
 
-
-
   colorMap: Record<string, string> = {
     gold: "#ffba43",
     silver: "#f6f5f5",
@@ -28,6 +26,56 @@ export class DesignManagerStore {
 
   get selectedColorHex(): string {
     return this.colorMap[this.selectedColor.toLowerCase()];
+  }
+
+  get isDiamondAvailable(): boolean {
+    const ringsData = this.rootStore.design3DManager.ringsData;
+    if (ringsData) {
+      const collectionData = ringsData.rings[this.selectedCollection];
+      if (collectionData) {
+        const modelData = collectionData[this.selectedModelId];
+        if (modelData) {
+          const variationData = modelData[this.selectedVariation];
+          if (variationData) {
+            return !!variationData.isDiamond;
+          }
+        }
+      }
+    }
+    return false;
+  }
+
+  syncDiamondState(respectUrlParam: boolean = false) {
+    const ringsData = this.rootStore.design3DManager.ringsData;
+    if (ringsData) {
+      const collectionData = ringsData.rings[this.selectedCollection];
+      if (collectionData) {
+        const modelData = collectionData[this.selectedModelId];
+        if (modelData) {
+          const variationData = modelData[this.selectedVariation];
+          if (variationData) {
+            const hasDiamond = !!variationData.isDiamond;
+            if (!hasDiamond) {
+              this.showDiamond = false;
+            } else {
+              if (respectUrlParam) {
+                const params = new URLSearchParams(window.location.search);
+                const diamondParam = params.get("diamond");
+                if (diamondParam !== null) {
+                  this.showDiamond = diamondParam === "true";
+                  return;
+                }
+              }
+              if (this.selectedCollection.toLowerCase() === "artisanal") {
+                this.showDiamond = false;
+              } else {
+                this.showDiamond = true;
+              }
+            }
+          }
+        }
+      }
+    }
   }
 
   getModelUrlForVariation(variation: string): string {
@@ -155,11 +203,6 @@ export class DesignManagerStore {
 
   setCollection(collection: string) {
     this.selectedCollection = collection;
-    if (collection.toLowerCase() === "artisanal") {
-      this.showDiamond = false;
-    } else {
-      this.showDiamond = true;
-    }
     const ringsData = this.rootStore.design3DManager.ringsData;
     if (ringsData && ringsData.rings[collection]) {
       const modelIds = Object.keys(ringsData.rings[collection]).filter(
@@ -177,6 +220,7 @@ export class DesignManagerStore {
         }
       }
     }
+    this.syncDiamondState();
     this.updateDefaultColorForActiveModel();
     this.updateUrlParams();
   }
@@ -195,12 +239,14 @@ export class DesignManagerStore {
         this.selectedVariation = variations[0];
       }
     }
+    this.syncDiamondState();
     this.updateDefaultColorForActiveModel();
     this.updateUrlParams();
   }
 
   setVariation(variation: string) {
     this.selectedVariation = variation;
+    this.syncDiamondState();
     this.updateDefaultColorForActiveModel();
     this.updateUrlParams();
   }
@@ -263,7 +309,7 @@ export class DesignManagerStore {
       modelUrl: this.selectedModelUrl,
       showDiamond: this.showDiamond,
       finish: this.selectedFinish,
-      roughness: this.selectedFinish === "polished" ? 0.1 : 0.75,
+      roughness: this.selectedFinish === "polished" ? 0.1 : 0.3,
     };
   }
 
@@ -362,11 +408,6 @@ export class DesignManagerStore {
   setAutoRotateSpeed(value: number) {
     this.autoRotateSpeed = value;
   }
-
-
-
-
-
 
   get activeNormalMaps() {
     const ringsData = this.rootStore.design3DManager.ringsData;

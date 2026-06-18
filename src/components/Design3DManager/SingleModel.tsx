@@ -163,11 +163,14 @@ export const SingleModel = observer(
     const normalFinishingMapUrl =
       hasNormalFinishing && normalFinishingUrl ? normalFinishingUrl : "";
 
-    const roughnessMapUrl =
-      variationData?.textures?.roughness &&
-      !variationData.textures.roughness.endsWith("roughness.jpg")
-        ? variationData.textures.roughness
-        : `/BehytRings/${formattedCollection}/${modelId}/${formattedVariation}/Roughness_Map.jpg`;
+    const hasRoughness = !!variationData?.textures?.roughness;
+    const rawRoughness = variationData?.textures?.roughness;
+    const roughnessMapUrl: string =
+      hasRoughness && rawRoughness
+        ? rawRoughness.endsWith("roughness.jpg")
+          ? `/BehytRings/${formattedCollection}/${modelId}/${formattedVariation}/Roughness_Map.jpg`
+          : rawRoughness
+        : "";
 
     // Load textures safely for this variation
     const aoTextureGold = useLoader(
@@ -235,7 +238,7 @@ export const SingleModel = observer(
               : null,
         aoMapIntensity:
           (!showDiamond && hasAoNoDiamond) || hasAoGold ? 1.0 : 0.0,
-        roughnessMap: roughnessTexture,
+        roughnessMap: hasRoughness ? roughnessTexture : null,
         clearcoat: finish === "polished" ? 1.0 : 0.0,
         normalScale: new THREE.Vector2(0, 0),
         normalMap: hasNormalBase ? normalBaseTexture : null,
@@ -248,11 +251,11 @@ export const SingleModel = observer(
       new THREE.MeshPhysicalMaterial({
         color: "#f6f5f5",
         metalness: 1.0,
-        roughness: roughness,
+        roughness: 0.1,
         aoMap: hasAoSilver ? aoTextureSilver : null,
         aoMapIntensity: hasAoSilver ? 0.8 : 0.0,
-        roughnessMap: roughnessTexture,
-        clearcoat: finish === "polished" ? 1.0 : 0.0,
+        roughnessMap: hasRoughness ? roughnessTexture : null,
+        clearcoat: 1.0,
         clearcoatRoughness: 0.1,
         normalScale: new THREE.Vector2(0, 0),
         normalMap: hasNormalFinishing ? normalFinishingTexture : null,
@@ -266,7 +269,7 @@ export const SingleModel = observer(
         roughness: roughness,
         aoMap: hasAoEngraving ? aoTextureEngraving : null,
         aoMapIntensity: hasAoEngraving ? 1.0 : 0.0,
-        roughnessMap: roughnessTexture,
+        roughnessMap: hasRoughness ? roughnessTexture : null,
         clearcoat: finish === "polished" ? 1.0 : 0.0,
         clearcoatRoughness: 0.1,
       }),
@@ -283,7 +286,9 @@ export const SingleModel = observer(
             : null;
       goldMaterialRef.current.aoMap = targetAoMap;
       goldMaterialRef.current.aoMapIntensity = targetAoMap ? 1.0 : 0.0;
-      goldMaterialRef.current.roughnessMap = roughnessTexture;
+      goldMaterialRef.current.roughnessMap = hasRoughness
+        ? roughnessTexture
+        : null;
       goldMaterialRef.current.normalMap = hasNormalBase
         ? normalBaseTexture
         : null;
@@ -293,7 +298,9 @@ export const SingleModel = observer(
       // Update Silver Material
       silverMaterialRef.current.aoMap = hasAoSilver ? aoTextureSilver : null;
       silverMaterialRef.current.aoMapIntensity = hasAoSilver ? 0.8 : 0.0;
-      silverMaterialRef.current.roughnessMap = roughnessTexture;
+      silverMaterialRef.current.roughnessMap = hasRoughness
+        ? roughnessTexture
+        : null;
       silverMaterialRef.current.normalMap = hasNormalFinishing
         ? normalFinishingTexture
         : null;
@@ -304,7 +311,9 @@ export const SingleModel = observer(
         ? aoTextureEngraving
         : null;
       engravingMaterialRef.current.aoMapIntensity = hasAoEngraving ? 1.0 : 0.0;
-      engravingMaterialRef.current.roughnessMap = roughnessTexture;
+      engravingMaterialRef.current.roughnessMap = hasRoughness
+        ? roughnessTexture
+        : null;
       engravingMaterialRef.current.needsUpdate = true;
 
       // Log normal map application status for the visible variation
@@ -333,6 +342,7 @@ export const SingleModel = observer(
       aoTextureEngraving,
       aoTextureNoDiamond,
       roughnessTexture,
+      hasRoughness,
       normalBaseTexture,
       normalFinishingTexture,
       hasAoGold,
@@ -462,7 +472,7 @@ export const SingleModel = observer(
                 ior: 2.4,
                 bounces: 3,
                 aberrationStrength: 0.005,
-                envMapIntensity: 0.3,
+                envMapIntensity: 0.6,
                 reflectivity: 0,
                 fresnel: 0.3,
               });
@@ -529,6 +539,17 @@ export const SingleModel = observer(
                 targetFinishingMaterial.normalScale.copy(originalNormalScale);
               }
             }
+          }
+
+          // Ensure the material is set to smooth
+          if (mesh.material) {
+            const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+            materials.forEach((mat) => {
+              if (mat) {
+                (mat as any).flatShading = false;
+                mat.needsUpdate = true;
+              }
+            });
           }
         }
       });

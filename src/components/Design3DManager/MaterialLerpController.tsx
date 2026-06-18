@@ -157,12 +157,12 @@ export const MaterialLerpController: React.FC<MaterialLerpControllerProps> = ({
         silverMaterial.color.lerp(targetSilverColor, factor);
         silverMaterial.roughness = THREE.MathUtils.lerp(
             silverMaterial.roughness,
-            targetRoughness.current,
+            0.1,
             factor
         );
         silverMaterial.clearcoat = THREE.MathUtils.lerp(
             silverMaterial.clearcoat,
-            targetClearcoat,
+            1.0,
             factor
         );
         silverMaterial.clearcoatRoughness = THREE.MathUtils.lerp(
