@@ -51,7 +51,21 @@ export const MaterialLerpController: React.FC<MaterialLerpControllerProps> = ({
 
         const resolveColor = (colorName: string | undefined, defaultHex: string): string => {
             if (!colorName) return defaultHex;
-            const cleanName = colorName.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+            let targetColorName = colorName;
+            if (colorName.includes(':')) {
+                const parts = colorName.split(':');
+                const selection = parts[1].trim().toLowerCase();
+                if (selection === 'yellow') {
+                    targetColorName = 'Yellow Gold';
+                } else if (selection === 'white') {
+                    targetColorName = 'White Gold';
+                } else if (selection === 'rose') {
+                    targetColorName = 'Rose Gold';
+                } else {
+                    targetColorName = parts[1].trim();
+                }
+            }
+            const cleanName = targetColorName.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
             const map = rootStore.designManager.colorMap;
             
             let mappedName = cleanName;
@@ -64,7 +78,7 @@ export const MaterialLerpController: React.FC<MaterialLerpControllerProps> = ({
             }
 
             if (map[mappedName]) return map[mappedName];
-            return colorName;
+            return targetColorName;
         };
 
         if (hasConfig) {

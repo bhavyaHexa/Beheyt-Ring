@@ -221,7 +221,7 @@ export const SingleModel = observer(
       normalFinishingTexture.colorSpace = THREE.NoColorSpace;
     }
 
-    // Load the GLTF for this variation
+    // Load the GLTF scene
     const { scene } = useGLTF(url);
 
     // Create materials ONCE and hold them in refs
@@ -242,8 +242,7 @@ export const SingleModel = observer(
         clearcoat: finish === "polished" ? 1.0 : 0.0,
         normalScale: new THREE.Vector2(0, 0),
         normalMap: hasNormalBase ? normalBaseTexture : null,
-        alphaMap:
-          !showDiamond && hasAoNoDiamond ? aoTextureNoDiamond : aoTextureGold,
+        alphaMap: hasAoGold ? aoTextureGold : null,
       }),
     );
 
@@ -275,15 +274,16 @@ export const SingleModel = observer(
       }),
     );
 
-    // Keep textures in sync if they change (e.g. modelId/variation swap)
+    // Keep textures in sync if they change
     useEffect(() => {
-      // Update Gold Material
+      // Dynamic AO targeting for base/gold material based on diamond state
       const targetAoMap =
         !showDiamond && hasAoNoDiamond
           ? aoTextureNoDiamond
           : hasAoGold
             ? aoTextureGold
             : null;
+
       goldMaterialRef.current.aoMap = targetAoMap;
       goldMaterialRef.current.aoMapIntensity = targetAoMap ? 1.0 : 0.0;
       goldMaterialRef.current.roughnessMap = hasRoughness
@@ -292,7 +292,7 @@ export const SingleModel = observer(
       goldMaterialRef.current.normalMap = hasNormalBase
         ? normalBaseTexture
         : null;
-      goldMaterialRef.current.alphaMap = targetAoMap;
+      goldMaterialRef.current.alphaMap = hasAoGold ? aoTextureGold : null;
       goldMaterialRef.current.needsUpdate = true;
 
       // Update Silver Material
@@ -307,10 +307,12 @@ export const SingleModel = observer(
       silverMaterialRef.current.needsUpdate = true;
 
       // Update Engraving Material
-      engravingMaterialRef.current.aoMap = hasAoEngraving
-        ? aoTextureEngraving
-        : null;
-      engravingMaterialRef.current.aoMapIntensity = hasAoEngraving ? 1.0 : 0.0;
+      const activeEngravingAo =
+        showDiamond && hasAoEngraving ? aoTextureEngraving : null;
+      engravingMaterialRef.current.aoMap = activeEngravingAo;
+      engravingMaterialRef.current.aoMapIntensity = activeEngravingAo
+        ? 1.0
+        : 0.0;
       engravingMaterialRef.current.roughnessMap = hasRoughness
         ? roughnessTexture
         : null;
@@ -357,7 +359,7 @@ export const SingleModel = observer(
       showDiamond,
     ]);
 
-    // Update normalScale when Leva controls change
+    // Update normalScale when controls change
     useEffect(() => {
       const targetBaseMaterial = goldMaterialRef.current;
       const targetFinishingMaterial = silverMaterialRef.current;
@@ -370,28 +372,53 @@ export const SingleModel = observer(
       }
     }, [hasNormalBase, hasNormalFinishing]);
 
-    // // Log the model's position/location coordinates (x, y, z) in the console
-    // useEffect(() => {
-    //     if (isVisible && scene) {
-    //         const box = new THREE.Box3().setFromObject(scene);
-    //         const center = new THREE.Vector3();
-    //         box.getCenter(center);
-    //         console.log(`Model Location: x=${center.x}, y=${center.y}, z=${center.z}`);
-    //     }
-    // }, [scene, isVisible, modelId, variation]);
+    // Global Presence Scanner
+    const {
+      hasNoDiamondBaseMesh,
+      hasNoDiamondFinishingMesh,
+      hasNoDiamondEngravingMesh,
+    } = useMemo(() => {
+      let base = false;
+      let finishing = false;
+      let engraving = false;
 
-    const hasNoDiamondMesh = useMemo(() => {
-      let found = false;
+      if (!scene)
+        return {
+          hasNoDiamondBaseMesh: false,
+          hasNoDiamondFinishingMesh: false,
+          hasNoDiamondEngravingMesh: false,
+        };
+
       scene.traverse((node) => {
-        if (node.name.includes("NoDiamond")) {
-          found = true;
+        if (node.name) {
+          const nameLower = node.name.toLowerCase();
+          if (nameLower.includes("nodiamond")) {
+            if (nameLower.includes("engrav")) {
+              engraving = true;
+            } else if (
+              nameLower.includes("finishing") ||
+              nameLower.includes("silver")
+            ) {
+              finishing = true;
+            } else {
+              base = true;
+            }
+          }
         }
       });
-      return found;
+      return {
+        hasNoDiamondBaseMesh: base,
+        hasNoDiamondFinishingMesh: finishing,
+        hasNoDiamondEngravingMesh: engraving,
+      };
     }, [scene]);
 
-    // Mesh Processing Logic
+    // Mesh Processing Logic & Diagnostics Loop
     useMemo(() => {
+      if (!scene) return;
+
+      const diagnosticReport: any[] = [];
+
       // Reset normal maps on shared materials before traversing
       goldMaterialRef.current.normalMap = null;
       silverMaterialRef.current.normalMap = null;
@@ -404,7 +431,31 @@ export const SingleModel = observer(
             mesh.geometry.computeVertexNormals();
           }
 
-          // Cache original normal map and scale on first traversal
+          // Exact hierarchical inclusion checker
+          const checkName = (n: THREE.Object3D, searchStr: string): boolean => {
+            let current: THREE.Object3D | null = n;
+            const target = searchStr.toLowerCase();
+            while (current) {
+              if (current.name && current.name.toLowerCase().includes(target)) {
+                return true;
+              }
+              current = current.parent;
+            }
+            return false;
+          };
+
+          const isNoDiamondMesh = checkName(mesh, "NoDiamond");
+
+          // An asset CANNOT be classified as a diamond component if it is explicitly a "NoDiamond" asset
+          const isDiamondMesh =
+            !isNoDiamondMesh &&
+            (checkName(mesh, "diamond") || checkName(mesh, "diam_centr"));
+
+          const isEngravingMesh = checkName(mesh, "engrav");
+          const isFinishingMesh =
+            checkName(mesh, "finishing") || checkName(mesh, "silver");
+
+          // Cache original maps
           if (mesh.userData.originalNormalMap === undefined) {
             mesh.userData.originalNormalMap =
               (mesh.material as any)?.normalMap || null;
@@ -419,51 +470,71 @@ export const SingleModel = observer(
           const targetFinishingMaterial = silverMaterialRef.current;
           const targetBaseMaterial = goldMaterialRef.current;
 
-          // Handle Visibility based on showDiamond
-          if (mesh.name === "Silver_Metal") {
-            mesh.visible = !showDiamond;
-            mesh.material = targetFinishingMaterial;
-            if (hasNormalFinishing) {
-              targetFinishingMaterial.normalMap = normalFinishingTexture;
-              targetFinishingMaterial.normalScale.set(1.0, 1.0);
+          const applyNormalMap = (
+            material: THREE.MeshPhysicalMaterial,
+            isBase: boolean,
+          ) => {
+            const hasNormal = isBase ? hasNormalBase : hasNormalFinishing;
+            const texture = isBase ? normalBaseTexture : normalFinishingTexture;
+            if (hasNormal) {
+              material.normalMap = texture;
+              material.normalScale.set(1.0, 1.0);
             } else if (originalNormalMap) {
-              targetFinishingMaterial.normalMap = originalNormalMap;
+              material.normalMap = originalNormalMap;
               if (originalNormalScale) {
-                targetFinishingMaterial.normalScale.copy(originalNormalScale);
+                material.normalScale.copy(originalNormalScale);
+              }
+            }
+          };
+
+          // --- DYNAMIC VISIBILITY SWITCHING RULES ---
+          if (showDiamond) {
+            if (isNoDiamondMesh) {
+              mesh.visible = false;
+            } else {
+              mesh.visible = true;
+            }
+          } else {
+            // Diamond is turned off
+            if (isDiamondMesh) {
+              mesh.visible = false;
+            } else if (isEngravingMesh) {
+              if (isNoDiamondMesh) {
+                mesh.visible = true;
+              } else {
+                mesh.visible = !hasNoDiamondEngravingMesh;
+              }
+            } else if (isFinishingMesh) {
+              if (isNoDiamondMesh) {
+                mesh.visible = true;
+              } else {
+                mesh.visible = !hasNoDiamondFinishingMesh;
+              }
+            } else {
+              // Base Metal Meshes
+              if (isNoDiamondMesh) {
+                mesh.visible = true;
+              } else {
+                mesh.visible = !hasNoDiamondBaseMesh;
               }
             }
           }
-          if (mesh.name === "Silver_Diamond") {
-            mesh.visible = showDiamond;
-            mesh.material = targetFinishingMaterial;
-            if (hasNormalFinishing) {
-              targetFinishingMaterial.normalMap = normalFinishingTexture;
-              targetFinishingMaterial.normalScale.set(1.0, 1.0);
-            } else if (originalNormalMap) {
-              targetFinishingMaterial.normalMap = originalNormalMap;
-              if (originalNormalScale) {
-                targetFinishingMaterial.normalScale.copy(originalNormalScale);
-              }
-            }
-          }
 
-          if (mesh.name === "NoDiamond" || mesh.name.includes("NoDiamond")) {
-            mesh.visible = !showDiamond;
-          }
+          // Trace to context matrix
+          diagnosticReport.push({
+            "Mesh Name": mesh.name,
+            "Parent Name": mesh.parent?.name || "None",
+            "Is Diamond": isDiamondMesh,
+            "Is NoDiamond": isNoDiamondMesh,
+            "Is Finishing": isFinishingMesh,
+            "Is Engraving": isEngravingMesh,
+            "Calculated Visibility": mesh.visible,
+          });
 
-          // --- START: NEWLY IMPLEMENTED DIAMOND LOGIC ---
-          if (
-            mesh.name === "Diamond_Mesh" ||
-            mesh.name.includes("Diam_Centr") ||
-            mesh.name.includes("Diamond_Metal")
-          ) {
-            mesh.visible = showDiamond;
-
+          // --- MATERIAL ASSIGNMENTS ---
+          if (isDiamondMesh) {
             if (showDiamond) {
-              // 1. Create BVH for the geometry (required for refraction bounces)
               const bvh = new MeshBVH(mesh.geometry, { strategy: 1 });
-
-              // 2. Assign the advanced Refraction Material
               mesh.material = new MeshRefractionMaterialWebGL({
                 geometry: mesh.geometry,
                 bvh: bvh,
@@ -477,13 +548,7 @@ export const SingleModel = observer(
                 fresnel: 0.3,
               });
             }
-          } else if (
-            mesh.name === "Engraving Mesh" ||
-            mesh.name === "Engraving Metal" ||
-            mesh.name === "Engraving_Mesh" ||
-            mesh.name === "Engraving_Metal" ||
-            mesh.name.includes("Engraving")
-          ) {
+          } else if (isEngravingMesh) {
             mesh.material = engravingMaterialRef.current;
             if (originalNormalMap) {
               engravingMaterialRef.current.normalMap = originalNormalMap;
@@ -493,57 +558,18 @@ export const SingleModel = observer(
                 );
               }
             }
-          } else if (
-            mesh.name.includes("Custom") ||
-            mesh.name === "Gold" ||
-            mesh.name === "Base_Metal" ||
-            mesh.name === "Base_metal" ||
-            mesh.name.includes("Base")
-          ) {
-            if (!mesh.name.includes("NoDiamond")) {
-              if (hasNoDiamondMesh) {
-                mesh.visible = showDiamond;
-              } else {
-                mesh.visible = true;
-              }
-            }
-            mesh.material = targetBaseMaterial;
-            if (hasNormalBase) {
-              targetBaseMaterial.normalMap = normalBaseTexture;
-              targetBaseMaterial.normalScale.set(1.0, 1.0);
-            } else if (originalNormalMap) {
-              targetBaseMaterial.normalMap = originalNormalMap;
-              if (originalNormalScale) {
-                targetBaseMaterial.normalScale.copy(originalNormalScale);
-              }
-            }
-          } else if (
-            mesh.name === "Finishing_Metal" ||
-            mesh.name.includes("Finishing")
-          ) {
-            if (
-              collection?.toLowerCase() === "contemporian" &&
-              modelId === "386"
-            ) {
-              mesh.visible = showDiamond;
-            } else {
-              mesh.visible = true;
-            }
+          } else if (isFinishingMesh) {
             mesh.material = targetFinishingMaterial;
-            if (hasNormalFinishing) {
-              targetFinishingMaterial.normalMap = normalFinishingTexture;
-              targetFinishingMaterial.normalScale.set(1.0, 1.0);
-            } else if (originalNormalMap) {
-              targetFinishingMaterial.normalMap = originalNormalMap;
-              if (originalNormalScale) {
-                targetFinishingMaterial.normalScale.copy(originalNormalScale);
-              }
-            }
+            applyNormalMap(targetFinishingMaterial, false);
+          } else {
+            mesh.material = targetBaseMaterial;
+            applyNormalMap(targetBaseMaterial, true);
           }
 
-          // Ensure the material is set to smooth
           if (mesh.material) {
-            const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+            const materials = Array.isArray(mesh.material)
+              ? mesh.material
+              : [mesh.material];
             materials.forEach((mat) => {
               if (mat) {
                 (mat as any).flatShading = false;
@@ -553,6 +579,15 @@ export const SingleModel = observer(
           }
         }
       });
+
+      // Show fixed status mapping inside devtools
+      if (isVisible) {
+        console.log(
+          `%c[SingleModel Matrix] --- Configuration State (showDiamond: ${showDiamond}) ---`,
+          "color: #00ffca; font-weight: bold; font-size: 12px;",
+        );
+        console.table(diagnosticReport);
+      }
     }, [
       scene,
       goldMaterialRef.current,
@@ -569,7 +604,10 @@ export const SingleModel = observer(
       hasNormalBase,
       hasNormalFinishing,
       normalIntensity,
-      hasNoDiamondMesh,
+      hasNoDiamondBaseMesh,
+      hasNoDiamondFinishingMesh,
+      hasNoDiamondEngravingMesh,
+      isVisible,
     ]);
 
     const boundsData = useMemo(() => {

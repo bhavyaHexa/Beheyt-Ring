@@ -864,7 +864,8 @@
                     "textures": {
                         "aoGold": "/BehytRings/Contemporian/319/4.0mm/Base_Metal_AO.webp",
                         "aoSilver": "/BehytRings/Contemporian/319/4.0mm/Finishing_Metal_AO.webp",
-                        "aoEngrave": "/BehytRings/Contemporian/319/4.0mm/Engraving_Metal_AO.webp"
+                        "aoEngrave": "/BehytRings/Contemporian/319/4.0mm/Engraving_Metal_AO.webp",
+                        "aoNoDiamond": "/BehytRings/Contemporian/319/4.0mm/Base_Metal_NoDiamond_AO.webp"
                     },
                     "isDiamond": true
                 }

@@ -61,7 +61,7 @@ const ModelRender = observer(() => {
         >
           <Suspense fallback={<Loader />}>
             <Environment
-              files={"/env/08.exr"}
+              files={"/env/08_V4.exr"}
               environmentIntensity={0.7}
               environmentRotation={[0, 3.63, 0]}
               blur={0.5}

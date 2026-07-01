@@ -1,0 +1,21 @@
+{
+  "rings": {
+    "Silver Heart": {
+      "664": {
+        "2.0mm": {
+          "modelUrl": "/BehytRings/Silver Heart/664/2.0mm/664_2.0mm.glb",
+          "Base_Metal_Color": "gold",
+          "finshing metal color": "silver",
+          "engraving mesh color": "silver",
+          "colorChange": "Finishing_Metal",
+          "textures": {
+            "aoGold": "/BehytRings/Silver Heart/664/2.0mm/Base_Metal_AO.webp",
+            "aoSilver": "/BehytRings/Silver Heart/664/2.0mm/Finishing_Metal_AO.webp",
+            "aoEngrave": "/BehytRings/Silver Heart/664/2.0mm/Engraving_Metal_AO.webp"
+          },
+          "isDiamond": false
+        }
+      }
+    }
+  }
+}
