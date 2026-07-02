@@ -88,6 +88,7 @@ export const SingleModel = observer(
       "silver_metal_ao",
       "Finishing_Metal",
       "Silver_Metal",
+      "FAO",
     ]);
     const hasAoSilver = !!aoSilverUrl;
 

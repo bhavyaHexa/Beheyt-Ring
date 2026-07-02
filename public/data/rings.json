@@ -12,24 +12,185 @@
     },
     "rings": {
         "Briljant": {
-            "546": {
-                "4.5mm": {
-                    "modelUrl": "/BehytRings/Briljant/546/4.5mm/546_4.5mm.glb",
-                    "textures": {
-                        "aoGold": "/BehytRings/Briljant/546/4.5mm/Gold_Metal_AO.webp",
-                        "aoSilver": "/BehytRings/Briljant/546/4.5mm/Silver_Metal_AO.webp",
-                        "roughness": "/BehytRings/Briljant/546/4.5mm/Roughness_Map.jpg"
+            "590":{
+                "4.0mm":{
+                    "modelUrl":"/BehytRings/Briljant/590/4.0mm/590_4.0mm.glb",
+                    "Base_Metal_Color":"gold",
+                    "engraving mesh color" :"gold",
+                    "colorChange":"both",
+                    "textures":{
+                        "aoGold":"/BehytRings/Briljant/590/4.0mm/Base_Mesh_AO.webp",
+                        "aoEngrave":"/BehytRings/Briljant/590/4.0mm/Engraving_Mesh_AO.webp",
+                        "aoNoDiamond":"/BehytRings/Briljant/590/4.0mm/Base_Mesh_NoDiamond_AO.webp"
                     },
-                    "isDiamond": true
-                },
-                "5.0mm": {
-                    "modelUrl": "/BehytRings/Briljant/546/5.0mm/546_5.0mm.glb",
-                    "textures": {
-                        "aoGold": "/BehytRings/Briljant/546/5.0mm/Gold_Metal_AO.webp",
-                        "aoSilver": "/BehytRings/Briljant/546/5.0mm/Silver_Metal_AO.webp",
-                        "roughness": "/BehytRings/Briljant/546/5.0mm/Roughness_Map.jpg"
+                    "isDiamond":true
+                }
+            },
+                "589":{
+                "4.0mm":{
+                    "modelUrl":"/BehytRings/Briljant/589/4.0mm/589_4.0mm.glb",
+                    "Base_Metal_Color":"gold",
+                    "engraving mesh color" :"gold",
+                    "colorChange":"both",
+                    "textures":{
+                        "aoGold":"/BehytRings/Briljant/589/4.0mm/Base_Mesh_AO.webp",
+                        "aoEngrave":"/BehytRings/Briljant/589/4.0mm/Engraving_Mesh_AO.webp"
                     },
-                    "isDiamond": true
+                    "isDiamond":false
+                }
+            },
+            "549":{
+                "4.0mm":{
+                    "modelUrl":"/BehytRings/Briljant/549/4.0mm/549_4.0mm.glb",
+                    "Base_Metal_Color":"gold",
+                    "engraving mesh color" :"gold",
+                    "colorChange":"both",
+                    "textures":{
+                        "aoGold":"/BehytRings/Briljant/549/4.0mm/Base_Metal_AO.webp",
+                        "aoEngrave":"/BehytRings/Briljant/549/4.0mm/Engraving_Mesh_AO.webp"
+                    },
+                    "isDiamond":false
+                }
+            },
+           "582":{
+                "4.0mm":{
+                    "modelUrl":"/BehytRings/Briljant/582/4.0mm/582_4.0mm.glb",
+                    "Base_Metal_Color":"gold",
+                    "engraving mesh color" :"gold",
+                    "colorChange":"both",
+                    "textures":{
+                        "aoGold":"/BehytRings/Briljant/582/4.0mm/Base_Mesh_AO.webp",
+                        "aoEngrave":"/BehytRings/Briljant/582/4.0mm/Engraving_Mesh_AO.webp"
+                    },
+                    "isDiamond":false
+                }
+            },
+            "571":{
+                "4.0mm":{
+                    "modelUrl":"/BehytRings/Briljant/571/4.0mm/571_4.0mm.glb",
+                    "Base_Metal_Color":"gold",
+                    "engraving mesh color" :"gold",
+                    "colorChange":"both",
+                    "textures":{
+                        "aoGold":"/BehytRings/Briljant/571/4.0mm/Base_Metal_AO.webp",
+                        "aoEngrave":"/BehytRings/Briljant/571/4.0mm/Engraving_Mesh_AO.webp"
+                    },
+                    "isDiamond":false
+                }
+            },
+              "585":{
+                "4.0mm":{
+                    "modelUrl":"/BehytRings/Briljant/585/4.0mm/585_4.0mm.glb",
+                    "Base_Metal_Color":"gold",
+                    "engraving mesh color" :"gold",
+                    "colorChange":"both",
+                    "textures":{
+                        "aoGold":"/BehytRings/Briljant/585/4.0mm/Base_Metal_AO.webp",
+                        "aoEngrave":"/BehytRings/Briljant/585/4.0mm/Engraving_Mesh_AO.webp"
+                    },
+                    "isDiamond":false
+                }
+            },
+              "569":{
+                "4.0mm":{
+                    "modelUrl":"/BehytRings/Briljant/569/4.0mm/569_4.0mm.glb",
+                    "Base_Metal_Color":"gold",
+                    "engraving mesh color" :"gold",
+                    "colorChange":"both",
+                    "textures":{
+                        "aoGold":"/BehytRings/Briljant/569/4.0mm/Base_Mesh_AO.webp",
+                        "aoEngrave":"/BehytRings/Briljant/569/4.0mm/Engraving_Mesh_AO.webp"
+                    },
+                    "isDiamond":false
+                }
+            },
+                "553":{
+                "4.0mm":{
+                    "modelUrl":"/BehytRings/Briljant/553/4.0mm/553_4.0mm.glb",
+                    "Base_Metal_Color":"gold",
+                    "engraving mesh color" :"gold",
+                    "colorChange":"both",
+                    "textures":{
+                        "aoGold":"/BehytRings/Briljant/553/4.0mm/Base_Metal_AO.webp",
+                        "aoEngrave":"/BehytRings/Briljant/553/4.0mm/Engraving_Mesh_AO.webp",
+                        "normalBase":"/BehytRings/Briljant/553/4.0mm/Base_Metal_Normal.webp"
+                    },
+                    "isDiamond":false
+                }
+            },
+               "64":{
+                "4.0mm":{
+                    "modelUrl":"/BehytRings/Briljant/64/4.0mm/64_4.0mm.glb",
+                    "Base_Metal_Color":"gold",
+                    "Finishing_Metal_Color":"silver",
+                    "engraving mesh color" :"gold",
+                    "colorChange":"both",
+                    "textures":{
+                        "aoGold":"/BehytRings/Briljant/64/4.0mm/Base_Metal_AO.webp",
+                        "aoSilver":"/BehytRings/Briljant/64/4.0mm/Finishing_Metal_AO.webp",
+                        "aoEngrave":"/BehytRings/Briljant/64/4.0mm/Engraving_Mesh_AO.webp"
+                    },
+                    "isDiamond":false
+                }
+            },
+                "376":{
+                "4.0mm":{
+                    "modelUrl":"/BehytRings/Briljant/376/4.0mm/376_4.0mm.glb",
+                    "Base_Metal_Color":"gold",
+                    "Finishing_Metal_Color":"silver",
+                    "engraving mesh color" :"gold",
+                    "colorChange":"both",
+                    "textures":{
+                        "aoGold":"/BehytRings/Briljant/376/4.0mm/Base_Metal_AO.webp",
+                        "aoSilver":"/BehytRings/Briljant/376/4.0mm/Finishing_Metal_AO.webp",
+                        "aoEngrave":"/BehytRings/Briljant/376/4.0mm/Engraving_Mesh_AO.webp"
+                    },
+                    "isDiamond":false
+                }
+            },
+               "226":{
+                "4.0mm":{
+                    "modelUrl":"/BehytRings/Briljant/226/4.0mm/226_4.0mm.glb",
+                    "Base_Metal_Color":"gold",
+                    "Finishing_Metal_Color":"silver",
+                    "engraving mesh color" :"gold",
+                    "colorChange":"both",
+                    "textures":{
+                        "aoGold":"/BehytRings/Briljant/226/4.0mm/Base_Metal_AO.webp",
+                        "aoSilver":"/BehytRings/Briljant/226/4.0mm/Finishing_Metal_AO.webp",
+                        "aoEngrave":"/BehytRings/Briljant/226/4.0mm/Engraving_Mesh_AO.webp"
+                    },
+                    "isDiamond":false
+                }
+            },
+               "398":{
+                "4.0mm":{
+                    "modelUrl":"/BehytRings/Briljant/398/4.0mm/398_4.0mm.glb",
+                    "Base_Metal_Color":"gold",
+                    "Finishing_Metal_Color":"silver",
+                    "engraving mesh color" :"gold",
+                    "colorChange":"both",
+                    "textures":{
+                        "aoGold":"/BehytRings/Briljant/398/4.0mm/Base_Mesh_AO.webp",
+                        "aoSilver":"/BehytRings/Briljant/398/4.0mm/Finishing_Mesh_AO.webp",
+                        "aoEngrave":"/BehytRings/Briljant/398/4.0mm/Engraving_Mesh_AO.webp"
+                    },
+                    "isDiamond":false
+                }
+            },
+             "312":{
+                "4.0mm":{
+                    "modelUrl":"/BehytRings/Briljant/312/4.0mm/312_4.0mm.glb",
+                    "Base_Metal_Color":"gold",
+                    "Finishing_Metal_Color":"silver",
+                    "engraving mesh color" :"gold",
+                    "colorChange":"both",
+                    "textures":{
+                        "aoGold":"/BehytRings/Briljant/312/4.0mm/Base_Mesh_AO.webp",
+                        "aoSilver":"/BehytRings/Briljant/312/4.0mm/Finishing_Mesh_AO.webp",
+                        "aoEngrave":"/BehytRings/Briljant/312/4.0mm/Engraving_Mesh_AO.webp"
+                    },
+                    "isDiamond":false
                 }
             }
         },
